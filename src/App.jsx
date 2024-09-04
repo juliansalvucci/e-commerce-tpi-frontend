@@ -1,13 +1,13 @@
-import "./styles/App.css"
+import "./styles/App.css";
 
 function App() {
   return (
     <>
-      <div className='.App'>
-        <h1 className='.Textito'>Vamo los pibe y las piba</h1>
+      <div className=".App">
+        {<h1 className=".Textito">Vamo los pibe y las piba</h1>}
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
