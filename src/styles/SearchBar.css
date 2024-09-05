@@ -1,12 +1,13 @@
 .search-bar {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: auto;
-  background-color: white;
-  border-radius: 1em 1em 0 0;
-  padding: 1em;
-  width: 300px;
-  box-sizing: border-box;
+  flex: 1; /* Hace que el SearchBar ocupe el máximo espacio disponible */
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
 }
 
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

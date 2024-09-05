@@ -14,7 +14,11 @@ function SearchBar() {
   return (
     <>
       <div className=".search-bar">
-        <input type="text" placeholder="Que quieres buscar?" onKeyUp={onKeyPress} />
+        <input
+          type="text"
+          placeholder="Que quieres buscar?"
+          onKeyUp={onKeyPress}
+        />
       </div>
     </>
   );
