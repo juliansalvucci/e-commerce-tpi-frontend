@@ -6,7 +6,3 @@
   padding: 20px;
   z-index: 10; /* z-index da prioridad de posición. Si hay dos elementos en la misma posición, el elemento con el z-index más alto tiene prioridad */
 }
-
-.navbar > * {
-  margin-right: 280px; /* Añade separación entre los elementos */
-}
