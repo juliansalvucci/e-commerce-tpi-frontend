@@ -1,6 +1,16 @@
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  font-size: 24px;
+  font-weight: bold;
+  color: blue;
+  text-decoration: none;
+  margin-right: 0px;
+}
+
+.logo-link:hover {
+  text-decoration: underline;
 }

@@ -1,11 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import "../styles/Logo.css";
 
-export class Logo extends Component {
-  render() {
-    return <div className=".logo">MegaStore</div>;
-    /*<img src="ACA VA DE DONDE SACAMOS LA IMAGEN" alt="Logo" className=".logo" />;*/
-  }
-}
+const Logo = () => {
+  return (
+    <div className=".logo-section">
+      {/* Aquí iría la imagen del logo cuando la agregues */}
+      <a href="/" className=".logo-link">
+        iLogo
+      </a>
+    </div>
+  );
+};
 
 export default Logo;
