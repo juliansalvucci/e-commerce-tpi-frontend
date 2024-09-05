@@ -1,0 +1,31 @@
+.user-logo {
+  margin-bottom: 10px;
+}
+
+.user-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-greeting {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.user-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.user-link {
+  font-size: 12px;
+  color: blue;
+  text-decoration: none;
+  margin-right: 0px;
+}
+
+.user-link:hover {
+  text-decoration: underline;
+}
