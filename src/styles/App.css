@@ -1,7 +1,6 @@
 .app {
-  height: 6em;
-  padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+  width: 100%;
+  align-items: center;
 }
-
