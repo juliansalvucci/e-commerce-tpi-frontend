@@ -5,9 +5,9 @@ import Logo from "../components/Logo";
 const Home = () => {
   return (
     <>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div >
         <Logo />
-        <SearchBar style={{ marginLeft: "1em" }} />
+        <div><SearchBar style={{ marginLeft: "1em" }} /></div>
       </div>
     </>
   );
