@@ -1,18 +1,12 @@
 .navbar {
   display: flex;
+  border-bottom: 1px solid white;
+  justify-content: space-around;
   align-items: center;
-}
-
-.navbar-user {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-cart {
-  display: flex;
-  align-items: center;
+  padding: 20px;
+  z-index: 10; /* z-index da prioridad de posición. Si hay dos elementos en la misma posición, el elemento con el z-index más alto tiene prioridad */
 }
 
 .navbar > * {
-  margin-right: 20px; /* Añade separación entre los elementos */
+  margin-right: 280px; /* Añade separación entre los elementos */
 }
