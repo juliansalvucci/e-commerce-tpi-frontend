@@ -3,9 +3,9 @@ import "../styles/Logo.css";
 
 const Logo = () => {
   return (
-    <div className=".logo-section">
+    <div className="logo-section">
       {/* Aquí iría la imagen del logo cuando la agregues */}
-      <a href="/" className=".logo-link">
+      <a href="/" className="logo-link">
         iLogo
       </a>
     </div>

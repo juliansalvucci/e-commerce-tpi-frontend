@@ -5,8 +5,8 @@ function App() {
   return (
     <>
       <Home />
-      <div className=".app">
-        <h1 >APLICACIÓN ECOMMERCE</h1>
+      <div className="app">
+        <h1>APLICACIÓN ECOMMERCE</h1>
       </div>
     </>
   );
