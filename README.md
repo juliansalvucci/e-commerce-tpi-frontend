@@ -28,17 +28,14 @@ Para el desarrollo de la plataforma utilizamos las siguientes tecnologías:
 
 El proyecto tiene la siguiente estructura de carpetas:
 
-\`\`\`
-/
-├── src/
-│   ├── assets/          # Imágenes y assets utilizados en el proyecto
-│   ├── components/      # Componentes principales del proyecto
-│   ├── context/         # Manejo de contexto y estado global
-│   ├── pages/           # Páginas de la aplicación
-│   ├── styles/          # Archivos CSS para el estilizado
-│   └── App.js           # Punto de entrada principal de la aplicación
-└── README.md            # Documentación del proyecto
-\`\`\`
+- src
+    - assets/          # Imágenes y assets utilizados en el proyecto
+    - components/      # Componentes principales del proyecto
+    - context/         # Manejo de contexto y estado global
+    - pages/           # Páginas de la aplicación
+    - styles/          # Archivos CSS para el estilizado
+    - App.js           # Punto de entrada principal de la aplicación
+- README.md            # Documentación del proyecto
 
 ---
 
