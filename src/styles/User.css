@@ -1,29 +1,15 @@
-.user-logo {
-  margin-bottom: 10px;
-  margin-right: 28px;
-  margin-left: 28px;
-}
-
 .user-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+}
+
+.user-logo {
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .user-greeting {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.user-links {
-  display: flex;
-  gap: 5px;
-}
-
-.user-link {
-  text-decoration: none;
-  margin-right: 2px;
-}
-
-.user-link:hover {
-  text-decoration: underline;
+  font-weight: bold;
 }
