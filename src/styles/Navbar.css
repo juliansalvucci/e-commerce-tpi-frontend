@@ -1,0 +1,13 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10%; /* lo pongo en porcentaje para que se ajuste con el ancho de la pantalla */
+  border-bottom: 1px solid cyan;
+  z-index: 10; /* z-index da prioridad de posición. Si hay dos elementos en la misma posición, el elemento con el z-index más alto tiene prioridad */
+}
+
+.combobox-container {
+  display: flex;
+  gap: 10px;
+}

@@ -1,13 +1,11 @@
 import React from "react";
-import SearchBar from "../components/SearchBar";
-import Logo from "../components/Logo";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
   return (
     <>
-      <div >
-        <Logo />
-        <div><SearchBar style={{ marginLeft: "1em" }} /></div>
+      <div>
+        <Navbar />
       </div>
     </>
   );
