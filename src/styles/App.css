@@ -1,6 +1,0 @@
-.app {
-  will-change: filter;
-  transition: filter 300ms;
-  width: 100%;
-  align-items: center;
-}
