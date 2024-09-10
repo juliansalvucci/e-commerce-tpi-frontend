@@ -1,0 +1,6 @@
+/*Hacemos desaparecer al carrito cuando llega a los 991px*/
+@media(max-width:991px){
+    .cart-icon{
+        display: none;
+    }
+}
