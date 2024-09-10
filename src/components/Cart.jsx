@@ -3,10 +3,16 @@ import "../styles/Cart.css";
 
 const Cart = () => {
   return (
-    <div className="cart-section">
-      {/* aca iría el ícono del carrito, por ahora "iCart" para ilustrar */}
-      <span>iCart</span>
-    </div>
+    <>
+      {/* Aca iría la imagen del logo del carrito
+        <div className="cart-logo">
+        <img src={} alt={} className="" /> 
+        </div>
+        */}
+      <button type="button" className="cart-logo">
+        🛒 Quiero comprar
+      </button>
+    </>
   );
 };
 
