@@ -11,6 +11,7 @@ Este proyecto consiste en la Implementación de un Sistema de Gestión para una 
   - [Tecnologías](#tecnologías)
   - [Estructura del Proyecto](#estructura-del-proyecto)
   - [Participantes](#participantes)
+  - [Guía para Contribuir](#guía-para-contribuir)
 
 ## Tecnologías
 
@@ -52,3 +53,7 @@ El equipo de desarrollo está compuesto por los siguientes participantes:
 - **Julián López Salvucci** - [julianls783@gmail.com](mailto:julianls783@gmail.com)
 
 ---
+
+## Guía para Contribuir
+
+Consulta la [Guía para Contribuir](CONTRIBUTING.md) para conocer las convenciones de commits y cómo contribuir al proyecto.
