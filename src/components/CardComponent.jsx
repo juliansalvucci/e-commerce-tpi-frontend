@@ -38,7 +38,7 @@ export const CardComponent = ({id, image, title, description, price, handlerAdd,
             <div className="card_content">
                 <h3 className="card_title">{title}</h3>
                 <p className="card_description">{description}</p>
-                <p className="card_price">{price}</p>
+                <p className="card_price">${price}</p>
                 {
                     added? 
                         //En el caso de que ya se haya añadido el producto al carrito

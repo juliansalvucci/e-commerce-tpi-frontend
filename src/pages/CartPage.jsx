@@ -34,7 +34,7 @@ export const CartPage = () => {
         {shoppingList.map(product => (
           <tr key={product.id}>
             <th scope="row">{product.title}</th>
-            <td>{product.price}</td>
+            <td>${product.price}</td>
             <td>
               {/*Quito cantidad de productos del carrito */}
               <button 
