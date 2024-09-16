@@ -5,7 +5,7 @@ const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
 const sinCaracteresEspeciales = /^[a-zA-Z0-9\s]+$/;
 const soloNumeros = /^\$?\d+(?:\.\d+)*$/;
 
-export const marcaSchema = yup.object().shape({
+export const brandSchema = yup.object().shape({
   nombre: yup
     .string()
     .required("Obligatorio")
