@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const alMenosUnaLetra = /[a-zA-Z]/;
-const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
+//const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
 const sinCaracteresEspeciales = /^[a-zA-Z0-9\s]+$/;
 const soloNumeros = /^\$?\d+(?:\.\d+)*$/;
 
@@ -35,8 +35,11 @@ export const productSchema = yup.object().shape({
     .required("Obligatorio")
     .min(2, "El nombre debe contener al menos 2 caracteres")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra")
-    .matches(primeraLetraMayusculaNoNumero, "El primer caracter debe ser una letra mayúscula")
-    .matches(sinCaracteresEspeciales, "El nombre no debe contener caracteres especiales"),
+    //.matches(primeraLetraMayusculaNoNumero, "El primer caracter debe ser una letra mayúscula")
+    .matches(
+      sinCaracteresEspeciales,
+      "El nombre no debe contener caracteres especiales"
+    ),
   descripcion: yup.string().required("Obligatorio"),
   precio: yup
     .string()
