@@ -10,6 +10,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import axios from "axios";
 
 export const RegisterPage = () => {
   // Esquema de validación con Yup
@@ -65,11 +66,22 @@ export const RegisterPage = () => {
             password: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              console.log("Formulario de registro enviado:", values);
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              // Llamada POST al backend usando Axios
+              const response = await axios.post(
+                "http://localhost:8080/auth/signup",
+                values
+              );
+              console.log("Respuesta del servidor:", response.data);
+
+              // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito
+            } catch (error) {
+              console.error("Error en el registro:", error);
+              // Aquí puedes manejar el error, como mostrar un mensaje de error
+            } finally {
               setSubmitting(false);
-            }, 500);
+            }
           }}
         >
           {({
