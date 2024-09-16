@@ -87,12 +87,6 @@
   color: #a0aec0;
 }
 
-input[type="checkbox"] {
-  width: fit-content;
-  margin-right: 8px;
-  transform: scale(1.25);
-}
-
 .btn-crear {
   display: block;
   margin: 16px 0;
