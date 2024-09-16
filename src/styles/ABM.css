@@ -46,13 +46,13 @@
   margin-top: 2px;
 }
 
-form {
+.form-group {
   width: 100%;
   max-width: 400px;
   margin: 0 auto; /*Centrar el formulario*/
 }
 
-form label {
+.form-group label {
   font-size: 12px;
   font-weight: bold;
   display: block;
@@ -61,8 +61,8 @@ form label {
   color: black;
 }
 
-input,
-select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 10px 8px;
   font-size: 16px;
@@ -72,13 +72,13 @@ select {
   outline: none;
 }
 
-input:focus,
-select:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: rgb(70, 70, 70);
 }
 
-input::placeholder,
-select::placeholder {
+.form-group input::placeholder,
+.form-group select::placeholder {
   color: #a0aec0;
 }
 
@@ -103,7 +103,7 @@ input[type="checkbox"] {
 }
 
 /*Esto cambia el borde del formulario cuando hay un error*/
-input.input-error,
-select.input-error {
+.form-group input.input-error,
+.form-group select.input-error {
   border-color: #fc8181;
 }
