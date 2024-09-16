@@ -1,68 +1,69 @@
 import React from "react";
-import { useFormik } from "formik";
-import { marcaSchema } from "../schemas";
-import "../styles/ABM.css";
+import { Formik, Form } from "formik";
+import { brandSchema } from "../schemas";
+import ABMInputComponent from "../components/ABMInputComponent";
 import ABMBackButtonComponent from "../components/ABMBackButtonComponent";
+//import axios from "axios";
+import "../styles/ABM.css";
 
-const onSubmit = async (actions) => {
-  //Aca iría la llamada a la API para crear una marca
-  actions.resetForm();
+// Función que se ejecutará al enviar el form
+const onSubmit = async (values, { resetForm }) => {
+  /*
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/brand",
+      values
+    );
+    console.log("Respuesta del servidor:", response.data);
+    // Aca íria la lógica de mostrar un mensaje de exito
+  } catch (error) {
+    console.error("Error en el registro:", error);
+    // Aca íria la lógica de mostrar el error
+  } finally {
+    setSubmitting(false);
+  }
+  */
+  console.log("Formulario enviado con valores:", values);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  resetForm();
+  alert("Formulario enviado");
 };
 
-const ABMMarcaPage = () => {
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    setTouched,
-  } = useFormik({
-    initialValues: {
-      nombre: "",
-    },
-    validationSchema: marcaSchema,
-    onSubmit,
-  });
-
-  //console.log(errors);
-
+const ABMBrandPage = () => {
   return (
-    //Formulario de creación de marca
     <div className="background">
       <ABMBackButtonComponent />
       <div className="container abm-brand-page">
         <h1 className="title">
-          Creá una marca
-          <form onSubmit={handleSubmit} autoComplete="off">
-            <label htmlFor="nombre">NOMBRE</label>
-            <input
-              id="nombre"
-              value={values.nombre}
-              type="text"
-              placeholder="Ingrese el nombre"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={
-                errors.nombre && touched.nombre ? "input-error" : ""
-              } //Para que aparezca el error
-              onFocus={() =>
-                touched.nombre && setTouched({ ...touched, nombre: false })
-              } //Para que se limpie el error
-            />
-            {errors.nombre && touched.nombre && (
-              <p className="error">{errors.nombre}</p>
+          Creá una Marca
+          <Formik
+            initialValues={{ nombre: "" }} // Valores iniciales del formulario
+            validationSchema={brandSchema} // Esquema de validación
+            onSubmit={onSubmit} // Función al enviar el formulario
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <ABMInputComponent
+                  label="NOMBRE"
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Ingrese el nombre de la marca"
+                />
+                <button
+                  className="btn-crear"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  Crear
+                </button>
+              </Form>
             )}
-            <button className="btn-crear" disabled={isSubmitting} type="submit">
-              Crear
-            </button>
-          </form>
+          </Formik>
         </h1>
       </div>
     </div>
   );
 };
 
-export default ABMMarcaPage;
+export default ABMBrandPage;
