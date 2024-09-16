@@ -1,18 +1,58 @@
-import { Form, Formik } from "formik";
+import React from "react";
+import { Formik, Form } from "formik";
 import { subCategorySchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
 import ABMBackButtonComponent from "../components/ABMBackButtonComponent";
+//import axios from "axios";
+import "../styles/ABM.css";
 
-const onSubmit = async (values, actions) => {
-  /*console.log(values);
-    console.log(actions);*/
-  /*Aca iría la llamada a la API para crear la subcategoría*/
-  console.log("Creando SubCategoría...");
-  actions.resetForm();
+// Función que se ejecutará al enviar el form
+const onSubmit = async (values, { resetForm }) => {
+  /*
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/subcategory",
+      values
+    );
+    console.log("Respuesta del servidor:", response.data);
+    // Aca íria la lógica de mostrar un mensaje de exito
+  } catch (error) {
+    console.error("Error en el registro:", error);
+    // Aca íria la lógica de mostrar el error
+  } finally {
+    setSubmitting(false);
+  }
+  */
+  console.log("Formulario enviado con valores:", values);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  resetForm();
+  alert("Formulario enviado");
 };
 
 const ABMSubCategoryPage = () => {
+  /*
+  const [categories, setCategories] = useState([]); // Estado para almacenar las categorías
+  // useEffect para obtener las categorías desde la API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/category");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error al obtener las categorías:", error);
+      }
+    };
+
+    fetchCategories(); // Llamada a la API cuando el componente se monta
+  }, []); // Solo se ejecuta una vez cuando el componente se monta
+  */
+  // Por ahora, dummy data
+  const categoryOptions = [
+    { value: "1", label: "Computación" }, // Cuando haga el fetch, value será el id de categoría, label el nombre
+    { value: "2", label: "Celulares y Accesorios" },
+  ];
+
   return (
     <div className="background">
       <ABMBackButtonComponent />
@@ -20,37 +60,40 @@ const ABMSubCategoryPage = () => {
         <h1 className="title">
           Creá una SubCategoría
           <Formik
-            initialValues={{ nombre: "", descripcion: "", categoria: "" }}
-            validationSchema={subCategorySchema}
-            onSubmit={onSubmit}
+            initialValues={{ nombre: "", descripcion: "", categoria: "" }} // Valores iniciales del formulario
+            validationSchema={subCategorySchema} // Esquema de validación
+            onSubmit={onSubmit} // Función al enviar el formulario
           >
             {({ isSubmitting }) => (
               <Form>
                 <ABMInputComponent
                   label="NOMBRE"
+                  id="nombre"
                   name="nombre"
                   type="text"
                   placeholder="Ingrese el nombre"
                 />
                 <ABMInputComponent
                   label="DESCRIPCIÓN"
+                  id="descripcion"
                   name="descripcion"
                   type="text"
                   placeholder="Ingrese la descripción"
                 />
                 <ABMSelectComponent
                   label="CATEGORÍA"
+                  id="categoria"
                   name="categoria"
-                  placeholder="Seleccione una Categoría"
-                >
-                  <option value="">Seleccione una Categoría</option>
-                  <option value="1">Smartphones</option>
-                  <option value="2">TVs</option>
-                </ABMSelectComponent>
+                  options={categoryOptions}
+                  /*options={categories.map((cat) => ({
+                    //value: cat.id, // Usamos el ID de la categoría como valor
+                    //label: cat.name, // Usamos el nombre de la categoría como label
+                  }))}*/ // Pasamos las categorías que vienen del estado
+                />
                 <button
                   className="btn-crear"
-                  disabled={isSubmitting}
                   type="submit"
+                  disabled={isSubmitting}
                 >
                   Crear
                 </button>
@@ -62,4 +105,5 @@ const ABMSubCategoryPage = () => {
     </div>
   );
 };
+
 export default ABMSubCategoryPage;
