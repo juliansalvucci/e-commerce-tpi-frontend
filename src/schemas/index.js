@@ -17,7 +17,7 @@ export const subCategorySchema = yup.object().shape({
     .string()
     .required("Obligatorio")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-  descripción: yup.string().notRequired(),
+  descripcion: yup.string().notRequired(),
   categoria: yup.string().required("Obligatorio"),
 });
 
@@ -26,7 +26,7 @@ export const categorySchema = yup.object().shape({
     .string()
     .required("Obligatorio")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-  descripción: yup.string().required("Obligatorio"),
+  descripcion: yup.string().required("Obligatorio"),
 });
 
 export const productSchema = yup.object().shape({
