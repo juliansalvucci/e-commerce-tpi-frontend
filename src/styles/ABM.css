@@ -28,6 +28,11 @@
   height: 40vh;
 }
 
+.container.abm-product-page {
+  width: 30%;
+  height: 70vh;
+}
+
 .container.abm-subcategory-page {
   width: 30%;
   height: 50vh;
