@@ -10,8 +10,11 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useUser } from "../context/UserProvider";
 
 export const LoginPage = () => {
+  const { login } = useUser();
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Correo electrónico inválido")
@@ -57,12 +60,7 @@ export const LoginPage = () => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              console.log("Formulario enviado:", values);
-              setSubmitting(false);
-            }, 500);
-          }}
+          onSubmit={login}
         >
           {({
             isSubmitting,
