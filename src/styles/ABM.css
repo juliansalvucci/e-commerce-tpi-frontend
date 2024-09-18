@@ -7,11 +7,11 @@
 }
 
 .container {
-  display: flex;
+  display: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
-  max-width: 50%;
+  height: auto;
+  width: 30vw;
   margin: auto;
   position: absolute;
   top: 50%;
@@ -51,6 +51,8 @@
 
 /*Este es el texto que aparece abajo del formulario cuando hay un error*/
 .error {
+  position: absolute;
+  bottom: -20px;
   color: #fc8181;
   font-size: 13px;
   text-align: left;
@@ -58,6 +60,8 @@
 }
 
 .form-group {
+  position: relative;
+  text-align: center;
   width: 100%;
   max-width: 400px;
   margin: 0 auto; /*Centrar el formulario*/
