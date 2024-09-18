@@ -1,8 +1,26 @@
 import React from "react";
-import { useField } from "formik";
+import { useEffect } from "react";
+import { useField, useFormikContext } from "formik";
+
+const formatPrice = (value) => {
+  if (!value) return "";
+  const number = value.replace(/\D/g, ""); // Elimina cualquier caracter que no sea número
+  return "$" + new Intl.NumberFormat().format(number); // Formatea el número con comas
+};
 
 const ABMInputComponent = ({ label, id, ...props }) => {
-  const [field, meta] = useField(props); // useField viene de Formik para manejar los campos de form
+  const [field, meta, helpers] = useField(props);
+  const { setValue } = helpers;
+  const { values } = useFormikContext();
+
+  useEffect(() => {
+    if (props.type === "text" && props.name === "precio") {
+      const formattedPrice = formatPrice(values[props.name]);
+      if (formattedPrice !== values[props.name]) {
+        setValue(formattedPrice); // Actualiza el valor formateado en el input
+      }
+    }
+  }, [values[props.name], props.name, setValue]);
 
   return (
     <div className="form-group">
