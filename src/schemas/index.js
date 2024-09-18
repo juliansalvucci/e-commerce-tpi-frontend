@@ -5,6 +5,19 @@ const alMenosUnaLetra = /[a-zA-Z]/;
 const sinCaracteresEspeciales = /^[a-zA-Z0-9\s]+$/;
 const soloNumeros = /^\$?\d+(?:\.\d+)*$/;
 
+/*// Función que consulta la API para verificar si un nombre ya existe
+const isUnique = async (tipoClase, nombre) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/${tipoClase}?name=${nombre}`
+    );
+    return response.data.exists === false; // Supongamos que la API devuelve un campo "exists"
+  } catch (error) {
+    console.error("Error al consultar la API:", error);
+    return false; // En caso de error, asumimos que la validación falla
+  }
+};*/
+
 export const brandSchema = yup.object().shape({
   nombre: yup
     .string()
