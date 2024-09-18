@@ -34,40 +34,38 @@ const ABMCategoryPage = () => {
     <div className="background">
       <ABMBackButtonComponent />
       <div className="container abm-category-page">
-        <h1 className="title">
-          Creá una Categoría
-        </h1>
+        <h1 className="title">Creá una Categoría</h1>
         <Formik
-            initialValues={{ nombre: "", descripcion: "" }} // Valores iniciales del formulario
-            validationSchema={categorySchema} // Esquema de validación
-            onSubmit={onSubmit} // Función al enviar el formulario
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <ABMInputComponent
-                  label="NOMBRE"
-                  id="nombre"
-                  name="nombre"
-                  type="text"
-                  placeholder="Ingrese el nombre"
-                />
-                <ABMInputComponent
-                  label="DESCRIPCIÓN"
-                  id="descripcion"
-                  name="descripcion"
-                  type="text"
-                  placeholder="Ingrese la descripción"
-                />
-                <button
-                  className="btn-crear"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  Crear
-                </button>
-              </Form>
-            )}
-          </Formik>
+          initialValues={{ nombre: "", descripcion: "" }} // Valores iniciales del formulario
+          validationSchema={categorySchema} // Esquema de validación
+          onSubmit={onSubmit} // Función al enviar el formulario
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <ABMInputComponent
+                label="NOMBRE"
+                id="nombre"
+                name="nombre"
+                type="text"
+                placeholder="Ingrese el nombre"
+              />
+              <ABMInputComponent
+                label="DESCRIPCIÓN"
+                id="descripcion"
+                name="descripcion"
+                type="text"
+                placeholder="Ingrese la descripción"
+              />
+              <button
+                className="btn-crear"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Crear
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

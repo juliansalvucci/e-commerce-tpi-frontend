@@ -57,50 +57,48 @@ const ABMSubCategoryPage = () => {
     <div className="background">
       <ABMBackButtonComponent />
       <div className="container abm-subcategory-page">
-        <h1 className="title">
-          Creá una SubCategoría
-        </h1>
+        <h1 className="title">Creá una SubCategoría</h1>
         <Formik
-            initialValues={{ nombre: "", descripcion: "", categoria: "" }} // Valores iniciales del formulario
-            validationSchema={subCategorySchema} // Esquema de validación
-            onSubmit={onSubmit} // Función al enviar el formulario
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <ABMInputComponent
-                  label="NOMBRE"
-                  id="nombre"
-                  name="nombre"
-                  type="text"
-                  placeholder="Ingrese el nombre"
-                />
-                <ABMInputComponent
-                  label="DESCRIPCIÓN"
-                  id="descripcion"
-                  name="descripcion"
-                  type="text"
-                  placeholder="Ingrese la descripción"
-                />
-                <ABMSelectComponent
-                  label="CATEGORÍA"
-                  id="categoria"
-                  name="categoria"
-                  options={categoryOptions}
-                  /*options={categories.map((cat) => ({
+          initialValues={{ nombre: "", descripcion: "", categoria: "" }} // Valores iniciales del formulario
+          validationSchema={subCategorySchema} // Esquema de validación
+          onSubmit={onSubmit} // Función al enviar el formulario
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <ABMInputComponent
+                label="NOMBRE"
+                id="nombre"
+                name="nombre"
+                type="text"
+                placeholder="Ingrese el nombre"
+              />
+              <ABMInputComponent
+                label="DESCRIPCIÓN"
+                id="descripcion"
+                name="descripcion"
+                type="text"
+                placeholder="Ingrese la descripción"
+              />
+              <ABMSelectComponent
+                label="CATEGORÍA"
+                id="categoria"
+                name="categoria"
+                options={categoryOptions}
+                /*options={categories.map((cat) => ({
                     //value: cat.id, // Usamos el ID de la categoría como valor
                     //label: cat.name, // Usamos el nombre de la categoría como label
                   }))}*/ // Pasamos las categorías que vienen del estado
-                />
-                <button
-                  className="btn-crear"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  Crear
-                </button>
-              </Form>
-            )}
-          </Formik>
+              />
+              <button
+                className="btn-crear"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Crear
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
