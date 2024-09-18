@@ -1,4 +1,5 @@
 import * as yup from "yup";
+//import axios from "axios";
 
 const alMenosUnaLetra = /[a-zA-Z]/;
 //const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
@@ -23,14 +24,35 @@ export const brandSchema = yup.object().shape({
     .string()
     .required("Obligatorio")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
+    /*.test(
+      'unique-brand',
+      'Ya existe una marca con ese nombre',
+      async ("brand", value) => {
+        //Llamada asíncrona a la API para verificar si el nombre de la marca ya existe
+        return await isUnique("brand", value);
+      }
+    ),*/
 });
 
 export const subCategorySchema = yup.object().shape({
   nombre: yup
     .string()
+    .min(3, "El nombre debe tener al menos 3 caracteres")
+    .max(30, "El nombre debe tener como maximo 20 caracteres")
     .required("Obligatorio")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-  descripcion: yup.string().notRequired(),
+  /*.test(
+      'unique-subcategory',
+      'Ya existe una subcategoria con ese nombre',
+      async ("subcategory",value) => {
+        //Llamada asíncrona a la API para verificar si el nombre de la subcategoria ya existe
+        return await isUnique("subcategory", value);
+      }
+    ),*/
+  descripcion: yup
+    .string()
+    .max(100, "La descripcion debe tener como maximo 100 caracteres")
+    .required("Obligatorio"),
   categoria: yup.string().required("Obligatorio"),
 });
 
@@ -39,6 +61,14 @@ export const categorySchema = yup.object().shape({
     .string()
     .required("Obligatorio")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
+    /*.test(
+      'unique-category',
+      'Ya existe una categoria con ese nombre',
+      async ("category", value) => {
+        //Llamada asíncrona a la API para verificar si el nombre de la categoria ya existe
+        return await isUnique("category", value);
+      }
+    ),*/
   descripcion: yup.string().required("Obligatorio"),
 });
 
