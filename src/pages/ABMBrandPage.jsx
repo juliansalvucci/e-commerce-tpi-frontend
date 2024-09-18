@@ -36,7 +36,8 @@ const ABMBrandPage = () => {
       <div className="container abm-brand-page">
         <h1 className="title">
           Creá una Marca
-          <Formik
+        </h1>
+        <Formik
             initialValues={{ nombre: "" }} // Valores iniciales del formulario
             validationSchema={brandSchema} // Esquema de validación
             onSubmit={onSubmit} // Función al enviar el formulario
@@ -60,7 +61,6 @@ const ABMBrandPage = () => {
               </Form>
             )}
           </Formik>
-        </h1>
       </div>
     </div>
   );

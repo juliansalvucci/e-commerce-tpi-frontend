@@ -59,7 +59,8 @@ const ABMSubCategoryPage = () => {
       <div className="container abm-subcategory-page">
         <h1 className="title">
           Creá una SubCategoría
-          <Formik
+        </h1>
+        <Formik
             initialValues={{ nombre: "", descripcion: "", categoria: "" }} // Valores iniciales del formulario
             validationSchema={subCategorySchema} // Esquema de validación
             onSubmit={onSubmit} // Función al enviar el formulario
@@ -100,7 +101,6 @@ const ABMSubCategoryPage = () => {
               </Form>
             )}
           </Formik>
-        </h1>
       </div>
     </div>
   );

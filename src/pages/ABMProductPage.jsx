@@ -77,7 +77,8 @@ const ABMProductPage = () => {
       <div className="container abm-product-page">
         <h1 className="title">
           Creá un Producto
-          <Formik
+        </h1>
+        <Formik
             initialValues={{
               nombre: "",
               descripcion: "",
@@ -141,7 +142,6 @@ const ABMProductPage = () => {
               </Form>
             )}
           </Formik>
-        </h1>
       </div>
     </div>
   );

@@ -36,7 +36,8 @@ const ABMCategoryPage = () => {
       <div className="container abm-category-page">
         <h1 className="title">
           Creá una Categoría
-          <Formik
+        </h1>
+        <Formik
             initialValues={{ nombre: "", descripcion: "" }} // Valores iniciales del formulario
             validationSchema={categorySchema} // Esquema de validación
             onSubmit={onSubmit} // Función al enviar el formulario
@@ -67,7 +68,6 @@ const ABMCategoryPage = () => {
               </Form>
             )}
           </Formik>
-        </h1>
       </div>
     </div>
   );
