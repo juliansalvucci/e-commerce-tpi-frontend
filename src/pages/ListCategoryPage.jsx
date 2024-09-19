@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Container, Stack, Box, Pagination, Typography } from "@mui/material";
 import ListCategoryAccordion from "../components/ListCategoryAccordion";
-import ListDeleteButtonComponent from "../components/ListDeleteButtonComponent";
-import ListEditButtonComponent from "../components/ListEditButtonComponent";
-import ListRestoreButtonComponent from "../components/ListRestoreButtonComponent";
-import ListCreateButtonComponent from "../components/ListCreateButtonComponent";
-import ListShowDeletedButtonComponent from "../components/ListShowDeletedButtonComponent";
-import ListUpdateButtonComponent from "../components/ListUpdateButtonComponent";
+import ListDeleteButton from "../components/ListDeleteButton";
+import ListEditButton from "../components/ListEditButton";
+import ListRestoreButton from "../components/ListRestoreButton";
+import ListCreateButton from "../components/ListCreateButton";
+import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import ListUpdateButton from "../components/ListUpdateButton";
 import "../styles/List.css";
 
 const ListCategoryPage = () => {
@@ -133,15 +133,15 @@ const ListCategoryPage = () => {
                 >
                   {!category.deleted ? (
                     <>
-                      <ListDeleteButtonComponent
+                      <ListDeleteButton
                         onClick={() => handleDelete(category.id)}
                       />
-                      <ListEditButtonComponent
+                      <ListEditButton
                         onClick={() => handleEdit(category.id)}
                       />
                     </>
                   ) : (
-                    <ListRestoreButtonComponent
+                    <ListRestoreButton
                       onClick={() => handleRestore(category.id)}
                       className="restore-button"
                     />
@@ -157,12 +157,12 @@ const ListCategoryPage = () => {
           alignItems="center"
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButtonComponent />
-            <ListShowDeletedButtonComponent
+            <ListCreateButton />
+            <ListShowDeletedButton
               showDeleted={showDeleted}
               onClick={handleShowDeletedToggle}
             />
-            <ListUpdateButtonComponent />
+            <ListUpdateButton />
           </Stack>
 
           <Pagination

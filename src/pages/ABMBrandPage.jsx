@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, Form } from "formik";
 import { brandSchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
-import ABMBackButtonComponent from "../components/ABMBackButtonComponent";
+import ABMBackButton from "../components/ABMBackButton";
 //import axios from "axios";
 import "../styles/ABM.css";
 
@@ -32,7 +32,7 @@ const onSubmit = async (values, { resetForm }) => {
 const ABMBrandPage = () => {
   return (
     <div className="background">
-      <ABMBackButtonComponent />
+      <ABMBackButton />
       <div className="container abm-brand-page">
         <h1 className="title">Creá una Marca</h1>
         <Formik

@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import { subCategorySchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
-import ABMBackButtonComponent from "../components/ABMBackButtonComponent";
+import ABMBackButton from "../components/ABMBackButton";
 //import axios from "axios";
 import "../styles/ABM.css";
 
@@ -55,7 +55,7 @@ const ABMSubCategoryPage = () => {
 
   return (
     <div className="background">
-      <ABMBackButtonComponent />
+      <ABMBackButton />
       <div className="container abm-subcategory-page">
         <h1 className="title">Creá una SubCategoría</h1>
         <Formik

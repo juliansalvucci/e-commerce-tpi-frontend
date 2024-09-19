@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, Form } from "formik";
 import { categorySchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
-import ABMBackButtonComponent from "../components/ABMBackButtonComponent";
+import ABMBackButton from "../s/ABMBackButton";
 //import axios from "axios";
 import "../styles/ABM.css";
 
@@ -32,7 +32,7 @@ const onSubmit = async (values, { resetForm }) => {
 const ABMCategoryPage = () => {
   return (
     <div className="background">
-      <ABMBackButtonComponent />
+      <ABMBackButton />
       <div className="container abm-category-page">
         <h1 className="title">Creá una Categoría</h1>
         <Formik
@@ -42,14 +42,14 @@ const ABMCategoryPage = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInputComponent
+              <ABMInput
                 label="NOMBRE"
                 id="nombre"
                 name="nombre"
                 type="text"
                 placeholder="Ingrese el nombre"
               />
-              <ABMInputComponent
+              <ABMInput
                 label="DESCRIPCIÓN"
                 id="descripcion"
                 name="descripcion"

@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import { productSchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
-import ABMBackButtonComponent from "../components/ABMBackButtonComponent";
+import ABMBackButton from "../s/ABMBackButton";
 //import axios from "axios";
 import "../styles/ABM.css";
 
@@ -44,7 +44,7 @@ const ABMProductPage = () => {
       }
     };
     fetchSubCategories();
-  }, []); // Solo se ejecuta una vez cuando el componente se monta
+  }, []); // Solo se ejecuta una vez cuando el e se monta
 
   const [brands, setBrands] = useState([]); // Estado para las marcas
   // useEffect para obtener las marcas
@@ -58,7 +58,7 @@ const ABMProductPage = () => {
       }
     };
     fetchBrands();
-  }, []); // Solo se ejecuta una vez cuando el componente se monta
+  }, []); // Solo se ejecuta una vez cuando el e se monta
   */
 
   // Por ahora, dummy data
@@ -73,7 +73,7 @@ const ABMProductPage = () => {
 
   return (
     <div className="background">
-      <ABMBackButtonComponent />
+      <ABMBackButton />
       <div className="container abm-product-page">
         <h1 className="title">Creá un Producto</h1>
         <Formik
