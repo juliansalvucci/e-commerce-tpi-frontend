@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
         values
       );
       console.log("Respuesta del servidor:", response.data);
+      localStorage.setItem("token", response.data.token);
       Swal.fire({
         icon: "success",
         title: "Usuario registrado con éxito",
@@ -39,7 +40,7 @@ export const UserProvider = ({ children }) => {
         values
       );
       console.log("Respuesta del servidor:", response.data);
-
+      localStorage.setItem("token", response.data.token);
       Swal.fire({
         icon: "success",
         title: "Bienvenido",
