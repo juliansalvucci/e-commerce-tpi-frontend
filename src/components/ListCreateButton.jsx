@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 //import { useNavigate } from "react-router-dom";
 
-const ListCreateButtonComponent = () => {
+const ListCreateButton = () => {
   //const navigate = useNavigate();
 
   const handleClick = () => {
@@ -15,10 +15,10 @@ const ListCreateButtonComponent = () => {
     <Button
       variant="contained"
       sx={{
-        backgroundColor: "black",   // Color de fondo negro
-        color: "white",             // Texto en blanco
+        backgroundColor: "black",
+        color: "white",
         "&:hover": {
-          backgroundColor: "grey",  // Color al pasar el mouse (hover)
+          backgroundColor: "grey",
         },
       }}
       startIcon={<AddIcon />}
@@ -29,4 +29,4 @@ const ListCreateButtonComponent = () => {
   );
 };
 
-export default ListCreateButtonComponent;
+export default ListCreateButton;

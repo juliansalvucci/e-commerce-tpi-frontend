@@ -2,7 +2,7 @@ import React from "react";
 import { IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const ListDeleteButtonComponent = ({ onClick }) => {
+const ListDeleteButton = ({ onClick }) => {
   return (
     <Tooltip title="Borrar" placement="right" arrow>
       <IconButton sx={{ color: "black" }} onClick={onClick}>
@@ -12,4 +12,4 @@ const ListDeleteButtonComponent = ({ onClick }) => {
   );
 };
 
-export default ListDeleteButtonComponent;
+export default ListDeleteButton;

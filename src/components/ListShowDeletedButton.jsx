@@ -3,15 +3,15 @@ import { Button } from "@mui/material";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const ListShowDeletedButtonComponent = ({ showDeleted, onClick }) => {
+const ListShowDeletedButton = ({ showDeleted, onClick }) => {
   return (
     <Button
       variant="contained"
       sx={{
-        backgroundColor: "black",   // Color de fondo negro
-        color: "white",             // Texto en blanco
+        backgroundColor: "black",
+        color: "white",
         "&:hover": {
-          backgroundColor: "grey",  // Color al pasar el mouse (hover)
+          backgroundColor: "grey",
         },
       }}
       startIcon={showDeleted ? <VisibilityIcon /> : <VisibilityOffIcon />}
@@ -22,4 +22,4 @@ const ListShowDeletedButtonComponent = ({ showDeleted, onClick }) => {
   );
 };
 
-export default ListShowDeletedButtonComponent;
+export default ListShowDeletedButton;

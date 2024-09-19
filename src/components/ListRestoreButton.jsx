@@ -2,7 +2,7 @@ import React from "react";
 import { IconButton } from "@mui/material";
 import RestoreIcon from "@mui/icons-material/Restore";
 
-const ListRestoreButtonComponent = ({ onClick }) => {
+const ListRestoreButton = ({ onClick }) => {
   return (
     <IconButton sx={{ color: "black" }} onClick={onClick}>
       <RestoreIcon />
@@ -10,4 +10,4 @@ const ListRestoreButtonComponent = ({ onClick }) => {
   );
 };
 
-export default ListRestoreButtonComponent;
+export default ListRestoreButton;

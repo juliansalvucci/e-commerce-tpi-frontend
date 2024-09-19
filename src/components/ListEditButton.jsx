@@ -2,7 +2,7 @@ import React from "react";
 import { IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-const ListEditButtonComponent = ({ onClick }) => {
+const ListEditButton = ({ onClick }) => {
   return (
     <Tooltip title="Editar" placement="right" arrow>
       <IconButton sx={{ color: "black" }} onClick={onClick}>
@@ -12,4 +12,4 @@ const ListEditButtonComponent = ({ onClick }) => {
   );
 };
 
-export default ListEditButtonComponent;
+export default ListEditButton;

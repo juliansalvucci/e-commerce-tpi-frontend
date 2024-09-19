@@ -37,7 +37,7 @@ const BackButton = styled(Button)({
   },
 });
 
-const ABMBackButtonComponent = () => {
+const ABMBackButton = () => {
   return (
     <BBTooltip
       title="Volver"
@@ -55,4 +55,4 @@ const ABMBackButtonComponent = () => {
   );
 };
 
-export default ABMBackButtonComponent;
+export default ABMBackButton;
