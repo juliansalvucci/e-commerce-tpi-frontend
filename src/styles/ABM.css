@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+.background {
+  background-color: rgb(83, 97, 180);
+  min-height: 100vh;
+}
+
+.container {
+  display: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 30vw;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /*Centrar el contenedor*/
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container.abm-brand-page {
+  width: 35vw;
+  min-height: 40vh;
+}
+
+.container.abm-category-page {
+  width: 35vw;
+  min-height: 40vh;
+}
+
+.container.abm-product-page {
+  width: 35vw;
+  min-height: 70vh;
+}
+
+.container.abm-subcategory-page {
+  width: 40vw;
+  min-height: 50vh;
+}
+
+.title {
+  margin-top: 20px;
+  text-align: center;
+  color: black;
+  font-family: "Poppins", "sans-serif";
+  font-weight: 400;
+}
+
+/*Este es el texto que aparece abajo del formulario cuando hay un error*/
+.error {
+  position: absolute;
+  bottom: -20px;
+  color: #fc8181;
+  font-size: 13px;
+  text-align: left;
+  margin-top: 2px;
+}
+
+.form-group {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto; /*Centrar el formulario*/
+}
+
+.form-group label {
+  font-family: "DM Sans", sans-serif;
+  font-weight: light;
+  font-size: 12px;
+  display: block;
+  text-align: left;
+  margin: 20px 0px 0px 0px;
+  color: black;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 8px;
+  font-size: 16px;
+  color: black;
+  border: 2px solid black;
+  background-color: white;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: rgb(70, 70, 70);
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder {
+  color: #a0aec0;
+}
+
+.btn-crear {
+  display: block;
+  margin: 20px auto;
+  padding: 8px 8px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  width: 100%;
+  font-size: 16px;
+  font-family: "Poppins", "sans-serif";
+  font-weight: 500;
+  max-width: 400px;
+}
+
+/*Esto cambia el borde del formulario cuando hay un error*/
+.form-group input.input-error,
+.form-group select.input-error {
+  border-color: #fc8181;
+}
