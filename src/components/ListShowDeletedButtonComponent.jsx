@@ -7,7 +7,13 @@ const ListShowDeletedButtonComponent = ({ showDeleted, onClick }) => {
   return (
     <Button
       variant="contained"
-      color="secondary"
+      sx={{
+        backgroundColor: "black",   // Color de fondo negro
+        color: "white",             // Texto en blanco
+        "&:hover": {
+          backgroundColor: "grey",  // Color al pasar el mouse (hover)
+        },
+      }}
       startIcon={showDeleted ? <VisibilityIcon /> : <VisibilityOffIcon />}
       onClick={onClick}
     >

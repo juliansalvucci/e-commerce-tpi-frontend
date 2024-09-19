@@ -13,7 +13,13 @@ const ListUpdateButtonComponent = () => {
   return (
     <Button
       variant="contained"
-      color="default"
+      sx={{
+        backgroundColor: "black",   // Color de fondo negro
+        color: "white",             // Texto en blanco
+        "&:hover": {
+          backgroundColor: "grey",  // Color al pasar el mouse (hover)
+        },
+      }}
       startIcon={<RefreshIcon />}
       onClick={handleClick}
     >

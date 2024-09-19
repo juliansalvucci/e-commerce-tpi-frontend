@@ -14,7 +14,13 @@ const ListCreateButtonComponent = () => {
   return (
     <Button
       variant="contained"
-      color="primary"
+      sx={{
+        backgroundColor: "black",   // Color de fondo negro
+        color: "white",             // Texto en blanco
+        "&:hover": {
+          backgroundColor: "grey",  // Color al pasar el mouse (hover)
+        },
+      }}
       startIcon={<AddIcon />}
       onClick={handleClick}
     >
