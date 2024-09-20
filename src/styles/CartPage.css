@@ -1,0 +1,198 @@
+.container {
+  border-radius: 20px;
+}
+
+.table-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: large;
+  font-size: large;
+}
+
+.container .top-container {
+  padding: 20px;
+  height: 90%;
+  border: 2px solid gray;
+  margin: 30px auto;
+  border-radius: 20px;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container .bottom-container {
+  padding-top: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px; /* Opcional: para bordes redondeados */
+  padding: 20px; /* Ajusta el padding según sea necesario */
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  font-weight: 550;
+  font-style: medium;
+  font-size: small;
+}
+
+.product-img {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+/* Estilo para la columna de cantidad */
+.quantity-column {
+  width: 120px;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 100;
+  font-style: smaller;
+  font-size: smaller;
+}
+
+.quantity-column button {
+  align-items: center;
+}
+
+.quantity-column .btn-primary {
+  background-color: none;
+  color: none;
+  border: none;
+}
+
+.quantity-column .btn-primary:active {
+  background-color: #f4f4f4;
+  color: #283b54;
+  box-shadow: none;
+}
+
+.trash-icon {
+  display: flex;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  background: none;
+}
+
+.circle {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 30px;
+  background: #a6a6a6;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: space-around;
+}
+
+.trash-icon:hover,
+.circle:hover {
+  background-color: rgb(221, 218, 218);
+}
+
+/*Boton de finalizar compra*/
+.bottom-container .btn-primary {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: #283b54;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: medium;
+  font-size: medium;
+}
+
+td {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: medium;
+  font-size: medium;
+  justify-content: center;
+  align-content: space-around;
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: small;
+  font-size: small;
+}
+.bottom-container .d-grid {
+  margin-left: auto;
+  margin-right: 30px;
+}
+
+.bottom-container .btn-primary:hover {
+  background-color: #5f8cc7;
+}
+
+/* Definición de la clase para el botón de confirmación */
+.swal-confirm-button {
+  background-color: #466388;
+  color: white;
+  font-family: "Arial", sans-serif;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+/* Definición de la clase para el botón de cancelación */
+.swal-cancel-button {
+  background-color: #c93544;
+  color: white;
+  font-family: "Arial", sans-serif;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+/**/
+.swal-question-popup {
+  background-color: #f4f4f4;
+  border-radius: 20px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: medium;
+  font-size: medium;
+}
+
+.swal-success-popup {
+  background-color: #f4f4f4;
+  border-radius: 20px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: small;
+  font-size: small;
+  width: 40%;
+}
+.swal-success-popup ul {
+  list-style-type: circle;
+  padding-left: 0;
+  text-align: center;
+}
+.swal-success-popup li {
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 8px;
+  text-align: justify;
+  text-align-last: center;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.swal-ok-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: #283b54;
+  color: white;
+  margin-top: -10px;
+}
+
+.swal-ok-button:hover {
+  background-color: #466388;
+}
