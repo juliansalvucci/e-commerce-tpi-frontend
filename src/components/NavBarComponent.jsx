@@ -42,18 +42,44 @@ export const NavBarComponent = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <div className="navbar-nav">
             {/* Opción de productos, cierra el popup al hacer click */}
-            <NavLink to="/" className="nav-link" aria-current="page" onClick={closePopup}>
+            <NavLink
+              to="/"
+              className="nav-link"
+              aria-current="page"
+              onClick={closePopup}
+            >
               Productos
             </NavLink>
           </div>
           <div className="navbar-nav">
             {/* Opción del carrito, cierra el popup al hacer click */}
-            <NavLink to="/carrito" className="nav-link" aria-current="page" onClick={closePopup}>
+            <NavLink
+              to="/carrito"
+              className="nav-link"
+              aria-current="page"
+              onClick={closePopup}
+            >
               Carrito
             </NavLink>
           </div>
         </div>
         {/* Icono del carrito de compras, al hacer click muestra/oculta el popup */}
+        <NavLink
+          to="/login"
+          className="nav-link"
+          aria-current="page"
+          onClick={closePopup}
+        >
+          Login
+        </NavLink>
+        <NavLink
+          to="/register"
+          className="nav-link"
+          aria-current="page"
+          onClick={closePopup}
+        >
+          Registrarse
+        </NavLink>
         <button className="cart-icon btn" onClick={togglePopup}>
           <Badge badgeContent={shoppingList.length} color="primary">
             <ShoppingCart />
