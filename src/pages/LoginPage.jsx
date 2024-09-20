@@ -11,9 +11,8 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useUser } from "../context/UserProvider";
-import "../styles/ABM.css";
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const { login } = useUser();
 
   const validationSchema = Yup.object({
@@ -120,7 +119,6 @@ const LoginPage = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                className="btn-crear"
                 disabled={isSubmitting}
               >
                 Iniciar Sesión
@@ -132,5 +130,3 @@ const LoginPage = () => {
     </Box>
   );
 };
-
-export default LoginPage;

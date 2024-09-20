@@ -4,9 +4,9 @@ import { ProductsPage } from "./pages/ProductsPage";
 import { CartPage } from "./pages/CartPage";
 import { ProductProvider } from "./context/ProductProvider";
 import { CartProvider } from "./context/CartProvider";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
 import { UserProvider } from "./context/UserProvider";
-//import LoginPage from "./pages/LoginPage";
-//import RegisterPage from "./pages/RegisterPage";
 
 export const CarritoApp = () => {
   return (
@@ -22,10 +22,8 @@ export const CarritoApp = () => {
               <Route path="/carrito" element={<CartPage />}></Route>
               {/*Agreggo el siguiente camino en caso de que el usuario ingrese algo diferente a lo pedido*/}
               <Route path="/*" element={<Navigate to="/" />}></Route>
-              {/* ROMPE TODO. NO TOCAR
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/register" element={<RegisterPage />}></Route>
-              */}
             </Routes>
           </div>
         </CartProvider>

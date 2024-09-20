@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useUser } from "../context/UserProvider.jsx";
-import "../styles/ABM.css";
 
-const RegisterPage = () => {
+
+export const RegisterPage = () => {
   const { register } = useUser();
   // Esquema de validación con Yup
   const validationSchema = Yup.object({
@@ -157,7 +157,6 @@ const RegisterPage = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                className="btn-crear"
                 disabled={isSubmitting}
               >
                 Registrarse
@@ -169,5 +168,3 @@ const RegisterPage = () => {
     </Box>
   );
 };
-
-export default RegisterPage;
