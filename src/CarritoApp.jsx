@@ -7,13 +7,15 @@ import { CartProvider } from "./context/CartProvider";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { UserProvider } from "./context/UserProvider";
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 export const CarritoApp = () => {
   return (
     <UserProvider>
       <ProductProvider>
         <CartProvider>
-          <NavBarComponent />
+          <NavBar />
           <div className="container">
             <Routes>
               {/*Especifico qué elementos (componente) debo mostrar al tener la ruta localhost:5174/*/}
@@ -26,6 +28,7 @@ export const CarritoApp = () => {
               <Route path="/register" element={<RegisterPage />}></Route>
             </Routes>
           </div>
+          <Footer />
         </CartProvider>
       </ProductProvider>
     </UserProvider>
