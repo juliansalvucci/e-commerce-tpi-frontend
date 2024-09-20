@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useUser } from "../context/UserProvider.jsx";
-import "../styles/ABM.css";
 
 
 export const RegisterPage = () => {
@@ -158,7 +157,6 @@ export const RegisterPage = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                className="btn-crear"
                 disabled={isSubmitting}
               >
                 Registrarse
