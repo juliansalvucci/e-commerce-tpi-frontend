@@ -1,37 +1,40 @@
 import * as yup from "yup";
-//import axios from "axios";
+import axios from "axios";
 
 const alMenosUnaLetra = /[a-zA-Z]/;
 //const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
 const sinCaracteresEspeciales = /^[a-zA-Z0-9\s]+$/;
 const soloNumeros = /^\$?\d+(?:\.\d+)*$/;
 
-/*// Función que consulta la API para verificar si un nombre ya existe
+// Función que consulta la API para verificar si un nombre ya existe
 const isUnique = async (tipoClase, nombre) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/${tipoClase}?name=${nombre}`
+      `http://localhost:8080/${tipoClase}/name/${nombre}`
     );
-    return response.data.exists === false; // Supongamos que la API devuelve un campo "exists"
+    return response.data.exists === false;
   } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return true; // El nombre no existe
+    }
     console.error("Error al consultar la API:", error);
-    return false; // En caso de error, asumimos que la validación falla
+    return false; // En caso de otro error, asumimos que no es único (POR AHORA)
   }
-};*/
+};
 
 export const brandSchema = yup.object().shape({
   nombre: yup
     .string()
     .required("Obligatorio")
-    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-    /*.test(
+    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra")
+    .test(
       'unique-brand',
       'Ya existe una marca con ese nombre',
-      async ("brand", value) => {
-        //Llamada asíncrona a la API para verificar si el nombre de la marca ya existe
+      async function (value) { // Usamos function en lugar de arrow function para acceder a this
+        if (!value) return true; // Si el campo está vacío, no hacemos la validación async
         return await isUnique("brand", value);
       }
-    ),*/
+    ),
 });
 
 export const subCategorySchema = yup.object().shape({
