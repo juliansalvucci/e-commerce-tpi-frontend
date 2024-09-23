@@ -38,6 +38,8 @@ const ABMBrandPage = () => {
         <Formik
           initialValues={{ nombre: "" }} // Valores iniciales del formulario
           validationSchema={brandSchema} // Esquema de validación
+          validateOnBlur={true} // Solo valida al perder foco
+          validateOnChange={false} // Deshabilitar validación en cada cambio
           onSubmit={onSubmit} // Función al enviar el formulario
         >
           {({ isSubmitting }) => (
