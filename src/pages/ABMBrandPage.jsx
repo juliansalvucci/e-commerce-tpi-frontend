@@ -3,30 +3,30 @@ import { Formik, Form } from "formik";
 import { brandSchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMBackButton from "../components/ABMBackButton";
-//import axios from "axios";
+import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm }) => {
-  /*
+const onSubmit = async (values, { resetForm, setSubmitting }) => {
   try {
-    const response = await axios.post(
-      "http://localhost:8080/brand",
-      values
-    );
+    const response = await axios.post("http://localhost:8080/brand", {
+      name: values.nombre,
+    });
     console.log("Respuesta del servidor:", response.data);
-    // Aca íria la lógica de mostrar un mensaje de exito
+    alert(`Marca creada con éxito: ${response.data.name}`);
   } catch (error) {
     console.error("Error en el registro:", error);
-    // Aca íria la lógica de mostrar el error
+    alert("Hubo un error al crear la marca.");
   } finally {
     setSubmitting(false);
+    resetForm();
   }
-  */
+  /*
   console.log("Formulario enviado con valores:", values);
   await new Promise((resolve) => setTimeout(resolve, 1000));
   resetForm();
   alert("Formulario enviado");
+  */
 };
 
 const ABMBrandPage = () => {
