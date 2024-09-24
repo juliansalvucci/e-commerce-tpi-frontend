@@ -2,6 +2,7 @@ import * as yup from "yup";
 import axios from "axios";
 
 const alMenosUnaLetra = /[a-zA-Z]/;
+const primerCharacterLetraONumero = /^[a-zA-Z0-9]/;
 //const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
 const sinCaracteresEspeciales = /^[a-zA-Z0-9\s]+$/;
 const soloNumeros = /^\$?\d+(?:\.\d+)*$/;
@@ -27,6 +28,7 @@ export const brandSchema = yup.object().shape({
     .string()
     .required("Obligatorio")
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra")
+    .matches(primerCharacterLetraONumero, "El primer caracter debe ser una letra o un número")
     .test(
       'unique-brand',
       'Ya existe una marca con ese nombre',
