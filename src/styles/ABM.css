@@ -52,7 +52,7 @@
 
 /*Este es el texto que aparece abajo del formulario cuando hay un error*/
 .error {
-  position: absolute;
+  /*position: absolute;*/
   bottom: -20px;
   color: #fc8181;
   font-size: 13px;
