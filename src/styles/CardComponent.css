@@ -82,17 +82,6 @@
   font-style: normal;
 }
 
-/*
-  .card .add_button,
-  .card .remove_button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 20px;
-    color: #fff;
-    cursor: pointer;
-  }
-    */
-
 .card .add_button,
 .card .remove_button {
   display: flex;
@@ -153,4 +142,8 @@
 .pagination .page-item:not(.disabled) .page-link:hover {
   background-color: #b1c7e4; 
   color: white; 
+}
+
+.product-alert{
+  cursor: pointer;
 }
