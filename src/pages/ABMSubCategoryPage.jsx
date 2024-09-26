@@ -1,40 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import { subCategorySchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
 import ABMBackButton from "../components/ABMBackButton";
-//import axios from "axios";
+import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm }) => {
-  /*
+const onSubmit = async (values, { resetForm, setSubmitting }) => {
   try {
-    const response = await axios.post(
-      "http://localhost:8080/subcategory",
-      values
-    );
+    const response = await axios.post("http://localhost:8080/subcategory", {
+      name: values.nombre,
+      description: values.descripcion,
+      categoryId: values.categoria,
+    });
     console.log("Respuesta del servidor:", response.data);
-    // Aca íria la lógica de mostrar un mensaje de exito
+    alert(`SubCategoria creada con éxito: ${response.data.name}`);
+    resetForm();
   } catch (error) {
     console.error("Error en el registro:", error);
-    // Aca íria la lógica de mostrar el error
+    alert("Hubo un error al crear la categoria.");
   } finally {
     setSubmitting(false);
   }
-  */
+  /*
   console.log("Formulario enviado con valores:", values);
   await new Promise((resolve) => setTimeout(resolve, 1000));
   resetForm();
   alert("Formulario enviado");
+  */
 };
 
 const ABMSubCategoryPage = () => {
-  /*
   const [categories, setCategories] = useState([]); // Estado para almacenar las categorías
-  // useEffect para obtener las categorías desde la API
   useEffect(() => {
+    // useEffect para obtener las categorías desde la API
     const fetchCategories = async () => {
       try {
         const response = await axios.get("http://localhost:8080/category");
@@ -46,12 +47,6 @@ const ABMSubCategoryPage = () => {
 
     fetchCategories(); // Llamada a la API cuando el componente se monta
   }, []); // Solo se ejecuta una vez cuando el componente se monta
-  */
-  // Por ahora, dummy data
-  const categoryOptions = [
-    { value: "1", label: "Computación" }, // Cuando haga el fetch, value será el id de categoría, label el nombre
-    { value: "2", label: "Celulares y Accesorios" },
-  ];
 
   return (
     <div className="background">
@@ -59,9 +54,11 @@ const ABMSubCategoryPage = () => {
       <div className="container abm-subcategory-page">
         <h1 className="title">Creá una SubCategoría</h1>
         <Formik
-          initialValues={{ nombre: "", descripcion: "", categoria: "" }} // Valores iniciales del formulario
-          validationSchema={subCategorySchema} // Esquema de validación
-          onSubmit={onSubmit} // Función al enviar el formulario
+          initialValues={{ nombre: "", descripcion: "", categoria: "" }}
+          validationSchema={subCategorySchema}
+          validateOnBlur={true} // Solo valida al perder foco
+          validateOnChange={false} // Deshabilitar validación en cada cambio
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
@@ -83,11 +80,10 @@ const ABMSubCategoryPage = () => {
                 label="CATEGORÍA"
                 id="categoria"
                 name="categoria"
-                options={categoryOptions}
-                /*options={categories.map((cat) => ({
-                    //value: cat.id, // Usamos el ID de la categoría como valor
-                    //label: cat.name, // Usamos el nombre de la categoría como label
-                  }))}*/ // Pasamos las categorías que vienen del estado
+                options={categories.map((cat) => ({
+                  value: cat.id, // Usamos el ID de la categoría como valor
+                  label: cat.name, // Usamos el nombre de la categoría como label
+                }))} // Pasamos las categorías que vienen del estado
               />
               <button
                 className="btn-crear"

@@ -2,31 +2,32 @@ import React from "react";
 import { Formik, Form } from "formik";
 import { categorySchema } from "../schemas";
 import ABMInputComponent from "../components/ABMInputComponent";
-import ABMBackButton from "../s/ABMBackButton";
-//import axios from "axios";
+import ABMBackButton from "../components/ABMBackButton";
+import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm }) => {
-  /*
+const onSubmit = async (values, { resetForm, setSubmitting }) => {
   try {
-    const response = await axios.post(
-      "http://localhost:8080/category",
-      values
-    );
+    const response = await axios.post("http://localhost:8080/category", {
+      name: values.nombre,
+      description: values.descripcion,
+    });
     console.log("Respuesta del servidor:", response.data);
-    // Aca íria la lógica de mostrar un mensaje de exito
+    alert(`Categoria creada con éxito: ${response.data.name}`);
+    resetForm();
   } catch (error) {
     console.error("Error en el registro:", error);
-    // Aca íria la lógica de mostrar el error
+    alert("Hubo un error al crear la categoria.");
   } finally {
     setSubmitting(false);
   }
-  */
+  /*
   console.log("Formulario enviado con valores:", values);
   await new Promise((resolve) => setTimeout(resolve, 1000));
   resetForm();
   alert("Formulario enviado");
+  */
 };
 
 const ABMCategoryPage = () => {
@@ -36,20 +37,22 @@ const ABMCategoryPage = () => {
       <div className="container abm-category-page">
         <h1 className="title">Creá una Categoría</h1>
         <Formik
-          initialValues={{ nombre: "", descripcion: "" }} // Valores iniciales del formulario
-          validationSchema={categorySchema} // Esquema de validación
-          onSubmit={onSubmit} // Función al enviar el formulario
+          initialValues={{ nombre: "", descripcion: "" }}
+          validationSchema={categorySchema}
+          validateOnBlur={true} // Solo valida al perder foco
+          validateOnChange={false} // Deshabilitar validación en cada cambio
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInput
+              <ABMInputComponent
                 label="NOMBRE"
                 id="nombre"
                 name="nombre"
                 type="text"
                 placeholder="Ingrese el nombre"
               />
-              <ABMInput
+              <ABMInputComponent
                 label="DESCRIPCIÓN"
                 id="descripcion"
                 name="descripcion"

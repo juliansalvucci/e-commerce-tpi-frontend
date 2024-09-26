@@ -14,12 +14,12 @@ const onSubmit = async (values, { resetForm, setSubmitting }) => {
     });
     console.log("Respuesta del servidor:", response.data);
     alert(`Marca creada con éxito: ${response.data.name}`);
+    resetForm();
   } catch (error) {
     console.error("Error en el registro:", error);
     alert("Hubo un error al crear la marca.");
   } finally {
     setSubmitting(false);
-    resetForm();
   }
   /*
   console.log("Formulario enviado con valores:", values);
@@ -36,11 +36,11 @@ const ABMBrandPage = () => {
       <div className="container abm-brand-page">
         <h1 className="title">Creá una Marca</h1>
         <Formik
-          initialValues={{ nombre: "" }} // Valores iniciales del formulario
-          validationSchema={brandSchema} // Esquema de validación
+          initialValues={{ nombre: "" }}
+          validationSchema={brandSchema}
           validateOnBlur={true} // Solo valida al perder foco
           validateOnChange={false} // Deshabilitar validación en cada cambio
-          onSubmit={onSubmit} // Función al enviar el formulario
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
@@ -49,7 +49,7 @@ const ABMBrandPage = () => {
                 id="nombre"
                 name="nombre"
                 type="text"
-                placeholder="Ingrese el nombre de la marca"
+                placeholder="Ingrese el nombre"
               />
               <button
                 className="btn-crear"

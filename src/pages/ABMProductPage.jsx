@@ -1,37 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import { productSchema } from "../schemas";
+import { Stack, Box } from "@mui/material";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
-import ABMBackButton from "../s/ABMBackButton";
-//import axios from "axios";
+import ABMBackButton from "../components/ABMBackButton";
+import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm }) => {
-  /*
+const onSubmit = async (values, { resetForm, setSubmitting }) => {
   try {
-    const response = await axios.post(
-      "http://localhost:8080/subcategory",
-      values
-    );
+    const response = await axios.post("http://localhost:8080/product", {
+      name: values.nombre,
+      description: values.descripcion,
+      price: values.precio,
+      stock: values.stock,
+      stockMin: values.stockMin,
+      imageURL: values.imagen,
+      brandId: values.marca,
+      subCategoryId: values.subcategoria,
+    });
     console.log("Respuesta del servidor:", response.data);
-    // Aca íria la lógica de mostrar un mensaje de exito
+    alert(`SubCategoria creada con éxito: ${response.data.name}`);
+    resetForm();
   } catch (error) {
     console.error("Error en el registro:", error);
-    // Aca íria la lógica de mostrar el error
+    alert("Hubo un error al crear la categoria.");
   } finally {
     setSubmitting(false);
   }
-  */
+  /*
   console.log("Formulario enviado con valores:", values);
   await new Promise((resolve) => setTimeout(resolve, 1000));
   resetForm();
   alert("Formulario enviado");
+  */
 };
 
 const ABMProductPage = () => {
-  /*
   const [subCategories, setSubCategories] = useState([]); // Estado para las subcategorías
   // useEffect para obtener las subcategorías
   useEffect(() => {
@@ -44,7 +51,7 @@ const ABMProductPage = () => {
       }
     };
     fetchSubCategories();
-  }, []); // Solo se ejecuta una vez cuando el e se monta
+  }, []); // Solo se ejecuta una vez cuando el componente se monta
 
   const [brands, setBrands] = useState([]); // Estado para las marcas
   // useEffect para obtener las marcas
@@ -58,18 +65,7 @@ const ABMProductPage = () => {
       }
     };
     fetchBrands();
-  }, []); // Solo se ejecuta una vez cuando el e se monta
-  */
-
-  // Por ahora, dummy data
-  const brandOptions = [
-    { value: "1", label: "Samsung" }, // Cuando haga el fetch, value será el id de categoría, label el nombre
-    { value: "2", label: "Apple" },
-  ];
-  const subCategoryOptions = [
-    { value: "1", label: "Celulares" }, // Cuando haga el fetch, value será el id de categoría, label el nombre
-    { value: "2", label: "Accesorios de Celular" },
-  ];
+  }, []); // Solo se ejecuta una vez cuando el componente se monta
 
   return (
     <div className="background">
@@ -81,55 +77,86 @@ const ABMProductPage = () => {
             nombre: "",
             descripcion: "",
             precio: "",
+            stock: "",
+            stockMin: "",
+            imagen: "",
             marca: "",
             subcategoria: "",
-          }} // Valores iniciales del formulario
-          validationSchema={productSchema} // Esquema de validación
-          onSubmit={onSubmit} // Función al enviar el formulario
+          }}
+          validationSchema={productSchema}
+          validateOnBlur={true} // Solo valida al perder foco
+          validateOnChange={false} // Deshabilitar validación en cada cambio
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInputComponent
-                label="NOMBRE"
-                id="nombre"
-                name="nombre"
-                type="text"
-                placeholder="Ingrese el nombre"
-              />
-              <ABMInputComponent
-                label="DESCRIPCIÓN"
-                id="descripcion"
-                name="descripcion"
-                type="text"
-                placeholder="Ingrese la descripción"
-              />
-              <ABMInputComponent
-                label="PRECIO"
-                id="precio"
-                name="precio"
-                type="text"
-                placeholder="Ingrese el precio"
-              />
-              <ABMSelectComponent
-                label="MARCA"
-                id="marca"
-                name="marca"
-                options={brandOptions} // Esta linea se va cuando lo de abajo se testee
-                /*options={brands.map((brand) => ({
-                    //value: brand.id, // Usamos el ID de la marca como valor
-                    //label: brand.name, // Usamos el nombre de la marca como label
-                  }))}*/ // Pasamos las marcas que vienen del estado
-              />
-              <ABMSelectComponent
-                label="SUBCATEGORÍA"
-                id="subcategoria"
-                name="subcategoria"
-                options={subCategoryOptions} // Esta linea se va cuando lo de abajo se testee
-                /*options={subCategories.map((subCat) => ({
-                    //value: subCat.id, // Usamos el ID de la subcategoría como valor
-                    //label: subCat.name, // Usamos el nombre de la subcategoría como label
-                  }))}*/ // Pasamos las subcategorías que vienen del estado
-              />
+              <Stack spacing={2} direction="row">
+                <ABMInputComponent
+                  label="NOMBRE"
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                />
+                <ABMInputComponent
+                  label="DESCRIPCIÓN"
+                  id="descripcion"
+                  name="descripcion"
+                  type="text"
+                  placeholder="Ingrese la descripción"
+                />
+                <ABMInputComponent
+                  label="PRECIO"
+                  id="precio"
+                  name="precio"
+                  type="number"
+                  step="0.01" // Permito decimales
+                  placeholder="Ingrese el precio"
+                />
+              </Stack>
+              <Stack spacing={2} direction="row">
+                <ABMInputComponent
+                  label="STOCK"
+                  id="stock"
+                  name="stock"
+                  type="number"
+                  placeholder="Ingrese el stock disponible"
+                />
+                <ABMInputComponent
+                  label="STOCK MÍNIMO"
+                  id="stockMin"
+                  name="stockMin"
+                  type="number"
+                  placeholder="Ingrese el stock mínimo"
+                />
+                <ABMInputComponent
+                  label="IMAGEN"
+                  id="imagen"
+                  name="imagen"
+                  type="text"
+                  placeholder="Ingrese la URL de la imagen"
+                />
+              </Stack>
+              <Stack spacing={2} direction="row">
+                <ABMSelectComponent
+                  label="MARCA"
+                  id="marca"
+                  name="marca"
+                  options={brands.map((brand) => ({
+                    value: brand.id,
+                    label: brand.name,
+                  }))}
+                />
+                <ABMSelectComponent
+                  label="SUBCATEGORÍA"
+                  id="subcategoria"
+                  name="subcategoria"
+                  options={subCategories.map((subCat) => ({
+                    value: subCat.id,
+                    label: subCat.name,
+                  }))}
+                />
+              </Stack>
               <button
                 className="btn-crear"
                 type="submit"
