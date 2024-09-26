@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import "../styles/CardComponent.css";
 import { CartContext } from "../context/CartContext";
+import { ProductPopup } from "../components/ProductPopup";
 import addProductToCart from "../assets/add-product.png";
 import removeProductToCart from "../assets/remove-product.png";
 
@@ -9,6 +10,7 @@ export const CardComponent = ({
   image,
   title,
   price,
+  description,
   handlerAdd,
   handlerRemove,
 }) => {
@@ -16,6 +18,9 @@ export const CardComponent = ({
 
   //Comprobamos si está o no agregado al carrito
   const [added, setAdded] = useState(false);
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);  // Estado para controlar la visibilidad del popup del producto
+  const [selectedProduct, setSelectedProduct] = useState(null);  // Estado para almacenar el producto seleccionado del popup del mismo
 
   const addProduct = () => {
     handlerAdd();
@@ -38,13 +43,46 @@ export const CardComponent = ({
     checkAdded();
   }, [shoppingList]); //Se actualiza cada vez que el shoppingList cambie
 
+  const showProductPopup = () => {
+    // Buscar el producto en el carrito para obtener su cantidad actual
+    const productInCart = shoppingList.find((item) => item.id === id);
+    const quantity = productInCart ? productInCart.quantity : 1;
+  
+    setSelectedProduct({ id, image, title, description, price, quantity });
+    setIsPopupVisible(true);
+  };
+
+  //Cierro el popup con el detalle del producto seleccionado
+  const closeProductPopup = () => {
+    setIsPopupVisible(false);
+  }
+
   return (
     <li className="card">
-      <img src={image} alt={title} className="card-img" />
+      <div className="product-alert">
+        <img
+          src={image}
+          alt={title}
+          className="card-img"
+          onClick={showProductPopup}
+        />
+      </div>
 
       <div className="card_content">
-        <h5 className="card_title">{title}</h5>
-        <p className="card_price">${price.toFixed(2)}</p>
+        <div className="product-alert">
+          <h5
+            className="card_title"
+            onClick={showProductPopup}
+          >
+            {title}
+          </h5>
+          <p
+            className="card_price"
+            onClick={showProductPopup}
+          >
+            ${price.toFixed(2)}
+          </p>
+        </div>
         {added ? (
           //En el caso de que ya se haya añadido el producto al carrito y el usuario quiere quitarla
           <div className="circle">
@@ -67,6 +105,15 @@ export const CardComponent = ({
           </div>
         )}
       </div>
+
+      {/*Renderiza el popup si está visible */}
+      {isPopupVisible && (
+        <ProductPopup
+          isVisible={isPopupVisible}
+          onClose={closeProductPopup}
+          product={selectedProduct}
+        />
+      )}
     </li>
   );
 };
