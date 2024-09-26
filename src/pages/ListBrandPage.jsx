@@ -9,7 +9,7 @@ import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import axios from "axios";
 import "../styles/List.css";
 
-const ListPage = () => {
+const ListBrandPage = () => {
   const [items, setItems] = useState([]);
   const [showDeleted, setShowDeleted] = useState(false);
   const [page, setPage] = useState(1);
@@ -72,7 +72,7 @@ const ListPage = () => {
       <Container className="container">
         <Box className="title-box">
           <Typography variant="h3" className="title">
-            {showDeleted ? "Listado de Items Eliminados" : "Listado de Items"}
+            {showDeleted ? "Listado de Marcas Eliminadas" : "Listado de Marcas"}
           </Typography>
         </Box>
 
@@ -120,29 +120,31 @@ const ListPage = () => {
           )}
         </Box>
 
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Stack direction="row" spacing={2}>
-            <ListCreateButton />
-            <ListShowDeletedButton
-              showDeleted={showDeleted}
-              onClick={handleShowDeletedToggle}
-            />
-            <ListUpdateButton onClick={fetchItems} />
-          </Stack>
+        <Box>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Stack direction="row" spacing={2}>
+              <ListCreateButton />
+              <ListShowDeletedButton
+                showDeleted={showDeleted}
+                onClick={handleShowDeletedToggle}
+              />
+              <ListUpdateButton onClick={fetchItems} />
+            </Stack>
 
-          <Pagination
-            count={Math.ceil(items.length / itemsPerPage)}
-            page={page}
-            onChange={handlePageChange}
-          />
-        </Stack>
+            <Pagination
+              count={Math.ceil(items.length / itemsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+            />
+          </Stack>
+        </Box>
       </Container>
     </Box>
   );
 };
 
-export default ListPage;
+export default ListBrandPage;
