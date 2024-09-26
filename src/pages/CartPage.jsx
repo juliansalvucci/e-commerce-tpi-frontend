@@ -56,6 +56,7 @@ export const CartPage = () => {
       }
     });
   };
+
   return (
     <div className="container">
       <div className="top-container">

@@ -1,0 +1,192 @@
+.product-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+}
+
+/*Contenedor para editar el botón de x del popup del producto*/
+.x-btn-popup {
+  position: absolute;
+  top: 96px;
+  right: 210px;
+  background: #dc3546e5;
+  color: #283b54;
+  border: none;
+  font-size: 12px;
+  border-radius: 10px;
+  width: 25px;
+  height: 25px;
+  
+}
+
+/*Contenedor para editar el botón de x del popup del producto cuando el usuario coloca el mouse encima*/
+.x-btn-popup:hover {
+  cursor: pointer;
+  background-color: #f09999;
+  border-color: #f09999;
+}
+
+.details-container h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: large;
+  font-weight: 800;
+  font-family: "Poppins", sans-serif;
+  width: 95%;
+}
+
+.details-container p {
+  width: 95%;
+  font-family: "Poppins", sans-serif;
+  font-weight: 550;
+  font-size: small;
+}
+
+.details-container .price-container{
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-weight: 550;
+  font-size: small;
+}
+
+/*Contenedor de todos los elementos del popup*/
+.product-container .popup-content {
+  display: flex;
+  flex-direction: row; /* Coloca los elementos uno al lado del otro (horizontalmente) */
+  align-items: flex-start; /* Alinea los elementos en la parte superior del contenedor */
+  justify-content: flex-start; /* Alinea los elementos al principio del contenedor */
+  background-color: white; /* Aquí se especifica el color de fondo */
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 70%; /* Asegura que el contenedor ocupe todo el espacio horizontal */
+  height: 70%;
+}
+
+/*Contenedor para la imagen del producto, que estará en el lado izquierdo*/
+.popup-content .image-container {
+  border-radius: 8px;
+  max-width: 200px; /* Limita el ancho máximo de la imagen */
+  max-height: 200px; /* Limita el alto máximo de la imagen */
+  width: 100%; /* Ajusta la imagen al ancho completo de su contenedor */
+  object-fit: cover;
+  margin-right: 20px; /* Espacio entre la imagen y el contenedor de detalles */
+  display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center;     /* Centrar verticalmente */
+}
+
+.popup-content .image-container img {
+  display: block;
+  margin-top: 150px;
+}
+
+/*Contener de la descripción y precio de los productos, a la derecha de la imagen*/
+.details-container {
+  flex-grow: 1; /* Hace que el contenedor ocupe todo el espacio restante a la derecha */
+  margin-left: 20px;
+  text-align: justify; /* Alinea el texto a la izquierda */
+}
+
+
+.buy-counter-buttoms{
+  display: flex;
+  flex-direction: row; /* Organiza los elementos en una fila */
+  align-items: center;
+  gap: 20px;
+}
+
+.buy-container {
+  display: block; /* Asegura que el contenedor del botón esté debajo */
+  margin-top: 20px; 
+  width: 30%; 
+  text-align: left; 
+}
+
+.buy-button {
+  background-color: #283b54; 
+  color: white; 
+  padding: 12px 24px; 
+  border: none; 
+  border-radius: 8px; 
+  font-size: 16px; 
+  cursor: pointer; 
+}
+
+.buy-button:hover {
+  background-color: #3d5f8b; 
+  color: #a6a6a6;
+  cursor: pointer;
+}
+
+.counter-products{
+  margin-left: 90px;
+  margin-top: 25px;
+}
+
+/* Botones de incremento y decremento */
+.counter-products .btn-outline-primary {
+  color: #fff;
+  background-color: #283b54;
+  border-color: #283b54;
+}
+
+.counter-products .btn-outline-primary:hover{
+  color: white;
+  background-color: #3d5f8b;
+  border-color: #3d5f8b;
+}
+
+.counter-products .btn-primary {
+  background-color: rgb(233, 231, 231);
+  border-color: gray;
+  color: gray;
+}
+
+.counter-products .btn-primary:hover {
+  background-color: rgb(233, 231, 231);
+  border-color: gray;
+  color: gray;
+  cursor: default;
+}
+
+.product-container .add_button,
+.product-container .remove_button {
+  display: flex;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  background: none;
+}
+
+.product-container .circle {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  border-radius: 30px;
+  background: #a6a6a6;
+  opacity: 0.8;
+  top: 330px;
+  right: 400px;
+  z-index: 1;
+  margin-top: 9%;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
