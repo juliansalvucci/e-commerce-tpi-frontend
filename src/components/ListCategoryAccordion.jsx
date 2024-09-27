@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+/*¿QUE SIGNIFICA ACCORDIONDETAILS, EN ESTE CASO NO SE ELIMINARÍA PORQUE YA NO CONSIDERMOS DESCRIPCION*/
 const ListCategoryAccordion = ({ category, onToggle, expanded }) => {
   return (
     <Accordion
@@ -23,8 +24,9 @@ const ListCategoryAccordion = ({ category, onToggle, expanded }) => {
             : `Fecha de creación: ${category.creationDateTime}`}
         </Typography>
       </AccordionSummary>
+      
       <AccordionDetails>
-        <Typography>{category.description}</Typography>
+        <Typography>{category.description}</Typography> 
       </AccordionDetails>
     </Accordion>
   );
