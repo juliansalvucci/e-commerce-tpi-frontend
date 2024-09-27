@@ -194,7 +194,6 @@ const ListCategoryPage = () => {
         </Box>
 
         {/* Botón para alternar entre categorías eliminadas y activas */}
-
         <Stack
           direction="row"
           justifyContent="center"
