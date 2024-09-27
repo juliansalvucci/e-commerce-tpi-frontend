@@ -1,30 +1,28 @@
 import React from "react";
 import { useField } from "formik";
+import { MenuItem, TextField } from "@mui/material";
 
-const ABMSelectComponent = ({ label, id, options, ...props }) => {
+const ABMSelectComponent = ({ label, options, ...props }) => {
   const [field, meta] = useField(props); // useField para manejar el campo con Formik
 
   return (
-    <div className="form-group">
-      <label htmlFor={id}>{label}</label>
-      <select
-        {...field}
-        {...props} // Pasa las propiedades adicionales al select
-        id={id} // Esto corrige: The label's for attribute refers to a form field by its name, not its id. This might prevent the browser from correctly autofilling the form and accessibility tools from working correctly.
-        className={meta.touched && meta.error ? "input-error" : ""}
-      >
-        <option value="">Seleccione una opción</option>{" "}
-        {/* Opción por defecto */}
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </div>
+    <TextField
+      fullWidth
+      select
+      label={label}
+      id={label}
+      {...field}
+      {...props}
+      error={meta.touched && Boolean(meta.error)}
+      helperText={meta.touched && meta.error ? meta.error : ""}
+      variant="outlined"
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label}
+        </MenuItem>
+      ))}
+    </TextField>
   );
 };
 
