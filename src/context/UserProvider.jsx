@@ -2,8 +2,12 @@ import React, { useContext } from "react";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const UserProvider = ({ children }) => {
+
+  const navigate = useNavigate();
   const register = async (values, { setSubmitting }) => {
     try {
       // Llamada POST al backend usando Axios
@@ -17,6 +21,8 @@ export const UserProvider = ({ children }) => {
         icon: "success",
         title: "Usuario registrado con éxito",
       });
+
+      navigate("/");
 
       // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito
     } catch (error) {
@@ -45,7 +51,7 @@ export const UserProvider = ({ children }) => {
         icon: "success",
         title: "Bienvenido",
       });
-
+      navigate("/");
       // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito
     } catch (error) {
       console.error("Error en el registro:", error);
