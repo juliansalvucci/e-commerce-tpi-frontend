@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import { productSchema } from "../schemas";
-import { Stack, Box } from "@mui/material";
+import isUnique from "../utils/isUniqueUtils";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
-import ABMBackButton from "../components/ABMBackButton";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm, setSubmitting }) => {
+const onSubmit = async (
+  values,
+  { resetForm, setSubmitting, setFieldError }
+) => {
   try {
+    const isUniqueResult = await isUnique("product", values.nombre);
+    if (!isUniqueResult) {
+      setFieldError("nombre", "Ya existe un producto con ese nombre");
+      setSubmitting(false);
+      return;
+    }
     const response = await axios.post("http://localhost:8080/product", {
       name: values.nombre,
       description: values.descripcion,
@@ -21,12 +30,39 @@ const onSubmit = async (values, { resetForm, setSubmitting }) => {
       brandId: values.marca,
       subCategoryId: values.subcategoria,
     });
-    console.log("Respuesta del servidor:", response.data);
-    alert(`SubCategoria creada con éxito: ${response.data.name}`);
+    //console.log("Respuesta del servidor:", response.data);
+    const productDetails = `
+      <ul>
+        <p><strong>Nombre:</strong> ${response.data.name}</p>
+        <p><strong>Marca:</strong> ${response.data.brand}</p>
+        <p><strong>Subcategoria:</strong> ${response.data.subCategory}</p>
+        <p><strong>Precio:</strong> ${response.data.price}</p>
+        <p><strong>Stock:</strong> ${response.data.stock}</p>
+        <p><strong>Stock Min.:</strong> ${response.data.stockMin}</p>
+        <p><strong>Descripción:</strong> ${response.data.description}</p>
+      </ul>
+    `;
+    Swal.fire({
+      icon: "success",
+      title: "Exito!",
+      text: `El producto ${response.data.name} fue creado con éxito!`,
+      html: productDetails,
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
     resetForm();
   } catch (error) {
-    console.error("Error en el registro:", error);
-    alert("Hubo un error al crear la categoria.");
+    //console.error("Error en el registro:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Hubo un error al crear el producto",
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
   } finally {
     setSubmitting(false);
   }

@@ -1,26 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import { subCategorySchema } from "../schemas";
+import isUnique from "../utils/isUniqueUtils";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
-import ABMBackButton from "../components/ABMBackButton";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm, setSubmitting }) => {
+const onSubmit = async (
+  values,
+  { resetForm, setSubmitting, setFieldError }
+) => {
   try {
+    const isUniqueResult = await isUnique("subcategory", values.nombre);
+    if (!isUniqueResult) {
+      setFieldError("nombre", "Ya existe una marca con ese nombre");
+      setSubmitting(false);
+      return;
+    }
     const response = await axios.post("http://localhost:8080/subcategory", {
       name: values.nombre,
-      description: values.descripcion,
       categoryId: values.categoria,
     });
-    console.log("Respuesta del servidor:", response.data);
-    alert(`SubCategoria creada con éxito: ${response.data.name}`);
+    //console.log("Respuesta del servidor:", response.data);
+    const subCategoryDetails = `
+      <ul>
+        <p><strong>Nombre:</strong> ${response.data.name}</p>
+        <p><strong>Categoría:</strong> ${response.data.category}</p>
+      </ul>
+    `;
+    Swal.fire({
+      icon: "success",
+      title: "Exito!",
+      text: `El producto ${response.data.name} fue creado con éxito!`,
+      html: subCategoryDetails,
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
     resetForm();
   } catch (error) {
-    console.error("Error en el registro:", error);
-    alert("Hubo un error al crear la categoria.");
+    //console.error("Error en el registro:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Hubo un error al crear la subcategoria",
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
   } finally {
     setSubmitting(false);
   }

@@ -1,24 +1,49 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import { categorySchema } from "../schemas";
+import isUnique from "../utils/isUniqueUtils";
 import ABMInputComponent from "../components/ABMInputComponent";
-import ABMBackButton from "../components/ABMBackButton";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm, setSubmitting }) => {
+const onSubmit = async (
+  values,
+  { resetForm, setSubmitting, setFieldError }
+) => {
   try {
+    const isUniqueResult = await isUnique("category", values.nombre);
+    if (!isUniqueResult) {
+      setFieldError("nombre", "Ya existe una categoría con ese nombre");
+      setSubmitting(false);
+      return;
+    }
     const response = await axios.post("http://localhost:8080/category", {
       name: values.nombre,
       description: values.descripcion,
     });
-    console.log("Respuesta del servidor:", response.data);
-    alert(`Categoria creada con éxito: ${response.data.name}`);
+    //console.log("Respuesta del servidor:", response.data);
+    Swal.fire({
+      icon: "success",
+      title: "Exito!",
+      text: `La categoria ${response.data.name} fue creada con éxito!`,
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
     resetForm();
   } catch (error) {
-    console.error("Error en el registro:", error);
-    alert("Hubo un error al crear la categoria.");
+    //console.error("Error en el registro:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Hubo un error al crear la categoria",
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
   } finally {
     setSubmitting(false);
   }
