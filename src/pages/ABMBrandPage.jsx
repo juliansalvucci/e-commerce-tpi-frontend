@@ -1,23 +1,49 @@
 import React from "react";
+import { Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { brandSchema } from "../schemas";
+import isUnique from "../utils/isUniqueUtils";
 import ABMInputComponent from "../components/ABMInputComponent";
-import ABMBackButton from "../components/ABMBackButton";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "../styles/ABM.css";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm, setSubmitting }) => {
+const onSubmit = async (
+  values,
+  { resetForm, setSubmitting, setFieldError }
+) => {
   try {
+    const isUniqueResult = await isUnique("brand", values.nombre);
+    if (!isUniqueResult) {
+      setFieldError("nombre", "Ya existe una marca con ese nombre");
+      setSubmitting(false);
+      return;
+    }
     const response = await axios.post("http://localhost:8080/brand", {
       name: values.nombre,
     });
-    console.log("Respuesta del servidor:", response.data);
-    alert(`Marca creada con éxito: ${response.data.name}`);
+    //console.log("Respuesta del servidor:", response.data);
+    Swal.fire({
+      icon: "success",
+      title: "Exito!",
+      text: `La marca ${response.data.name} fue creada con éxito!`,
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
     resetForm();
   } catch (error) {
-    console.error("Error en el registro:", error);
-    alert("Hubo un error al crear la marca.");
+    //console.error("Error en el registro:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Hubo un error al crear la marca",
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
   } finally {
     setSubmitting(false);
   }
@@ -31,22 +57,20 @@ const onSubmit = async (values, { resetForm, setSubmitting }) => {
 
 const ABMBrandPage = () => {
   return (
-    <div className="background">
-      <ABMBackButton />
-      <div className="container abm-brand-page">
-        <h1 className="title">Creá una Marca</h1>
+    <Box className="background" sx={{ padding: 2 }}>
+      <Box className="container abm-brand-page">
+        {/* Typography queda muy feo aca, mejor HTML*/}
+        <h2 className="title">Creá una Marca</h2>
         <Formik
           initialValues={{ nombre: "" }}
           validationSchema={brandSchema}
-          validateOnBlur={true} // Solo valida al perder foco
-          validateOnChange={false} // Deshabilitar validación en cada cambio
+          validateOnChange={true}
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
               <ABMInputComponent
-                label="NOMBRE"
-                id="nombre"
+                label="Nombre"
                 name="nombre"
                 type="text"
                 placeholder="Ingrese el nombre"
@@ -61,8 +85,8 @@ const ABMBrandPage = () => {
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

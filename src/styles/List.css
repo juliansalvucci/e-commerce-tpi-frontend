@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
 .background {
-  background-color: rgb(83, 97, 180);
+  background-color: #283b54;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -10,8 +10,7 @@
   padding: 16px;
 }
 
-.container {
-  height: 95%;
+.container {  
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -24,19 +23,18 @@
   font-family: "Poppins", "sans-serif";
   font-weight: 500;
   text-align: center;
-  color: black;
+  color: #283b54;
 }
 
-.category-list {
+.item-list {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 0;
   padding: 0;
 }
-
+/*¿QUÉ HACE ESTO?*/
 .accordion-container {
   width: 100%;
   height: 100%;
@@ -45,7 +43,7 @@
 
 .category-item {
   width: 100%;
-  border: 2px solid black;
+  border: 2px solid #283b54;
   margin-bottom: 0;
   padding: 0;
 }
@@ -55,7 +53,7 @@
   justify-content: center;
   margin: 0;
   padding: 0;
-  border-left: 2px solid black;
+  
 }
 
 .category-buttons.column {
