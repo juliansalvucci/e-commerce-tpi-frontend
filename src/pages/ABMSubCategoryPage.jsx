@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { subCategorySchema } from "../schemas";
 import isUnique from "../utils/isUniqueUtils";
@@ -80,12 +81,11 @@ const ABMSubCategoryPage = () => {
   }, []); // Solo se ejecuta una vez cuando el componente se monta
 
   return (
-    <div className="background">
-      <ABMBackButton />
-      <div className="container abm-subcategory-page">
-        <h1 className="title">Creá una SubCategoría</h1>
+    <Box className="background" sx={{}}>
+      <Box className="container abm-subcategory-page">
+        <h2 className="title">Creá una SubCategoría</h2>
         <Formik
-          initialValues={{ nombre: "", descripcion: "", categoria: "" }}
+          initialValues={{ nombre: "", categoria: "" }}
           validationSchema={subCategorySchema}
           validateOnBlur={true} // Solo valida al perder foco
           validateOnChange={false} // Deshabilitar validación en cada cambio
@@ -93,29 +93,24 @@ const ABMSubCategoryPage = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInputComponent
-                label="NOMBRE"
-                id="nombre"
-                name="nombre"
-                type="text"
-                placeholder="Ingrese el nombre"
-              />
-              <ABMInputComponent
-                label="DESCRIPCIÓN"
-                id="descripcion"
-                name="descripcion"
-                type="text"
-                placeholder="Ingrese la descripción"
-              />
-              <ABMSelectComponent
-                label="CATEGORÍA"
-                id="categoria"
-                name="categoria"
-                options={categories.map((cat) => ({
-                  value: cat.id, // Usamos el ID de la categoría como valor
-                  label: cat.name, // Usamos el nombre de la categoría como label
-                }))} // Pasamos las categorías que vienen del estado
-              />
+              <Box sx={{ mb: 2 }}>
+                <ABMInputComponent
+                  label="Nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <ABMSelectComponent
+                  label="Categoría"
+                  name="categoria"
+                  options={categories.map((cat) => ({
+                    value: cat.id, // Usamos el ID de la categoría como valor
+                    label: cat.name, // Usamos el nombre de la categoría como label
+                  }))} // Pasamos las categorías que vienen del estado
+                />
+              </Box>
               <button
                 className="btn-crear"
                 type="submit"
@@ -126,8 +121,8 @@ const ABMSubCategoryPage = () => {
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

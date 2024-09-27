@@ -1,4 +1,5 @@
 import React from "react";
+import { Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { categorySchema } from "../schemas";
 import isUnique from "../utils/isUniqueUtils";
@@ -21,7 +22,6 @@ const onSubmit = async (
     }
     const response = await axios.post("http://localhost:8080/category", {
       name: values.nombre,
-      description: values.descripcion,
     });
     //console.log("Respuesta del servidor:", response.data);
     Swal.fire({
@@ -57,32 +57,23 @@ const onSubmit = async (
 
 const ABMCategoryPage = () => {
   return (
-    <div className="background">
-      <ABMBackButton />
-      <div className="container abm-category-page">
-        <h1 className="title">Creá una Categoría</h1>
+    <Box className="background" sx={{ padding: 2 }}>
+      <Box className="container abm-category-page">
+        {/* Typography queda muy feo aca, mejor HTML*/}
+        <h2 className="title">Creá una Categoría</h2>
         <Formik
-          initialValues={{ nombre: "", descripcion: "" }}
+          initialValues={{ nombre: "" }}
           validationSchema={categorySchema}
-          validateOnBlur={true} // Solo valida al perder foco
-          validateOnChange={false} // Deshabilitar validación en cada cambio
+          validateOnChange={true}
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
               <ABMInputComponent
-                label="NOMBRE"
-                id="nombre"
+                label="Nombre"
                 name="nombre"
                 type="text"
                 placeholder="Ingrese el nombre"
-              />
-              <ABMInputComponent
-                label="DESCRIPCIÓN"
-                id="descripcion"
-                name="descripcion"
-                type="text"
-                placeholder="Ingrese la descripción"
               />
               <button
                 className="btn-crear"
@@ -94,8 +85,8 @@ const ABMCategoryPage = () => {
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
