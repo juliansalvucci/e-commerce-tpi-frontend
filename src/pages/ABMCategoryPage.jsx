@@ -1,12 +1,12 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { Formik, Form } from "formik";
-import { categorySchema } from "../schemas";
-import isUnique from "../utils/isUniqueUtils";
-import ABMInputComponent from "../components/ABMInputComponent";
-import Swal from "sweetalert2";
 import axios from "axios";
+import { Formik, Form } from "formik";
+import Swal from "sweetalert2";
+import ABMInputComponent from "../components/ABMInputComponent";
+import { categorySchema } from "../schemas";
 import "../styles/ABM.css";
+import isUnique from "../utils/isUniqueUtils";
 
 // Función que se ejecutará al enviar el form
 const onSubmit = async (
