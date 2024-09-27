@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import fondo2 from "../assets/fondo-register.png";
+import logo from "../assets/logo.png";
 import {
   TextField,
   Button,
@@ -37,25 +39,57 @@ export const RegisterPage = () => {
   return (
     <Box
       sx={{
+        m: 1,
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "space-between",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
+        boxShadow: 3,
         backgroundColor: "#f5f5f5",
-        padding: 2,
       }}
     >
+      {/* Imagen en el lado izquierdo */}
+      <Box
+        component="img"
+        src={fondo2} // Reemplaza con la ruta de tu imagen
+        alt="Imagen de bienvenida"
+        sx={{
+          width: "120vh", // Ajusta el tamaño según sea necesario
+          height: "90vh",
+        }}
+      />
+      
       <Box
         sx={{
-          width: "100%",
-          maxWidth: 400,
+          width: "120vh",
+          height: "90vh",
           padding: 3,
-          borderRadius: 2,
+          paddingBottom: 10,
           backgroundColor: "white",
           boxShadow: 3,
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center", // Centra horizontalmente
+            alignItems: "center", // Centra verticalmente
+            mb: 4, // Margen inferior para separación
+          }}
+        >
+          <Box
+            component="img"
+            src={logo} // Reemplaza con la ruta de tu imagen
+            alt="Imagen de bienvenida"
+            sx={{
+              width: "100px", // Ajusta el tamaño según sea necesario
+              height: "100px", // Cambia a "auto" para mantener la proporción
+              borderRadius: "50px",
+              boxShadow: 5,
+              mt: 2, // Margen superior para separación
+            }}
+          />
+        </Box>
         <Typography variant="h5" align="center" gutterBottom>
           Registro
         </Typography>

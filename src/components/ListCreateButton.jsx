@@ -15,8 +15,8 @@ const ListCreateButton = () => {
     <Button
       variant="contained"
       sx={{
-        backgroundColor: "black",
-        color: "white",
+        backgroundColor: "#bed0dd",
+        color: "black",
         "&:hover": {
           backgroundColor: "grey",
         },
