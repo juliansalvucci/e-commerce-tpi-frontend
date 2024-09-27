@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Paper,
@@ -13,74 +13,55 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import axios from "axios";
+import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton"; // Componente para eliminar una categoría
 import ListEditButton from "../components/ListEditButton"; // Componente para editar una categoría
 import ListRestoreButton from "../components/ListRestoreButton"; // Componente para restaurar una categoría eliminada
 import ListShowDeletedButton from "../components/ListShowDeletedButton"; // Botón para alternar entre categorías activas y eliminadas
 import "../styles/List.css"; // Estilos personalizados
-import ListCreateButton from "../components/ListCreateButton";
-import ListUpdateButton from "../components/ListUpdateButton";
-
-// Definición de las columnas de la tabla
-const columns = [
-  { id: "name", label: "Nombre", minWidth: 170 },
-  { id: "creationDateTime", label: "Fecha de Creación", minWidth: 170 },
-  { id: "actions", label: "Acciones", minWidth: 170 },
-];
+import formatDateTime from "../utils/formatDateTimeUtils";
 
 const ListCategoryPage = () => {
-  // Estado inicial de las categorías
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Categoria 1",
-      creationDateTime: "2024-08-10",
-      deleted: false,
-    },
-    {
-      id: 2,
-      name: "Categoria 2",
-      creationDateTime: "2024-08-12",
-      deleteDatetime: "2024-09-01",
-      deleted: true, // Categoría eliminada
-    },
-    {
-      id: 3,
-      name: "Categoria 3",
-      creationDateTime: "2024-08-15",
-      deleted: false,
-    },
-    {
-      id: 4,
-      name: "Categoria 4",
-      creationDateTime: "2024-08-18",
-      deleted: false,
-    },
-    {
-      id: 5,
-      name: "Categoria 5",
-      creationDateTime: "2024-08-20",
-      deleted: false,
-    },
-    {
-      id: 6,
-      name: "Categoria 6",
-      creationDateTime: "2024-08-22",
-      deleteDatetime: "2023-09-02",
-      deleted: true, // Categoría eliminada
-    },
-    {
-      id: 7,
-      name: "Categoria 7",
-      creationDateTime: "2024-08-25",
-      deleted: false,
-    },
-  ]);
-
-  // Estado de la paginación
+  const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(0); // Página actual
   const [rowsPerPage, setRowsPerPage] = useState(3); // Número de filas por página
   const [showDeleted, setShowDeleted] = useState(false); // Mostrar categorías eliminadas o activas
+
+  // Definición de las columnas de la tabla
+  const columns = [
+    { id: "name", label: "Nombre", minWidth: 170 },
+    { id: "creationDateTime", label: "Fecha de Creación", minWidth: 170 },
+    ...(showDeleted
+      ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 170 }]
+      : []),
+    { id: "actions", label: "Acciones", minWidth: 170 },
+  ];
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(
+        showDeleted
+          ? "http://localhost:8080/category/deleted"
+          : "http://localhost:8080/category"
+      );
+      const updatedCategories = response.data.map((cat) => ({
+        ...cat,
+        deleted: cat.deleted === true,
+        creationDatetime: formatDateTime(cat.creationDatetime),
+        deleteDatetime: cat.deleteDatetime
+          ? formatDateTime(cat.deleteDatetime)
+          : null,
+      }));
+      setCategories(updatedCategories);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, [showDeleted]);
 
   // Maneja el cambio entre mostrar categorías eliminadas y activas
   const handleShowDeletedToggle = () => {
@@ -104,12 +85,38 @@ const ListCategoryPage = () => {
     setPage(0); // Resetea la página a la primera cuando cambia la cantidad de filas
   };
 
+  const handleEdit = async (id) => {
+    // Aca va la lógica de navegar hacia ABM Categoría con los datos del objeto
+    console.log("Hola");
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/category/${id}`);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
+  const handleRestore = async (id) => {
+    try {
+      await axios.post(`http://localhost:8080/category/recover/${id}`);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error restoring item:", error);
+    }
+  };
+
   return (
     <Box className="background">
-      <Container className="container" sx={{ width: '70%' }}>
+      <Container
+        className="container"
+        sx={{ width: "70%", display: "flex", justifyContent: "center" }}
+      >
         <Box className="title-box">
           {/* Título dinámico según el estado de "showDeleted" */}
-          <Typography variant="h3" className="title">
+          <Typography variant="h3" className="title" align="center">
             {showDeleted
               ? "Listado de Categorías Eliminadas"
               : "Listado de Categorías Activas"}
@@ -121,10 +128,18 @@ const ListCategoryPage = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            width: "100%", // Asegura que el contenedor ocupe todo el ancho disponible
           }}
         >
-          <Paper sx={{ width: "80%", overflow: "hidden", mt: 2 }}>
-            <TableContainer sx={{ maxHeight: 440, width : "120%" }}>
+          <Paper
+            sx={{
+              width: "90%",
+              overflow: "hidden",
+              mt: 2,
+              textAlign: "center",
+            }}
+          >
+            <TableContainer sx={{ maxHeight: 440, width: "100%" }}>
               <Table stickyHeader aria-label="categoría tabla">
                 <TableHead>
                   <TableRow>
@@ -132,7 +147,12 @@ const ListCategoryPage = () => {
                     {columns.map((column) => (
                       <TableCell
                         key={column.id}
-                        style={{ minWidth: column.minWidth }}
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                          minWidth: column.minWidth,
+                        }}
+                        align="center" // Centrar el texto del encabezado
                       >
                         {column.label}
                       </TableCell>
@@ -141,37 +161,42 @@ const ListCategoryPage = () => {
                 </TableHead>
                 <TableBody>
                   {/* Mapea las categorías filtradas para mostrar los datos en filas */}
-                  {filteredCategories
+                  {categories
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Muestra las categorías de acuerdo a la paginación
                     .map((category) => (
                       <TableRow hover tabIndex={-1} key={category.id}>
-                        {/* Nombre de la categoría */}
-                        <TableCell>{category.name}</TableCell>
-                        {/* Fecha de creación */}
-                        <TableCell>{category.creationDateTime}</TableCell>
-                        {/* Acciones según si la categoría está eliminada o no */}
-                        <TableCell>
-                          {!category.deleted ? (
-                            <Stack direction="row" spacing={1}>
-                              {/* Botón para eliminar categoría */}
+                        <TableCell align="center">{category.name}</TableCell>{" "}
+                        {/* Centrar contenido de la celda */}
+                        <TableCell align="center">
+                          {category.creationDatetime}
+                        </TableCell>{" "}
+                        {/* Centrar contenido de la celda */}
+                        {showDeleted && (
+                          <TableCell align="center">
+                            {category.deleteDatetime || "N/A"}{" "}
+                            {/* Centrar contenido de la celda */}
+                          </TableCell>
+                        )}
+                        <TableCell align="center">
+                          {!showDeleted ? (
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              justifyContent="center"
+                            >
+                              {" "}
+                              {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() =>
-                                  console.log(`Eliminar ${category.id}`)
-                                }
+                                onClick={() => handleDelete(category.id)}
                               />
-                              {/* Botón para editar categoría */}
                               <ListEditButton
-                                onClick={() =>
-                                  console.log(`Editar ${category.id}`)
-                                }
+                                onClick={() => handleEdit(category.id)}
                               />
                             </Stack>
                           ) : (
                             // Botón para restaurar categoría eliminada
                             <ListRestoreButton
-                              onClick={() =>
-                                console.log(`Restaurar ${category.id}`)
-                              }
+                              onClick={() => handleRestore(category.id)}
                             />
                           )}
                         </TableCell>
@@ -198,15 +223,14 @@ const ListCategoryPage = () => {
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ mt: 2 }}     
+          sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton />
+            <ListCreateButton label="Categoría" />
             <ListShowDeletedButton
               showDeleted={showDeleted} // Estado actual
               onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas
             />
-            <ListUpdateButton />
           </Stack>
         </Stack>
       </Container>
