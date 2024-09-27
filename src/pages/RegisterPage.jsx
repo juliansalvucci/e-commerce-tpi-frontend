@@ -12,7 +12,6 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useUser } from "../context/UserProvider.jsx";
 
-
 export const RegisterPage = () => {
   const { register } = useUser();
   // Esquema de validación con Yup
@@ -23,7 +22,8 @@ export const RegisterPage = () => {
       .email("Correo electrónico inválido")
       .required("El correo electrónico es obligatorio"),
     password: Yup.string()
-      .min(6, "La contraseña debe tener al menos 6 caracteres")
+      .min(8, "La contraseña debe tener al menos 6 caracteres")
+      .max(22, "La contraseña no debe tener más de 22 caracteres")
       .required("La contraseña es obligatoria"),
   });
 
