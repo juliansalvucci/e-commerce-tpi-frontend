@@ -17,7 +17,7 @@ const onSubmit = async (
   try {
     const isUniqueResult = await isUnique("subcategory", values.nombre);
     if (!isUniqueResult) {
-      setFieldError("nombre", "Ya existe una marca con ese nombre");
+      setFieldError("nombre", "Ya existe una subcategoría con ese nombre");
       setSubmitting(false);
       return;
     }
@@ -35,7 +35,7 @@ const onSubmit = async (
     Swal.fire({
       icon: "success",
       title: "Exito!",
-      text: `El producto ${response.data.name} fue creado con éxito!`,
+      text: `La subcategoría ${response.data.name} fue creada con éxito!`,
       html: subCategoryDetails,
       customClass: {
         popup: "swal-success-popup",
