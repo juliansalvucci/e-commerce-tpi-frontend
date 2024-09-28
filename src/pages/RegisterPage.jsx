@@ -46,6 +46,7 @@ export const RegisterPage = () => {
         justifyContent: "center",
         boxShadow: 3,
         backgroundColor: "#f5f5f5",
+        border: "1px solid #ccc",
       }}
     >
       {/* Imagen en el lado izquierdo */}

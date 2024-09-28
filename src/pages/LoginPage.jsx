@@ -44,15 +44,16 @@ export const LoginPage = () => {
         boxShadow: 3,
         backgroundColor: "#f5f5f5",
         m: 1,
+        border: "1px solid #ccc",
       }}
     >
       {/* Imagen en el lado izquierdo */}
       <Box
         component="img"
-        src={fondo} 
+        src={fondo}
         alt="Imagen de bienvenida"
         sx={{
-          width: "120vh", 
+          width: "120vh",
           height: "90vh",
         }}
       />
@@ -61,11 +62,10 @@ export const LoginPage = () => {
         sx={{
           width: "120vw",
           height: "90vh",
-          
+
           padding: 3,
           paddingBottom: 10,
           backgroundColor: "white",
-          boxShadow: 3,
         }}
       >
         {/* Contenedor para centrar la imagen */}
