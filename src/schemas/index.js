@@ -60,15 +60,7 @@ export const productSchema = yup.object().shape({
   stock: yup
     .number()
     .min(0, "El stock disponible debe ser mayor o igual a 0")
-    .required("Obligatorio")
-    .test(
-      "stock-mayor-que-stockMin",
-      "El stock debe ser mayor o igual al stock mínimo",
-      function (value) {
-        const { stockMin } = this.parent;
-        return value >= stockMin;
-      }
-    ),
+    .required("Obligatorio"),
   stockMin: yup
     .number()
     .min(0, "El stock minimo debe ser mayor o igual a 0")
