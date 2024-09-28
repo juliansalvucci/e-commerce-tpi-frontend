@@ -168,10 +168,10 @@ const ABMProductPage = () => {
                   placeholder="Ingrese el stock disponible"
                 />
                 <ABMInputComponent
-                  label="Stock Mínimo"
+                  label="Alerta de Stock"
                   name="stockMin"
                   type="number"
-                  placeholder="Ingrese el stock mínimo"
+                  placeholder="Ingresar el stock mínimo de alerta"
                 />
               </Stack>
               <Stack spacing={2} direction="row">
