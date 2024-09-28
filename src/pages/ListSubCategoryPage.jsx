@@ -14,13 +14,15 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
+import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
-import ListDeleteButton from "../components/ListDeleteButton"; // Componente para eliminar una categoría
-import ListEditButton from "../components/ListEditButton"; // Componente para editar una categoría
-import ListRestoreButton from "../components/ListRestoreButton"; // Componente para restaurar una categoría eliminada
-import ListShowDeletedButton from "../components/ListShowDeletedButton"; // Botón para alternar entre categorías activas y eliminadas
-import "../styles/List.css"; // Estilos personalizados
+import ListDeleteButton from "../components/ListDeleteButton";
+import ListEditButton from "../components/ListEditButton";
+import ListRestoreButton from "../components/ListRestoreButton";
+import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import "../styles/List.css";
 import formatDateTime from "../utils/formatDateTimeUtils";
+import hasProducts from "../utils/hasProductsUtils";
 
 const ListCategoryPage = () => {
   const [subCategories, setSubCategories] = useState([]);
@@ -91,7 +93,21 @@ const ListCategoryPage = () => {
     console.log("Hola");
   };
 
-  const handleDelete = async (id) => {
+  const deleteSubCategory = async (id, name) => {
+    const hasProductsResult = await hasProducts("subcategory", name);
+    if (hasProductsResult) {
+      Swal.fire({
+        icon: "error",
+        title: "La subcategoría no puede ser eliminada",
+        text: "La subcategoría tiene productos asociados.",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+      return;
+    }
     try {
       await axios.delete(`http://localhost:8080/subcategory/${id}`);
       fetchSubCategories();
@@ -100,13 +116,51 @@ const ListCategoryPage = () => {
     }
   };
 
-  const handleRestore = async (id) => {
+  const handleDelete = async (id, name) => {
+    Swal.fire({
+      title: "Borrar Subcategoría",
+      text: "¿Estas seguro que quieres borrar esta subcategoría?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteSubCategory(id, name);
+      }
+    });
+  };
+
+  const recoverSubCategory = async (id) => {
     try {
       await axios.post(`http://localhost:8080/subcategory/recover/${id}`);
       fetchSubCategories();
     } catch (error) {
       console.error("Error restoring item:", error);
     }
+  };
+
+  const handleRestore = async (id) => {
+    Swal.fire({
+      title: "Restaurar Subcategoría",
+      text: "¿Estas seguro que quieres restaurar esta subcategoría?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        recoverSubCategory(id);
+      }
+    });
   };
 
   return (
@@ -134,7 +188,7 @@ const ListCategoryPage = () => {
         >
           <Paper
             sx={{
-              width: "90%",
+              width: "93%",
               overflow: "hidden",
               mt: 2,
               textAlign: "center",
@@ -188,7 +242,7 @@ const ListCategoryPage = () => {
                               {" "}
                               {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() => handleDelete(subCategory.id)}
+                                onClick={() => handleDelete(subCategory.id, subCategory.name)}
                               />
                               <ListEditButton
                                 onClick={() => handleEdit(subCategory.id)}
