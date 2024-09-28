@@ -4,7 +4,6 @@ import axios from "axios";
 const alMenosUnaLetra = /[a-zA-Z]/;
 const primerCharacterLetraONumero = /^[a-zA-Z0-9]/;
 const primerCharacterLetra = /^[a-zA-Z]/;
-const noNumeros = /^[^0-9]+$/;
 
 // Esquema para la marca
 export const brandSchema = yup.object().shape({
@@ -27,7 +26,7 @@ export const categorySchema = yup.object().shape({
     .required("Obligatorio")
     .min(3, "El nombre debe tener al menos 3 caracteres")
     .max(30, "El nombre debe tener como maximo 30 caracteres")
-    .matches(noNumeros, "El nombre no puede contener números")
+    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra")
     .matches(primerCharacterLetra, "El primer caracter debe ser una letra"),
 });
 
@@ -37,7 +36,7 @@ export const subCategorySchema = yup.object().shape({
     .required("Obligatorio")
     .min(3, "El nombre debe tener al menos 3 caracteres")
     .max(30, "El nombre debe tener como maximo 30 caracteres")
-    .matches(noNumeros, "El nombre no puede contener números")
+    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra")
     .matches(primerCharacterLetra, "El primer caracter debe ser una letra"),
   categoria: yup.string().required("Obligatorio"),
 });
