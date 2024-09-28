@@ -22,7 +22,6 @@ import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import "../styles/List.css";
 import formatDateTime from "../utils/formatDateTimeUtils";
-import hasProducts from "../utils/hasProductsUtils";
 
 const ListCategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -92,30 +91,29 @@ const ListCategoryPage = () => {
     console.log("Hola");
   };
 
-  const deleteCategory = async (id, name) => {
-    const hasProductsResult = await hasProducts("category", name);
-    if (hasProductsResult) {
-      Swal.fire({
-        icon: "error",
-        title: "La categoría no puede ser eliminada",
-        text: "La categoría tiene productos asociados.",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-      return;
-    }
+  const deleteCategory = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/category/${id}`);
       fetchCategories();
     } catch (error) {
-      console.error("Error deleting item:", error);
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "La categoría no puede ser eliminada",
+          text: "La categoría tiene subcategorias asociadas.",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al borrar categoria:", error);
+      }
     }
   };
 
-  const handleDelete = async (id, name) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       title: "Borrar Categoría",
       text: "¿Estas seguro que quieres borrar esta categoría?",
@@ -129,7 +127,7 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteCategory(id, name);
+        deleteCategory(id);
       }
     });
   };
@@ -242,7 +240,7 @@ const ListCategoryPage = () => {
                               {/* Centrar botones */}
                               <ListDeleteButton
                                 onClick={() =>
-                                  handleDelete(category.id, category.name)
+                                  handleDelete(category.id)
                                 }
                               />
                               <ListEditButton

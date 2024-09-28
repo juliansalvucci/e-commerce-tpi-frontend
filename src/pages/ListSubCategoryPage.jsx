@@ -22,7 +22,6 @@ import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import "../styles/List.css";
 import formatDateTime from "../utils/formatDateTimeUtils";
-import hasProducts from "../utils/hasProductsUtils";
 
 const ListCategoryPage = () => {
   const [subCategories, setSubCategories] = useState([]);
@@ -94,25 +93,24 @@ const ListCategoryPage = () => {
   };
 
   const deleteSubCategory = async (id, name) => {
-    const hasProductsResult = await hasProducts("subcategory", name);
-    if (hasProductsResult) {
-      Swal.fire({
-        icon: "error",
-        title: "La subcategoría no puede ser eliminada",
-        text: "La subcategoría tiene productos asociados.",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-      return;
-    }
     try {
       await axios.delete(`http://localhost:8080/subcategory/${id}`);
       fetchSubCategories();
     } catch (error) {
-      console.error("Error deleting item:", error);
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "La subcategoria no puede ser eliminada",
+          text: "La subcategoria tiene productos asociados.",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al borrar subcategoria:", error);
+      }
     }
   };
 
@@ -242,7 +240,9 @@ const ListCategoryPage = () => {
                               {" "}
                               {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() => handleDelete(subCategory.id, subCategory.name)}
+                                onClick={() =>
+                                  handleDelete(subCategory.id, subCategory.name)
+                                }
                               />
                               <ListEditButton
                                 onClick={() => handleEdit(subCategory.id)}

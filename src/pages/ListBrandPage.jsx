@@ -22,7 +22,6 @@ import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import "../styles/List.css";
 import formatDateTime from "../utils/formatDateTimeUtils";
-import hasProducts from "../utils/hasProductsUtils";
 
 const ListBrandPage = () => {
   const [brands, setBrands] = useState([]);
@@ -92,30 +91,29 @@ const ListBrandPage = () => {
     console.log("Hola");
   };
 
-  const deleteBrand = async (id, name) => {
-    const hasProductsResult = await hasProducts("brand", name);
-    if (hasProductsResult) {
-      Swal.fire({
-        icon: "error",
-        title: "La marca no puede ser eliminada",
-        text: "La marca tiene productos asociados.",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-      return;
-    }
+  const deleteBrand = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/brand/${id}`);
       fetchBrands();
     } catch (error) {
-      console.error("Error deleting item:", error);
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "La marca no puede ser eliminada",
+          text: "La marca tiene productos asociados.",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al borrar marca:", error);
+      }
     }
   };
 
-  const handleDelete = async (id, name) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       title: "Borrar Marca",
       text: "¿Estas seguro que quieres borrar esta marca?",
@@ -129,7 +127,7 @@ const ListBrandPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteBrand(id, name);
+        deleteBrand(id);
       }
     });
   };
@@ -241,9 +239,7 @@ const ListBrandPage = () => {
                               {" "}
                               {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() =>
-                                  handleDelete(brand.id, brand.name)
-                                }
+                                onClick={() => handleDelete(brand.id)}
                               />
                               <ListEditButton
                                 onClick={() => handleEdit(brand.id)}

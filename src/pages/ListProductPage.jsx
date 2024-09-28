@@ -104,7 +104,20 @@ const ListProductPage = () => {
       await axios.delete(`http://localhost:8080/product/${id}`);
       fetchProducts();
     } catch (error) {
-      console.error("Error deleting item:", error);
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "El producto no puede ser eliminado",
+          text: "El producto aun tiene stock.",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al borrar categoria:", error);
+      }
     }
   };
 
