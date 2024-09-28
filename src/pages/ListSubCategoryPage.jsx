@@ -14,25 +14,24 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
-import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
-import ListDeleteButton from "../components/ListDeleteButton";
-import ListEditButton from "../components/ListEditButton";
-import ListRestoreButton from "../components/ListRestoreButton";
-import ListShowDeletedButton from "../components/ListShowDeletedButton";
-import "../styles/List.css";
+import ListDeleteButton from "../components/ListDeleteButton"; // Componente para eliminar una categoría
+import ListEditButton from "../components/ListEditButton"; // Componente para editar una categoría
+import ListRestoreButton from "../components/ListRestoreButton"; // Componente para restaurar una categoría eliminada
+import ListShowDeletedButton from "../components/ListShowDeletedButton"; // Botón para alternar entre categorías activas y eliminadas
+import "../styles/List.css"; // Estilos personalizados
 import formatDateTime from "../utils/formatDateTimeUtils";
-import hasProducts from "../utils/hasProductsUtils";
 
-const ListBrandPage = () => {
-  const [brands, setBrands] = useState([]);
+const ListCategoryPage = () => {
+  const [subCategories, setSubCategories] = useState([]);
   const [page, setPage] = useState(0); // Página actual
   const [rowsPerPage, setRowsPerPage] = useState(3); // Número de filas por página
-  const [showDeleted, setShowDeleted] = useState(false);
+  const [showDeleted, setShowDeleted] = useState(false); // Mostrar categorías eliminadas o activas
 
   // Definición de las columnas de la tabla
   const columns = [
     { id: "name", label: "Nombre", minWidth: 170 },
+    { id: "category", label: "Categoría", minWidth: 170 },
     { id: "creationDateTime", label: "Fecha de Creación", minWidth: 170 },
     ...(showDeleted
       ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 170 }]
@@ -40,41 +39,41 @@ const ListBrandPage = () => {
     { id: "actions", label: "Acciones", minWidth: 170 },
   ];
 
-  const fetchBrands = async () => {
+  const fetchSubCategories = async () => {
     try {
       const response = await axios.get(
         showDeleted
-          ? "http://localhost:8080/brand/deleted"
-          : "http://localhost:8080/brand"
+          ? "http://localhost:8080/subcategory/deleted"
+          : "http://localhost:8080/subcategory"
       );
-      const updatedBrands = response.data.map((brand) => ({
-        ...brand,
-        deleted: brand.deleted === true,
-        creationDatetime: formatDateTime(brand.creationDatetime),
-        deleteDatetime: brand.deleteDatetime
-          ? formatDateTime(brand.deleteDatetime)
+      const updatedSubCategories = response.data.map((subCat) => ({
+        ...subCat,
+        deleted: subCat.deleted === true,
+        creationDatetime: formatDateTime(subCat.creationDatetime),
+        deleteDatetime: subCat.deleteDatetime
+          ? formatDateTime(subCat.deleteDatetime)
           : null,
       }));
-      setBrands(updatedBrands);
+      setSubCategories(updatedSubCategories);
     } catch (error) {
       console.error("Error fetching items:", error);
     }
   };
 
   useEffect(() => {
-    fetchBrands();
+    fetchSubCategories();
   }, [showDeleted]);
 
-  // Maneja el cambio entre mostrar marcas eliminadas y activas
+  // Maneja el cambio entre mostrar subCategorías eliminadas y activas
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
     setPage(0); // Resetea la página a la primera cuando se cambia la vista
   };
 
-  // Filtra las marcas según el estado de "eliminadas" o "activas"
-  const filteredBrands = showDeleted
-    ? brands.filter((brand) => brand.deleted) // Muestra solo las eliminadas
-    : brands.filter((brand) => !brand.deleted); // Muestra solo las activas
+  // Filtra las categorías según el estado de "eliminadas" o "activas"
+  const filteredSubCategories = showDeleted
+    ? subCategories.filter((subCategory) => subCategory.deleted) // Muestra solo las eliminadas
+    : subCategories.filter((subCategory) => !subCategory.deleted); // Muestra solo las activas
 
   // Cambia la página en la paginación
   const handleChangePage = (event, newPage) => {
@@ -88,78 +87,26 @@ const ListBrandPage = () => {
   };
 
   const handleEdit = async (id) => {
-    // Aca va la lógica de navegar hacia ABM Marca con los datos del objeto
+    // Aca va la lógica de navegar hacia ABM Categoría con los datos del objeto
     console.log("Hola");
   };
 
-  const deleteBrand = async (id, name) => {
-    const hasProductsResult = await hasProducts("brand", name);
-    if (hasProductsResult) {
-      Swal.fire({
-        icon: "error",
-        title: "La marca no puede ser eliminada",
-        text: "La marca tiene productos asociados.",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-      return;
-    }
+  const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/brand/${id}`);
-      fetchBrands();
+      await axios.delete(`http://localhost:8080/subcategory/${id}`);
+      fetchSubCategories();
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
 
-  const handleDelete = async (id, name) => {
-    Swal.fire({
-      title: "Borrar Marca",
-      text: "¿Estas seguro que quieres borrar esta marca?",
-      showCancelButton: true,
-      confirmButtonText: "Si",
-      cancelButtonText: "No",
-      customClass: {
-        popup: "swal-question-popup",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteBrand(id, name);
-      }
-    });
-  };
-
-  const recoverBrand = async (id) => {
+  const handleRestore = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/brand/recover/${id}`);
-      fetchBrands();
+      await axios.post(`http://localhost:8080/subcategory/recover/${id}`);
+      fetchSubCategories();
     } catch (error) {
       console.error("Error restoring item:", error);
     }
-  };
-
-  const handleRestore = async (id) => {
-    Swal.fire({
-      title: "Restaurar Marca",
-      text: "¿Estas seguro que quieres restaurar esta marca?",
-      showCancelButton: true,
-      confirmButtonText: "Si",
-      cancelButtonText: "No",
-      customClass: {
-        popup: "swal-question-popup",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        recoverBrand(id);
-      }
-    });
   };
 
   return (
@@ -172,8 +119,8 @@ const ListBrandPage = () => {
           {/* Título dinámico según el estado de "showDeleted" */}
           <Typography variant="h3" className="title" align="center">
             {showDeleted
-              ? "Listado de Marcas Eliminadas"
-              : "Listado de Marcas Activas"}
+              ? "Listado de SubCategorías Eliminadas"
+              : "Listado de SubCategorías Activas"}
           </Typography>
         </Box>
 
@@ -194,7 +141,7 @@ const ListBrandPage = () => {
             }}
           >
             <TableContainer sx={{ maxHeight: 440, width: "100%" }}>
-              <Table stickyHeader aria-label="brand tabla">
+              <Table stickyHeader aria-label="categoría tabla">
                 <TableHead>
                   <TableRow>
                     {/* Mapea las columnas para crear las celdas del encabezado */}
@@ -214,21 +161,20 @@ const ListBrandPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* Mapea las marcas filtradas para mostrar los datos en filas */}
-                  {brands
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Muestra las marcas de acuerdo a la paginación
-                    .map((brand) => (
-                      <TableRow hover tabIndex={-1} key={brand.id}>
-                        <TableCell align="center">{brand.name}</TableCell>{" "}
-                        {/* Centrar contenido de la celda */}
+                  {/* Mapea las categorías filtradas para mostrar los datos en filas */}
+                  {subCategories
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Muestra las categorías de acuerdo a la paginación
+                    .map((subCategory) => (
+                      <TableRow hover tabIndex={-1} key={subCategory.id}>
+                        <TableCell align="center">{subCategory.name}</TableCell>{" "}
+                        <TableCell align="center">{subCategory.category}</TableCell>{" "}                        
                         <TableCell align="center">
-                          {brand.creationDatetime}
+                          {subCategory.creationDatetime}
                         </TableCell>{" "}
-                        {/* Centrar contenido de la celda */}
+                        
                         {showDeleted && (
                           <TableCell align="center">
-                            {brand.deleteDatetime || "N/A"}{" "}
-                            {/* Centrar contenido de la celda */}
+                            {subCategory.deleteDatetime || "N/A"}{" "}
                           </TableCell>
                         )}
                         <TableCell align="center">
@@ -241,16 +187,16 @@ const ListBrandPage = () => {
                               {" "}
                               {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() => handleDelete(brand.id, brand.name)}
+                                onClick={() => handleDelete(subCategory.id)}
                               />
                               <ListEditButton
-                                onClick={() => handleEdit(brand.id)}
+                                onClick={() => handleEdit(subCategory.id)}
                               />
                             </Stack>
                           ) : (
-                            // Botón para restaurar marca eliminada
+                            // Botón para restaurar categoría eliminada
                             <ListRestoreButton
-                              onClick={() => handleRestore(brand.id)}
+                              onClick={() => handleRestore(subCategory.id)}
                             />
                           )}
                         </TableCell>
@@ -263,7 +209,7 @@ const ListBrandPage = () => {
             <TablePagination
               rowsPerPageOptions={[3, 5, 10]} // Opciones de filas por página
               component="div"
-              count={filteredBrands.length} // Cantidad total de marcas filtradas
+              count={filteredSubCategories.length} // Cantidad total de categorías filtradas
               rowsPerPage={rowsPerPage} // Filas por página actual
               page={page} // Página actual
               onPageChange={handleChangePage} // Cambio de página
@@ -272,7 +218,7 @@ const ListBrandPage = () => {
           </Paper>
         </Box>
 
-        {/* Botón para alternar entre marcas eliminadas y activas */}
+        {/* Botón para alternar entre categorías eliminadas y activas */}
         <Stack
           direction="row"
           justifyContent="center"
@@ -280,7 +226,7 @@ const ListBrandPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Marca"/>
+            <ListCreateButton label="SubCategoría" />
             <ListShowDeletedButton
               showDeleted={showDeleted} // Estado actual
               onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas
@@ -292,4 +238,4 @@ const ListBrandPage = () => {
   );
 };
 
-export default ListBrandPage;
+export default ListCategoryPage;

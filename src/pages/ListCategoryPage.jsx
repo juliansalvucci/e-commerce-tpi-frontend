@@ -14,19 +14,21 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
+import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
-import ListDeleteButton from "../components/ListDeleteButton"; // Componente para eliminar una categoría
-import ListEditButton from "../components/ListEditButton"; // Componente para editar una categoría
-import ListRestoreButton from "../components/ListRestoreButton"; // Componente para restaurar una categoría eliminada
-import ListShowDeletedButton from "../components/ListShowDeletedButton"; // Botón para alternar entre categorías activas y eliminadas
-import "../styles/List.css"; // Estilos personalizados
+import ListDeleteButton from "../components/ListDeleteButton";
+import ListEditButton from "../components/ListEditButton";
+import ListRestoreButton from "../components/ListRestoreButton";
+import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import "../styles/List.css";
 import formatDateTime from "../utils/formatDateTimeUtils";
+import hasProducts from "../utils/hasProductsUtils";
 
 const ListCategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(0); // Página actual
   const [rowsPerPage, setRowsPerPage] = useState(3); // Número de filas por página
-  const [showDeleted, setShowDeleted] = useState(false); // Mostrar categorías eliminadas o activas
+  const [showDeleted, setShowDeleted] = useState(false);
 
   // Definición de las columnas de la tabla
   const columns = [
@@ -90,7 +92,21 @@ const ListCategoryPage = () => {
     console.log("Hola");
   };
 
-  const handleDelete = async (id) => {
+  const deleteCategory = async (id, name) => {
+    const hasProductsResult = await hasProducts("category", name);
+    if (hasProductsResult) {
+      Swal.fire({
+        icon: "error",
+        title: "La categoría no puede ser eliminada",
+        text: "La categoría tiene productos asociados.",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+      return;
+    }
     try {
       await axios.delete(`http://localhost:8080/category/${id}`);
       fetchCategories();
@@ -99,13 +115,51 @@ const ListCategoryPage = () => {
     }
   };
 
-  const handleRestore = async (id) => {
+  const handleDelete = async (id, name) => {
+    Swal.fire({
+      title: "Borrar Categoría",
+      text: "¿Estas seguro que quieres borrar esta categoría?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteCategory(id, name);
+      }
+    });
+  };
+
+  const recoverCategory = async (id) => {
     try {
       await axios.post(`http://localhost:8080/category/recover/${id}`);
       fetchCategories();
     } catch (error) {
       console.error("Error restoring item:", error);
     }
+  };
+
+  const handleRestore = async (id) => {
+    Swal.fire({
+      title: "Restaurar Categoría",
+      text: "¿Estas seguro que quieres restaurar esta categoría?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        recoverCategory(id);
+      }
+    });
   };
 
   return (
@@ -187,7 +241,9 @@ const ListCategoryPage = () => {
                               {" "}
                               {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() => handleDelete(category.id)}
+                                onClick={() =>
+                                  handleDelete(category.id, category.name)
+                                }
                               />
                               <ListEditButton
                                 onClick={() => handleEdit(category.id)}
