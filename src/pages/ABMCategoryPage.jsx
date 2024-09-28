@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import Swal from "sweetalert2";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import { categorySchema } from "../schemas";
 import "../styles/ABM.css";
@@ -75,13 +76,11 @@ const ABMCategoryPage = () => {
                 type="text"
                 placeholder="Ingrese el nombre"
               />
-              <button
-                className="btn-crear"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                Crear
-              </button>
+              <ABMActionButton
+                is={isSubmitting}
+                accion="Crear"
+                tipoClase="Categoría"
+              />
             </Form>
           )}
         </Formik>

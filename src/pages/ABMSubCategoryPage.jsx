@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import Swal from "sweetalert2";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
 import { subCategorySchema } from "../schemas";
@@ -111,13 +112,11 @@ const ABMSubCategoryPage = () => {
                   }))} // Pasamos las categorías que vienen del estado
                 />
               </Box>
-              <button
-                className="btn-crear"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                Crear
-              </button>
+              <ABMActionButton
+                is={isSubmitting}
+                accion="Crear"
+                tipoClase="Subcategoría"
+              />
             </Form>
           )}
         </Formik>

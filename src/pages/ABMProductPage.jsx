@@ -3,12 +3,12 @@ import { Box, Stack, FormControl, InputAdornment } from "@mui/material";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import Swal from "sweetalert2";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
 import { productSchema } from "../schemas";
 import "../styles/ABM.css";
 import isUnique from "../utils/isUniqueUtils";
-import ABMCreateBotton from "../components/ABMCreateBotton";
 
 // Función que se ejecutará al enviar el form
 const onSubmit = async (
@@ -190,7 +190,7 @@ const ABMProductPage = () => {
                   placeholder="Ingrese la URL de la imagen"
                 />
               </Stack>
-              <ABMCreateBotton
+              <ABMActionButton
                 is={isSubmitting}
                 accion="Crear"
                 tipoClase="Producto"
