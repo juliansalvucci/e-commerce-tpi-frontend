@@ -1,11 +1,9 @@
 import * as yup from "yup";
-import axios from "axios";
 
 const alMenosUnaLetra = /[a-zA-Z]/;
 const primerCharacterLetraONumero = /^[a-zA-Z0-9]/;
 const primerCharacterLetra = /^[a-zA-Z]/;
 
-// Esquema para la marca
 export const brandSchema = yup.object().shape({
   nombre: yup
     .string()
@@ -19,7 +17,6 @@ export const brandSchema = yup.object().shape({
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
 });
 
-// Esquema para la categoría
 export const categorySchema = yup.object().shape({
   nombre: yup
     .string()
@@ -63,7 +60,15 @@ export const productSchema = yup.object().shape({
   stock: yup
     .number()
     .min(0, "El stock disponible debe ser mayor o igual a 0")
-    .required("Obligatorio"),
+    .required("Obligatorio")
+    .test(
+      "stock-mayor-que-stockMin",
+      "El stock debe ser mayor o igual al stock mínimo",
+      function (value) {
+        const { stockMin } = this.parent;
+        return value >= stockMin;
+      }
+    ),
   stockMin: yup
     .number()
     .min(0, "El stock minimo debe ser mayor o igual a 0")
