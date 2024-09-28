@@ -13,8 +13,11 @@ import {
   Typography,
   Box,
   Collapse,
+  IconButton,
 } from "@mui/material";
+import { KeyboardArrowUp, KeyboardArrowDown } from "@mui/icons-material";
 import axios from "axios";
+import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
@@ -31,20 +34,21 @@ const ListProductPage = () => {
   const [openRows, setOpenRows] = useState({}); // Estado para manejar filas colapsables
 
   const columns = [
-    { id: "name", label: "Nombre", minWidth: 60 },
-    { id: "brand", label: "Marca", minWidth: 60 },
-    { id: "subcategory", label: "Subcategoria", minWidth: 60 },
-    { id: "price", label: "Precio", minWidth: 60 },
-    { id: "stock", label: "Stock Disp.", minWidth: 60 },
-    { id: "stockMin", label: "Stock Min.", minWidth: 60 },
-    { id: "actions", label: "Acciones", minWidth: 60 },
+    { id: "expand", label: "", minWidth: 30 }, // Nueva columna para expandir/colapsar
+    { id: "name", label: "Nombre", minWidth: 80 },
+    { id: "brand", label: "Marca", minWidth: 80 },
+    { id: "subCategory", label: "Subcategoria", minWidth: 80 },
+    { id: "price", label: "Precio", minWidth: 80 },
+    { id: "stock", label: "Stock Disp.", minWidth: 80 },
+    { id: "stockMin", label: "Stock Min.", minWidth: 80 },
+    { id: "actions", label: "Acciones", minWidth: 80 },
   ];
 
   const columnsInside = [
-    { id: "description", label: "Descripción", minWidth: 60 },
-    { id: "creationDateTime", label: "Fecha de Creación", minWidth: 60 },
+    { id: "description", label: "Descripción", minWidth: 80 },
+    { id: "creationDateTime", label: "Fecha de Creación", minWidth: 80 },
     ...(showDeleted
-      ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 60 }]
+      ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 80 }]
       : []),
   ];
 
@@ -95,13 +99,32 @@ const ListProductPage = () => {
     console.log("Edit product with ID:", id);
   };
 
-  const handleDelete = async (id) => {
+  const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/producto/${id}`);
+      await axios.delete(`http://localhost:8080/product/${id}`);
       fetchProducts();
     } catch (error) {
       console.error("Error deleting item:", error);
     }
+  };
+
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Borrar Producto",
+      text: "¿Estas seguro que quieres borrar este producto?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(id);
+      }
+    });
   };
 
   const recoverProduct = async (id) => {
@@ -143,7 +166,7 @@ const ListProductPage = () => {
     <Box className="background">
       <Container
         className="container"
-        sx={{ width: "70%", display: "flex", justifyContent: "center" }}
+        sx={{ width: "80%", display: "flex", justifyContent: "center" }}
       >
         <Box className="title-box">
           <Typography variant="h3" className="title" align="center">
@@ -163,7 +186,7 @@ const ListProductPage = () => {
         >
           <Paper
             sx={{
-              width: "90%",
+              width: "100%",
               overflow: "hidden",
               mt: 2,
               textAlign: "center",
@@ -189,19 +212,26 @@ const ListProductPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredProducts
+                  {products
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((product) => (
                       <React.Fragment key={product.id}>
-                        <TableRow
-                          hover
-                          tabIndex={-1}
-                          onClick={() => handleRowToggle(product.id)}
-                        >
+                        <TableRow hover tabIndex={-1}>
+                          <TableCell align="center">
+                            <IconButton
+                              onClick={() => handleRowToggle(product.id)}
+                            >
+                              {openRows[product.id] ? (
+                                <KeyboardArrowUp />
+                              ) : (
+                                <KeyboardArrowDown />
+                              )}
+                            </IconButton>
+                          </TableCell>
                           <TableCell align="center">{product.name}</TableCell>
                           <TableCell align="center">{product.brand}</TableCell>
                           <TableCell align="center">
-                            {product.subcategory}
+                            {product.subCategory}
                           </TableCell>
                           <TableCell align="center">{product.price}</TableCell>
                           <TableCell align="center">{product.stock}</TableCell>
@@ -237,19 +267,17 @@ const ListProductPage = () => {
                               unmountOnExit
                             >
                               <Box margin={1}>
-                                <Typography
-                                  variant="h6"
-                                  gutterBottom
-                                  component="div"
-                                >
-                                  Detalles
-                                </Typography>
                                 <Table size="small">
                                   <TableHead>
                                     <TableRow>
                                       {columnsInside.map((column) => (
                                         <TableCell
                                           key={column.id}
+                                          sx={{
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                            minWidth: column.minWidth,
+                                          }}
                                           align="center"
                                         >
                                           {column.label}
@@ -258,7 +286,7 @@ const ListProductPage = () => {
                                     </TableRow>
                                   </TableHead>
                                   <TableBody>
-                                    <TableRow>
+                                    <TableRow hover tabIndex={-1}>
                                       <TableCell align="center">
                                         {product.description}
                                       </TableCell>
@@ -267,7 +295,7 @@ const ListProductPage = () => {
                                       </TableCell>
                                       {showDeleted && (
                                         <TableCell align="center">
-                                          {product.deleteDatetime || "N/A"}
+                                          {product.deleteDatetime}
                                         </TableCell>
                                       )}
                                     </TableRow>
@@ -283,9 +311,9 @@ const ListProductPage = () => {
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]}
+              rowsPerPageOptions={[3, 5, 10, 25, 100]}
               component="div"
-              count={filteredProducts.length}
+              count={products.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -293,7 +321,6 @@ const ListProductPage = () => {
             />
           </Paper>
         </Box>
-
         <Stack
           direction="row"
           justifyContent="center"
