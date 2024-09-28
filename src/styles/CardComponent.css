@@ -120,7 +120,6 @@
   margin-top: 80px;
 }
 
-
 .page-item .page-link {
   cursor: pointer;
   padding: 0.5rem 0.75rem;
@@ -140,10 +139,10 @@
 
 /* Cambio de fondo al pasar el mouse sobre los elementos "Anterior" y "Siguiente" */
 .pagination .page-item:not(.disabled) .page-link:hover {
-  background-color: #b1c7e4; 
-  color: white; 
+  background-color: #b1c7e4;
+  color: white;
 }
 
-.product-alert{
+.product-alert {
   cursor: pointer;
 }

@@ -167,11 +167,12 @@ const ListCategoryPage = () => {
                     .map((subCategory) => (
                       <TableRow hover tabIndex={-1} key={subCategory.id}>
                         <TableCell align="center">{subCategory.name}</TableCell>{" "}
-                        <TableCell align="center">{subCategory.category}</TableCell>{" "}                        
+                        <TableCell align="center">
+                          {subCategory.category}
+                        </TableCell>{" "}
                         <TableCell align="center">
                           {subCategory.creationDatetime}
                         </TableCell>{" "}
-                        
                         {showDeleted && (
                           <TableCell align="center">
                             {subCategory.deleteDatetime || "N/A"}{" "}

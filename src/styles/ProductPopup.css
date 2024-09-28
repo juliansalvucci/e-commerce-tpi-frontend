@@ -23,7 +23,6 @@
   border-radius: 10px;
   width: 25px;
   height: 25px;
-  
 }
 
 /*Contenedor para editar el botón de x del popup del producto cuando el usuario coloca el mouse encima*/
@@ -49,7 +48,7 @@
   font-size: small;
 }
 
-.details-container .price-container{
+.details-container .price-container {
   text-align: left;
   font-family: "Poppins", sans-serif;
   font-weight: 550;
@@ -80,7 +79,7 @@
   margin-right: 20px; /* Espacio entre la imagen y el contenedor de detalles */
   display: flex;
   justify-content: center; /* Centrar horizontalmente */
-  align-items: center;     /* Centrar verticalmente */
+  align-items: center; /* Centrar verticalmente */
 }
 
 .popup-content .image-container img {
@@ -95,8 +94,7 @@
   text-align: justify; /* Alinea el texto a la izquierda */
 }
 
-
-.buy-counter-buttoms{
+.buy-counter-buttoms {
   display: flex;
   flex-direction: row; /* Organiza los elementos en una fila */
   align-items: center;
@@ -105,28 +103,28 @@
 
 .buy-container {
   display: block; /* Asegura que el contenedor del botón esté debajo */
-  margin-top: 20px; 
-  width: 30%; 
-  text-align: left; 
+  margin-top: 20px;
+  width: 30%;
+  text-align: left;
 }
 
 .buy-button {
-  background-color: #283b54; 
-  color: white; 
-  padding: 12px 24px; 
-  border: none; 
-  border-radius: 8px; 
-  font-size: 16px; 
-  cursor: pointer; 
+  background-color: #283b54;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .buy-button:hover {
-  background-color: #3d5f8b; 
+  background-color: #3d5f8b;
   color: #a6a6a6;
   cursor: pointer;
 }
 
-.counter-products{
+.counter-products {
   margin-left: 90px;
   margin-top: 25px;
 }
@@ -138,7 +136,7 @@
   border-color: #283b54;
 }
 
-.counter-products .btn-outline-primary:hover{
+.counter-products .btn-outline-primary:hover {
   color: white;
   background-color: #3d5f8b;
   border-color: #3d5f8b;
@@ -189,4 +187,3 @@
   font-size: 20px;
   cursor: pointer;
 }
-

@@ -14,7 +14,6 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useUser } from "../context/UserProvider.jsx";
 
-
 export const RegisterPage = () => {
   const { register } = useUser();
   // Esquema de validación con Yup
@@ -59,7 +58,7 @@ export const RegisterPage = () => {
           height: "90vh",
         }}
       />
-      
+
       <Box
         sx={{
           width: "120vh",

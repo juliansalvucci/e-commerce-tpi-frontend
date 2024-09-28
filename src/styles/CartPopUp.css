@@ -14,8 +14,8 @@
 }
 
 .scroll-container {
-  height: 100%; 
-  overflow-y: scroll; 
+  height: 100%;
+  overflow-y: scroll;
   margin-top: 10px;
 }
 
@@ -34,7 +34,7 @@
 
 .x-btn:hover {
   cursor: pointer;
-  background-color: #f09999; 
+  background-color: #f09999;
   border-color: #f09999;
 }
 
@@ -93,8 +93,8 @@
 
 .counter-products {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   margin-bottom: 10px;
 }
 
@@ -107,47 +107,46 @@
 
 /* Botón de cantidad */
 .btn-primary {
-  background-color: white; 
-  border-color: inherit; 
+  background-color: white;
+  border-color: inherit;
   color: gray;
 }
 
 /* Deshabilitar el hover para el botón .btn-primary */
 .btn-primary:hover {
-  background-color: white; 
-  border-color: #f4f4f4; 
-  color: gray; 
+  background-color: white;
+  border-color: #f4f4f4;
+  color: gray;
   cursor: default;
-  border-color: inherit; 
+  border-color: inherit;
 }
 
 .cart-product .counter-products .btn-primary {
-  background-color: none; 
-  color: none; 
-  border: none; 
+  background-color: none;
+  color: none;
+  border: none;
 }
 
 .cart-product .counter-products .btn-primary:active {
-  background-color: #f4f4f4; 
-  color: #283b54; 
-  box-shadow: none; 
+  background-color: #f4f4f4;
+  color: #283b54;
+  box-shadow: none;
 }
-
 
 /* Botón de incremento */
 .btn-outline-primary:hover {
-  background-color: #81abe1; 
+  background-color: #81abe1;
   border-color: #81abe1;
 }
 
 /* Botón de eliminar */
 .btn-danger {
-  background-color: #dc3546e5; 
+  background-color: #dc3546e5;
   border-color: #dc3545;
 }
 
 .delete-group .btn-danger:hover {
-  background-color: #f09999; 
+  background-color: #f09999;
   border-color: #f09999;
 }
 
@@ -158,10 +157,10 @@
 /* Linea divisora del total*/
 .cart hr {
   margin: 10px;
-  width: 80%; 
-  border: 1px solid black; 
+  width: 80%;
+  border: 1px solid black;
   margin-left: auto;
-  margin-right: auto; 
+  margin-right: auto;
 }
 
 .total-container h4 {

@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { NavBarComponent } from "./components/NavBarComponent";
 import { ProductsPage } from "./pages/ProductsPage";
 import { CartPage } from "./pages/CartPage";
 import { ProductProvider } from "./context/ProductProvider";
@@ -14,7 +13,9 @@ export const CarritoApp = () => {
   const location = useLocation();
 
   // Definir rutas en las que no se debe mostrar el NavBar ni el Footer
-  const hideNavBarAndFooter = ["/login", "/register"].includes(location.pathname);
+  const hideNavBarAndFooter = ["/login", "/register"].includes(
+    location.pathname
+  );
 
   return (
     <UserProvider>

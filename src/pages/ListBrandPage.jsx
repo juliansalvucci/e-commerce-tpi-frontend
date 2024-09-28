@@ -241,7 +241,9 @@ const ListBrandPage = () => {
                               {" "}
                               {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() => handleDelete(brand.id, brand.name)}
+                                onClick={() =>
+                                  handleDelete(brand.id, brand.name)
+                                }
                               />
                               <ListEditButton
                                 onClick={() => handleEdit(brand.id)}
@@ -280,7 +282,7 @@ const ListBrandPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Marca"/>
+            <ListCreateButton label="Marca" />
             <ListShowDeletedButton
               showDeleted={showDeleted} // Estado actual
               onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas

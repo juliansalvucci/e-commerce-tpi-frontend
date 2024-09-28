@@ -6,7 +6,6 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export const UserProvider = ({ children }) => {
-
   const navigate = useNavigate();
   const register = async (values, { setSubmitting }) => {
     try {

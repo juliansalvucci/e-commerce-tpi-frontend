@@ -19,8 +19,8 @@ export const CardComponent = ({
   //Comprobamos si está o no agregado al carrito
   const [added, setAdded] = useState(false);
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);  // Estado para controlar la visibilidad del popup del producto
-  const [selectedProduct, setSelectedProduct] = useState(null);  // Estado para almacenar el producto seleccionado del popup del mismo
+  const [isPopupVisible, setIsPopupVisible] = useState(false); // Estado para controlar la visibilidad del popup del producto
+  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para almacenar el producto seleccionado del popup del mismo
 
   const addProduct = () => {
     handlerAdd();
@@ -47,7 +47,7 @@ export const CardComponent = ({
     // Buscar el producto en el carrito para obtener su cantidad actual
     const productInCart = shoppingList.find((item) => item.id === id);
     const quantity = productInCart ? productInCart.quantity : 1;
-  
+
     setSelectedProduct({ id, image, title, description, price, quantity });
     setIsPopupVisible(true);
   };
@@ -55,7 +55,7 @@ export const CardComponent = ({
   //Cierro el popup con el detalle del producto seleccionado
   const closeProductPopup = () => {
     setIsPopupVisible(false);
-  }
+  };
 
   return (
     <li className="card">
@@ -70,16 +70,10 @@ export const CardComponent = ({
 
       <div className="card_content">
         <div className="product-alert">
-          <h5
-            className="card_title"
-            onClick={showProductPopup}
-          >
+          <h5 className="card_title" onClick={showProductPopup}>
             {title}
           </h5>
-          <p
-            className="card_price"
-            onClick={showProductPopup}
-          >
+          <p className="card_price" onClick={showProductPopup}>
             ${price.toFixed(2)}
           </p>
         </div>

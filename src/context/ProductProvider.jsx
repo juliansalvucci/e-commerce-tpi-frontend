@@ -12,9 +12,9 @@ export const ProductProvider = ({ children }) => {
       setProducts(response);
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Hubo un problema al cargar los productos'
+        icon: "error",
+        title: "¡Error!",
+        text: "Hubo un problema al cargar los productos",
       });
       console.error("Error al obtener productos:", error);
     }
