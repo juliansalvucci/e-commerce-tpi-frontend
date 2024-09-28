@@ -8,6 +8,7 @@ import ABMSelectComponent from "../components/ABMSelectComponent";
 import { productSchema } from "../schemas";
 import "../styles/ABM.css";
 import isUnique from "../utils/isUniqueUtils";
+import ABMCreateBotton from "../components/ABMCreateBotton";
 
 // Función que se ejecutará al enviar el form
 const onSubmit = async (
@@ -189,13 +190,11 @@ const ABMProductPage = () => {
                   placeholder="Ingrese la URL de la imagen"
                 />
               </Stack>
-              <button
-                className="btn-crear"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                Crear
-              </button>
+              <ABMCreateBotton
+                is={isSubmitting}
+                accion="Crear"
+                tipoClase="Producto"
+              />
             </Form>
           )}
         </Formik>

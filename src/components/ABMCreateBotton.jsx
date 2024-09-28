@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
-const ABMCreateBotton = () => {
+const ABMCreateBotton = ({is, accion, tipoClase}) => {
   return (
     <Button
       variant="contained"
+      type="submit"
+      disabled={is}
       sx={{
         display: "block",
         margin: "20px auto",
@@ -10,7 +12,7 @@ const ABMCreateBotton = () => {
         backgroundColor: "#bed0dd",
         color: "black",
         border: "none",
-        borderRadius: "50px",
+        borderRadius: "2px",
         width: "100%",
         fontSize: "16px",
         fontFamily: "Poppins",
@@ -21,7 +23,7 @@ const ABMCreateBotton = () => {
         },
       }}
     >
-      Crear
+      {accion} {tipoClase} 
     </Button>
   );
 };
