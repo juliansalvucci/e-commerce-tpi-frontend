@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { NavBarComponent } from "./components/NavBarComponent";
 import { ProductsPage } from "./pages/ProductsPage";
 import { CartPage } from "./pages/CartPage";
 import { ProductProvider } from "./context/ProductProvider";
