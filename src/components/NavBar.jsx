@@ -1,130 +1,124 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import '../styles/NavBar.css';
-import { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from "react";
+import {
+  Badge,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+  InputBase,
+  Box,
+} from "@mui/material";
+import { ShoppingCart, Search } from "@mui/icons-material";
+import { CartContext } from "../context/CartContext";
+import { CartPopup } from "./CartPopup"; // Componente del popup
+import { NavLink } from "react-router-dom";
+
 const NavBar = () => {
   const navbarStyle = {
-    backgroundColor: '#00203D',
-    color: '#C2E1FF',
+    backgroundColor: "#00203D",
   };
 
   const linkStyle = {
-    color: '#C2E1FF',
-    textDecoration: 'none',
+    color: "#C2E1FF",
+    textDecoration: "none",
   };
+
   const [opacity, setOpacity] = useState(1);
+  const { shoppingList } = useContext(CartContext);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const maxScroll = 200; // Puedes ajustar este valor según lo que desees
-      const newOpacity = Math.max(1 - scrollY / maxScroll, 0); // Calcular la opacidad
+      const maxScroll = 200;
+      const newOpacity = Math.max(1 - scrollY / maxScroll, 0);
       setOpacity(newOpacity);
     };
 
-    window.addEventListener('scroll', handleScroll);
-
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
+  const togglePopup = () => {
+    setIsPopupVisible(!isPopupVisible);
+  };
+
+  const closePopup = () => {
+    if (isPopupVisible) {
+      setIsPopupVisible(false);
+    }
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{opacity, navbarStyle}}>
-      <div className="container-fluid justify-content-center col-md-auto" >
-        <div className="row w-100">
-          {/* Fila superior */}
-          <div className="col-12 d-flex justify-content-center align-items-center mb-2">
-            <a className="navbar-brand" href="#" style={linkStyle}>
-            <i className="fa-solid fa-cart-shopping"></i>
-              MegaStore
-            </a>
-            <form className="d-flex flex-grow-1 mx-4">
-              <input className="form-control w-80 me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
-              <button className="btn btn-outline-light" type="submit">Buscar</button>
-            </form>
-            <div className="d-flex">
-              <a className="nav-link" href="#" style={linkStyle}>
-                <i className="bi bi-person-fill me-2"></i>
-                
-              </a>
-              <a className="nav-link ms-3" href="#" style={linkStyle}>
-                <i className="bi bi-cart-fill me-2"></i>
-                
-              </a>
-            </div>
-          </div>
-          
-          {/* Fila inferior */}
-          <div className="col-12">
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav">
+    <AppBar position="static" style={{ ...navbarStyle, opacity }}>
+      <Toolbar>
+        <Typography variant="h6" style={linkStyle}>
+          <NavLink to="/" style={linkStyle} onClick={closePopup}>
+            MegaStore
+          </NavLink>
+        </Typography>
 
-                <li className="nav-item dropdown dropend">
-                  <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={linkStyle}>
-                  <i className="fa-solid fa-list me-2"></i>
-                    Categorías
-                  </a>
+        <Box display="flex" alignItems="center" marginLeft="20px" flexGrow={1}>
+          <Box
+            display="flex"
+            alignItems="center"
+            bgcolor="#FFFFFF"
+            borderRadius="5px"
+            flexGrow={1}
+            boxShadow={2}
+          >
+            <InputBase
+              placeholder="Buscar productos…"
+              inputProps={{ "aria-label": "search" }}
+              style={{ padding: "10px", width: "100%", color: "#00203D" }}
+            />
+            <IconButton
+              type="submit"
+              style={{ padding: "10px", color: "#00203D" }}
+            >
+              <Search />
+            </IconButton>
+          </Box>
+        </Box>
 
-                  <ul className="dropdown-menu">
-                <li className="dropdown-submenu">
-                  <a className="dropdown-item dropdown-toggle" href="#">Categoría 1</a>
-                  <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#">Subcategoría 1.1</a></li>
-                    <li><a className="dropdown-item" href="#">Subcategoría 1.2</a></li>
-                  </ul>
-                </li>
-                <li className="dropdown-submenu">
-                  <a className="dropdown-item dropdown-toggle" href="#">Categoría 2</a>
-                  <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#">Subcategoría 2.1</a></li>
-                    <li><a className="dropdown-item" href="#">Subcategoría 2.2</a></li>
-                  </ul>
-                </li>
-                <li className="dropdown-submenu">
-                  <a className="dropdown-item dropdown-toggle" href="#">Categoría 3</a>
-                  <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#">Subcategoría 3.1</a></li>
-                    <li><a className="dropdown-item" href="#">Subcategoría 3.2</a></li>
-                  </ul>
-                </li>
-              </ul>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={linkStyle}>
-                  <i className="fa-solid fa-computer me-2"></i>
-                    Nootbooks
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={linkStyle}>
-                  <i className="fa-solid fa-mobile me-2"></i>
-                    Smartphones
-                  </a>
-                </li>
+        <Box display="flex" alignItems="center" marginLeft="auto">
+          <NavLink to="/login" style={linkStyle} onClick={closePopup}>
+            <Button color="inherit">Login</Button>
+          </NavLink>
+          <NavLink to="/register" style={linkStyle} onClick={closePopup}>
+            <Button color="inherit">Registrarse</Button>
+          </NavLink>
 
-                <li className="nav-item">
-                  <a className="nav-link disabled" href="#" style={linkStyle}>
-                  <i className="fa-solid fa-percent me-2"></i>
-                    Promociones
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={linkStyle}>
-                  <i className="fa-solid fa-circle-info me-2"></i>
-                    Ayuda
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+          <NavLink to="/carrito" style={linkStyle}>
+            <Button color="inherit" style={{ marginLeft: "10px" }}>
+              Carrito
+            </Button>
+          </NavLink>
+          <IconButton
+            onClick={togglePopup}
+            color="inherit"
+            style={{ marginLeft: "20px" }}
+          >
+            <Badge badgeContent={shoppingList.length} color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
+
+          <CartPopup isVisible={isPopupVisible} onClose={togglePopup} />
+        </Box>
+      </Toolbar>
+
+      <Box display="flex" justifyContent="center" p={1} bgcolor="#00203D">
+        <Button color="inherit">Categorías</Button>
+        <Button color="inherit">Notebooks</Button>
+        <Button color="inherit">Smartphones</Button>
+        <Button color="inherit">Promociones</Button>
+        <Button color="inherit">Ayuda</Button>
+      </Box>
+    </AppBar>
   );
 };
 

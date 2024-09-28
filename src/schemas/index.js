@@ -1,75 +1,45 @@
 import * as yup from "yup";
-//import axios from "axios";
+import axios from "axios";
 
 const alMenosUnaLetra = /[a-zA-Z]/;
-//const primeraLetraMayusculaNoNumero = /^[A-Z][^\d]*$/;
-const sinCaracteresEspeciales = /^[a-zA-Z0-9\s]+$/;
-const soloNumeros = /^\$?\d+(?:\.\d+)*$/;
+const primerCharacterLetraONumero = /^[a-zA-Z0-9]/;
+const primerCharacterLetra = /^[a-zA-Z]/;
+const noNumeros = /^[^0-9]+$/;
 
-/*// Función que consulta la API para verificar si un nombre ya existe
-const isUnique = async (tipoClase, nombre) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:8080/${tipoClase}?name=${nombre}`
-    );
-    return response.data.exists === false; // Supongamos que la API devuelve un campo "exists"
-  } catch (error) {
-    console.error("Error al consultar la API:", error);
-    return false; // En caso de error, asumimos que la validación falla
-  }
-};*/
-
+// Esquema para la marca
 export const brandSchema = yup.object().shape({
   nombre: yup
     .string()
     .required("Obligatorio")
+    .min(2, "El nombre debe contener al menos 2 caracteres")
+    .max(30, "El nombre debe tener como maximo 30 caracteres")
+    .matches(
+      primerCharacterLetraONumero,
+      "El primer caracter debe ser una letra o un número"
+    )
     .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-    /*.test(
-      'unique-brand',
-      'Ya existe una marca con ese nombre',
-      async ("brand", value) => {
-        //Llamada asíncrona a la API para verificar si el nombre de la marca ya existe
-        return await isUnique("brand", value);
-      }
-    ),*/
+});
+
+// Esquema para la categoría
+export const categorySchema = yup.object().shape({
+  nombre: yup
+    .string()
+    .required("Obligatorio")
+    .min(3, "El nombre debe tener al menos 3 caracteres")
+    .max(30, "El nombre debe tener como maximo 30 caracteres")
+    .matches(noNumeros, "El nombre no puede contener números")
+    .matches(primerCharacterLetra, "El primer caracter debe ser una letra"),
 });
 
 export const subCategorySchema = yup.object().shape({
   nombre: yup
     .string()
+    .required("Obligatorio")
     .min(3, "El nombre debe tener al menos 3 caracteres")
-    .max(30, "El nombre debe tener como maximo 20 caracteres")
-    .required("Obligatorio")
-    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-  /*.test(
-      'unique-subcategory',
-      'Ya existe una subcategoria con ese nombre',
-      async ("subcategory",value) => {
-        //Llamada asíncrona a la API para verificar si el nombre de la subcategoria ya existe
-        return await isUnique("subcategory", value);
-      }
-    ),*/
-  descripcion: yup
-    .string()
-    .max(100, "La descripcion debe tener como maximo 100 caracteres")
-    .required("Obligatorio"),
+    .max(30, "El nombre debe tener como maximo 30 caracteres")
+    .matches(noNumeros, "El nombre no puede contener números")
+    .matches(primerCharacterLetra, "El primer caracter debe ser una letra"),
   categoria: yup.string().required("Obligatorio"),
-});
-
-export const categorySchema = yup.object().shape({
-  nombre: yup
-    .string()
-    .required("Obligatorio")
-    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
-    /*.test(
-      'unique-category',
-      'Ya existe una categoria con ese nombre',
-      async ("category", value) => {
-        //Llamada asíncrona a la API para verificar si el nombre de la categoria ya existe
-        return await isUnique("category", value);
-      }
-    ),*/
-  descripcion: yup.string().required("Obligatorio"),
 });
 
 export const productSchema = yup.object().shape({
@@ -77,21 +47,29 @@ export const productSchema = yup.object().shape({
     .string()
     .required("Obligatorio")
     .min(2, "El nombre debe contener al menos 2 caracteres")
-    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra")
-    //.matches(primeraLetraMayusculaNoNumero, "El primer caracter debe ser una letra mayúscula")
+    .max(60, "El nombre debe tener como maximo 60 caracteres")
     .matches(
-      sinCaracteresEspeciales,
-      "El nombre no debe contener caracteres especiales"
-    ),
-  descripcion: yup.string().required("Obligatorio"),
-  precio: yup
+      primerCharacterLetraONumero,
+      "El primer caracter debe ser una letra o un número"
+    )
+    .matches(alMenosUnaLetra, "El nombre debe contener al menos una letra"),
+  descripcion: yup
     .string()
     .required("Obligatorio")
-    .matches(soloNumeros, "El precio debe contener solo números")
-    .test("precio-mayor-a-0", "El precio debe ser mayor a $0", (value) => {
-      const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
-      return numericValue >= 1;
-    }),
+    .max(100, "Maximo 100 caracteres"),
+  precio: yup
+    .number()
+    .positive("El precio debe ser mayor a $0")
+    .required("Obligatorio"),
+  stock: yup
+    .number()
+    .min(0, "El stock disponible debe ser mayor o igual a 0")
+    .required("Obligatorio"),
+  stockMin: yup
+    .number()
+    .min(0, "El stock minimo debe ser mayor o igual a 0")
+    .required("Obligatorio"),
+  imagen: yup.string().notRequired().url("Debe ser una URL válida"),
   marca: yup.string().required("Obligatorio"),
   subcategoria: yup.string().required("Obligatorio"),
 });

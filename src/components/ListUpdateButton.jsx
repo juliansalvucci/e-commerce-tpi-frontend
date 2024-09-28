@@ -14,8 +14,8 @@ const ListUpdateButton = () => {
     <Button
       variant="contained"
       sx={{
-        backgroundColor: "black", // Color de fondo negro
-        color: "white", // Texto en blanco
+        backgroundColor: "#bed0dd", // Color de fondo negro
+        color: "black", // Texto en blanco
         "&:hover": {
           backgroundColor: "grey", // Color al pasar el mouse (hover)
         },

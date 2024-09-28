@@ -1,0 +1,24 @@
+footer {
+  background-color: #343a40;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer img {
+  width: 50px; /* Tamaño de los íconos de métodos de pago */
+}
+
+footer .btn {
+  margin-top: 10px;
+}
+.custom-link {
+  color: #007bff; /* Color inicial */
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+.custom-link:hover {
+  color: #0056b3; /* Cambia el color al pasar el ratón */
+  background-color: rgba(0, 123, 255, 0.1); /* Fondo sutil */
+  padding: 5px 10px;
+  border-radius: 5px;
+}

@@ -1,60 +1,79 @@
 import React from "react";
+import { Box } from "@mui/material";
+import axios from "axios";
 import { Formik, Form } from "formik";
-import { categorySchema } from "../schemas";
+import Swal from "sweetalert2";
 import ABMInputComponent from "../components/ABMInputComponent";
-import ABMBackButton from "../s/ABMBackButton";
-//import axios from "axios";
+import { categorySchema } from "../schemas";
 import "../styles/ABM.css";
+import isUnique from "../utils/isUniqueUtils";
 
 // Función que se ejecutará al enviar el form
-const onSubmit = async (values, { resetForm }) => {
-  /*
+const onSubmit = async (
+  values,
+  { resetForm, setSubmitting, setFieldError }
+) => {
   try {
-    const response = await axios.post(
-      "http://localhost:8080/category",
-      values
-    );
-    console.log("Respuesta del servidor:", response.data);
-    // Aca íria la lógica de mostrar un mensaje de exito
+    const isUniqueResult = await isUnique("category", values.nombre);
+    if (!isUniqueResult) {
+      setFieldError("nombre", "Ya existe una categoría con ese nombre");
+      setSubmitting(false);
+      return;
+    }
+    const response = await axios.post("http://localhost:8080/category", {
+      name: values.nombre,
+    });
+    //console.log("Respuesta del servidor:", response.data);
+    Swal.fire({
+      icon: "success",
+      title: "Exito!",
+      text: `La categoria ${response.data.name} fue creada con éxito!`,
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
+    resetForm();
   } catch (error) {
-    console.error("Error en el registro:", error);
-    // Aca íria la lógica de mostrar el error
+    //console.error("Error en el registro:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Hubo un error al crear la categoria",
+      customClass: {
+        popup: "swal-success-popup",
+        confirmButton: "swal-ok-button",
+      },
+    });
   } finally {
     setSubmitting(false);
   }
-  */
+  /*
   console.log("Formulario enviado con valores:", values);
   await new Promise((resolve) => setTimeout(resolve, 1000));
   resetForm();
   alert("Formulario enviado");
+  */
 };
 
 const ABMCategoryPage = () => {
   return (
-    <div className="background">
-      <ABMBackButton />
-      <div className="container abm-category-page">
-        <h1 className="title">Creá una Categoría</h1>
+    <Box className="background" sx={{ padding: 2 }}>
+      <Box className="container abm-category-page">
+        {/* Typography queda muy feo aca, mejor HTML*/}
+        <h2 className="title">Creá una Categoría</h2>
         <Formik
-          initialValues={{ nombre: "", descripcion: "" }} // Valores iniciales del formulario
-          validationSchema={categorySchema} // Esquema de validación
-          onSubmit={onSubmit} // Función al enviar el formulario
+          initialValues={{ nombre: "" }}
+          validationSchema={categorySchema}
+          validateOnChange={true}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInput
-                label="NOMBRE"
-                id="nombre"
+              <ABMInputComponent
+                label="Nombre"
                 name="nombre"
                 type="text"
                 placeholder="Ingrese el nombre"
-              />
-              <ABMInput
-                label="DESCRIPCIÓN"
-                id="descripcion"
-                name="descripcion"
-                type="text"
-                placeholder="Ingrese la descripción"
               />
               <button
                 className="btn-crear"
@@ -66,8 +85,8 @@ const ABMCategoryPage = () => {
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
