@@ -24,7 +24,7 @@ export const RegisterPage = () => {
       .email("Correo electrónico inválido")
       .required("El correo electrónico es obligatorio"),
     password: Yup.string()
-      .min(8, "La contraseña debe tener al menos 6 caracteres")
+      .min(8, "La contraseña debe tener al menos 8 caracteres")
       .max(22, "La contraseña no debe tener más de 22 caracteres")
       .required("La contraseña es obligatoria"),
   });
