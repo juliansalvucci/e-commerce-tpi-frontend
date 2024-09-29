@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Box,
@@ -15,6 +16,7 @@ import { useUser } from "../context/UserProvider.jsx";
 import { loginSchema } from "../schemas";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   const { login } = useUser();
   // Estado para mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
@@ -77,7 +79,9 @@ export const LoginPage = () => {
               borderRadius: "50px",
               boxShadow: 5,
               mt: 4,
+              cursor: "pointer",
             }}
+            onClick={() => navigate("/")}
           />
         </Box>
 

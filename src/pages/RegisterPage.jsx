@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Box,
@@ -15,6 +16,7 @@ import { useUser } from "../context/UserProvider.jsx";
 import { registerSchema } from "../schemas";
 
 export const RegisterPage = () => {
+  const navigate = useNavigate();
   const { register } = useUser();
   // Estado para mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +49,6 @@ export const RegisterPage = () => {
           height: "90vh",
         }}
       />
-
       <Box
         sx={{
           width: "120vh",
@@ -76,7 +77,9 @@ export const RegisterPage = () => {
               borderRadius: "50px",
               boxShadow: 5,
               mt: 2,
+              cursor: "pointer",
             }}
+            onClick={() => navigate("/")}
           />
         </Box>
         <Typography variant="h5" align="center" gutterBottom>
