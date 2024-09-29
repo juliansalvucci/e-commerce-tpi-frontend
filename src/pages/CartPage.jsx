@@ -11,7 +11,7 @@ export const CartPage = () => {
   const calculateTotal = () => {
     return shoppingList
       .reduce((total, product) => total + product.price * product.quantity, 0)
-      .toFixed(2);
+      .toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
 
   // Función para calcular la cantidad total de productos
@@ -39,7 +39,7 @@ export const CartPage = () => {
       if (result.isConfirmed) {
         // Mostrar la segunda alerta si el usuario confirma la primera
         const productsPurchased = shoppingList
-          .map((product) => `<li>${product.title} x ${product.quantity}</li>`)
+          .map((product) => `<li>${product.name} x ${product.quantity}</li>`)
           .join(""); // Generar elementos de lista para cada producto
         Swal.fire({
           icon: "success",
@@ -78,17 +78,30 @@ export const CartPage = () => {
                 <td>
                   <div className="product-info">
                     <img
-                      src={product.image}
-                      alt={product.title}
+                      src={product.imageURL}
+                      alt={product.name}
                       className="product-img"
                     />
-                    <span>{product.title}</span>
+                    <span>{product.name}</span>
                   </div>
                 </td>
 
-                <td>${(product.price * product.quantity).toFixed(2)}</td>
+                <td>
+                  $
+                  {product.price.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}{" "}
+                  x {product.quantity}
+                </td>
+                <td>
+                  {(product.price * product.quantity).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </td>
                 <td className="quantity-column">
-                  {/*Quito cantidad de productos del carrito */}
+                  {/*Quito cantidad de productos al carrito */}
                   <button
                     className="btn btn-outline-primary"
                     onClick={() => decrementQuantity(product.id)}
@@ -99,7 +112,7 @@ export const CartPage = () => {
                   <button className="btn btn-primary">
                     {product.quantity}
                   </button>
-
+                  {/*Agrego cantidad de productos al carrito */}
                   <button
                     className="btn btn-outline-primary"
                     onClick={() => incrementQuantity(product.id)}

@@ -9,7 +9,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
   const calculateTotal = () => {
     return shoppingList
       .reduce((total, product) => total + product.price * product.quantity, 0)
-      .toFixed(2);
+      .toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
 
   // Función para calcular la cantidad total de productos
@@ -45,17 +45,23 @@ export const CartPopup = ({ isVisible, onClose }) => {
                 <div className="image-container">
                   <img
                     className="cart-img"
-                    src={product.image}
-                    alt={product.title}
+                    src={product.imageURL}
+                    alt={product.name}
                   />
                 </div>
 
                 <div className="title-container">
-                  <strong>{product.title}</strong>
+                  <strong>{product.name}</strong>
                 </div>
                 <div className="price-container">
                   {/* Total por producto */}
-                  <p>${(product.price * product.quantity).toFixed(2)}</p>
+                  <p>
+                    $
+                    {(product.price * product.quantity).toLocaleString(
+                      "en-US",
+                      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                    )}
+                  </p>
                 </div>
 
                 <div className="counter-products">
@@ -97,7 +103,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
         {/* Mostrar el total de los productos en el carrito */}
         <div className="total-container">
           <h4>
-            Total ({calculateTotalQuantity()}): ${calculateTotal()}
+            Total ({calculateTotalQuantity()}): {calculateTotal()}
           </h4>
         </div>
 

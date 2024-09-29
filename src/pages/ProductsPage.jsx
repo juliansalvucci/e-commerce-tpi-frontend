@@ -9,7 +9,7 @@ export const ProductsPage = () => {
 
   // Estado para la paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 16;
+  const productsPerPage = 12;
 
   // Calcular el índice de los productos a mostrar en la página actual
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -38,8 +38,9 @@ export const ProductsPage = () => {
               <CardComponent
                 key={product.id}
                 id={product.id}
-                title={product.title}
-                image={product.image}
+                title={product.name}
+                image={product.imageURL}
+                stock={product.stock}
                 price={product.price}
                 description={product.description}
                 handlerAdd={() => addProduct(product)}
