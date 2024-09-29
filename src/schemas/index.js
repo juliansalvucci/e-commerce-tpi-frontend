@@ -79,7 +79,8 @@ export const registerSchema = yup.object().shape({
     .required("El correo electrónico es obligatorio"),
   password: yup
     .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .max(22, "La contraseña debe tener como máximo 22 caracteres")
     .required("La contraseña es obligatoria"),
 });
 
@@ -90,6 +91,7 @@ export const loginSchema = yup.object({
     .required("El correo electrónico es obligatorio"),
   password: yup
     .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .max(22, "La contraseña debe tener como máximo 22 caracteres")
     .required("La contraseña es obligatoria"),
 });
