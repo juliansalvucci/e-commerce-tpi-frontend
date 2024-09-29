@@ -10,10 +10,12 @@ export const UserProvider = ({ children }) => {
   const register = async (values, { setSubmitting }) => {
     try {
       // Llamada POST al backend usando Axios
-      const response = await axios.post(
-        "http://localhost:8080/auth/signup",
-        values
-      );
+      const response = await axios.post("http://localhost:8080/auth/signup", {
+        firstName: values.nombre,
+        lastName: values.apellido,
+        email: values.email,
+        password: values.password,
+      });
       console.log("Respuesta del servidor:", response.data);
       localStorage.setItem("token", response.data.token);
       Swal.fire({
@@ -41,8 +43,10 @@ export const UserProvider = ({ children }) => {
     try {
       // Llamada POST al backend usando Axios
       const response = await axios.post(
-        "http://localhost:8080/auth/signin",
-        values
+        "http://localhost:8080/auth/signin", {
+          email: values.email,
+          password: values.password,
+        }
       );
       console.log("Respuesta del servidor:", response.data);
       localStorage.setItem("token", response.data.token);

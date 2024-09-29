@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import fondo from "../assets/fondo.png";
-import logo from "../assets/logo.png";
-
 import {
-  TextField,
   Button,
   Box,
   Typography,
@@ -13,20 +7,16 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useUser } from "../context/UserProvider";
+import { Formik, Form } from "formik";
+import fondo from "../assets/fondo.png";
+import logo from "../assets/logo.png";
+import ABMInputComponent from "../components/ABMInputComponent";
+import { useUser } from "../context/UserProvider.jsx";
+import { loginSchema } from "../schemas";
 
 export const LoginPage = () => {
   const { login } = useUser();
-
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email("Correo electrónico inválido")
-      .required("El correo electrónico es obligatorio"),
-    password: Yup.string()
-      .min(6, "La contraseña debe tener al menos 6 caracteres")
-      .required("La contraseña es obligatoria"),
-  });
-
+  // Estado para mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
   // Función para controlar la visibilidad de la contraseña
@@ -72,9 +62,9 @@ export const LoginPage = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center", // Centra horizontalmente
-            alignItems: "center", // Centra verticalmente
-            mb: 4, // Margen inferior para separación
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 4,
           }}
         >
           <Box
@@ -82,11 +72,11 @@ export const LoginPage = () => {
             src={logo} // Reemplaza con la ruta de tu imagen
             alt="Imagen de bienvenida"
             sx={{
-              width: "100px", // Ajusta el tamaño según sea necesario
-              height: "100px", // Cambia a "auto" para mantener la proporción
+              width: "100px",
+              height: "100px",
               borderRadius: "50px",
               boxShadow: 5,
-              mt: 4, // Margen superior para separación
+              mt: 4,
             }}
           />
         </Box>
@@ -97,46 +87,26 @@ export const LoginPage = () => {
 
         <Formik
           initialValues={{ email: "", password: "" }}
-          validationSchema={validationSchema}
+          validationSchema={loginSchema}
+          validateOnBlur={true}
+          validateOnChange={true}
           onSubmit={login}
         >
-          {({
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-            touched,
-            errors,
-          }) => (
+          {({ isSubmitting }) => (
             <Form>
               <Box mb={2}>
-                <TextField
-                  fullWidth
-                  id="email"
-                  name="email"
+                <ABMInputComponent
                   label="Correo Electrónico"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                  variant="outlined"
+                  name="email"
+                  type="text"
                 />
               </Box>
 
               <Box mb={2}>
-                <TextField
-                  fullWidth
-                  id="password"
-                  name="password"
+                <ABMInputComponent
                   label="Contraseña"
+                  name="password"
                   type={showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.password && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
-                  variant="outlined"
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">

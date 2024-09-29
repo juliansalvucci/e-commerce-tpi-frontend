@@ -69,3 +69,27 @@ export const productSchema = yup.object().shape({
   marca: yup.string().required("Obligatorio"),
   subcategoria: yup.string().required("Obligatorio"),
 });
+
+export const registerSchema = yup.object().shape({
+  nombre: yup.string().required("El nombre es obligatorio"),
+  apellido: yup.string().required("El apellido es obligatorio"),
+  email: yup
+    .string()
+    .email("Correo electrónico inválido")
+    .required("El correo electrónico es obligatorio"),
+  password: yup
+    .string()
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .required("La contraseña es obligatoria"),
+});
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email("Correo electrónico inválido")
+    .required("El correo electrónico es obligatorio"),
+  password: yup
+    .string()
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .required("La contraseña es obligatoria"),
+});
