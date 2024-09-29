@@ -10,7 +10,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import ListIcon from "@mui/icons-material/List";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -32,6 +32,17 @@ const NavBar = () => {
   const [openCategory, setOpenCategory] = useState(false);
   const [openProduct, setOpenProduct] = useState(false);
   const [openSubCategory, setOpenSubCategory] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Resetear el estado cuando cambie la ruta
+    setOpen(false);
+    setOpenBrand(false);
+    setOpenCategory(false);
+    setOpenProduct(false);
+    setOpenSubCategory(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,7 +125,7 @@ const NavBar = () => {
             >
               <List>
                 <ListItem
-                  button
+                  button="true"
                   component={NavLink}
                   style={linkStyle}
                   onClick={handleToggleBrand}
@@ -134,7 +145,7 @@ const NavBar = () => {
                 >
                   <List component="div" disablePadding>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/brand/create"
                       style={linkStyle}
@@ -142,7 +153,7 @@ const NavBar = () => {
                       <ListItemText primary="Create" />
                     </ListItem>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/brand/list"
                       style={linkStyle}
@@ -152,7 +163,7 @@ const NavBar = () => {
                   </List>
                 </Collapse>
                 <ListItem
-                  button
+                  button="true"
                   component={NavLink}
                   style={linkStyle}
                   onClick={handleToggleCategory}
@@ -172,7 +183,7 @@ const NavBar = () => {
                 >
                   <List component="div" disablePadding>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/category/create"
                       style={linkStyle}
@@ -180,7 +191,7 @@ const NavBar = () => {
                       <ListItemText primary="Create" />
                     </ListItem>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/category/list"
                       style={linkStyle}
@@ -190,7 +201,7 @@ const NavBar = () => {
                   </List>
                 </Collapse>
                 <ListItem
-                  button
+                  button="true"
                   component={NavLink}
                   style={linkStyle}
                   onClick={handleToggleProduct}
@@ -210,7 +221,7 @@ const NavBar = () => {
                 >
                   <List component="div" disablePadding>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/product/create"
                       style={linkStyle}
@@ -218,7 +229,7 @@ const NavBar = () => {
                       <ListItemText primary="Create" />
                     </ListItem>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/product/list"
                       style={linkStyle}
@@ -228,7 +239,7 @@ const NavBar = () => {
                   </List>
                 </Collapse>
                 <ListItem
-                  button
+                  button="true"
                   component={NavLink}
                   style={linkStyle}
                   onClick={handleToggleSubCategory}
@@ -248,7 +259,7 @@ const NavBar = () => {
                 >
                   <List component="div" disablePadding>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/subcategory/create"
                       style={linkStyle}
@@ -256,7 +267,7 @@ const NavBar = () => {
                       <ListItemText primary="Create" />
                     </ListItem>
                     <ListItem
-                      button
+                      button="true"
                       component={NavLink}
                       to="/admin/subcategory/list"
                       style={linkStyle}
