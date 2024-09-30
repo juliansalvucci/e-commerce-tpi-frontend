@@ -1,4 +1,7 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
 import Swal from "sweetalert2";
 import "../styles/CartPage.css";
@@ -23,6 +26,18 @@ export const CartPage = () => {
   };
 
   const handlerPurchase = () => {
+    if (shoppingList.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "No hay productos seleccionados",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+    } else {
     //Mostramos una alerta en el que se muestre el listado de los productos comprados (su titulo y cantidad)
     Swal.fire({
       title: "Finalizar compra",
