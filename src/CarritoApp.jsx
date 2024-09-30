@@ -10,9 +10,15 @@ import NavBar from "./components/NavBar";
 import NavBarAdmin from "./components/NavBarAdmin";
 import Footer from "./components/Footer";
 import BrandProvider from "./context/BrandProvider";
+import CategoryProvider from "./context/CategoryProvider";
+import SubCategoryProvider from "./context/SubCategoryProvider";
 import HomeAdminPage from "./pages/HomeAdminPage";
 import ABMBrandPage from "./pages/ABMBrandPage";
 import ListBrandPage from "./pages/ListBrandPage";
+import ABMCategoryPage from "./pages/ABMCategoryPage";
+import ListCategoryPage from "./pages/ListCategoryPage";
+import ABMSubCategoryPage from "./pages/ABMSubCategoryPage";
+import ListSubCategoryPage from "./pages/ListSubCategoryPage";
 
 export const CarritoApp = () => {
   const location = useLocation();
@@ -23,28 +29,62 @@ export const CarritoApp = () => {
   );
 
   return (
-    
-    <BrandProvider>
-      <NavBarAdmin />
-      <div>
-        <Routes>
-          <Route path="/admin" element={<HomeAdminPage/>}></Route>
-          <Route path="/admin/brand/create" element={<ABMBrandPage/>}></Route>
-          <Route path="/admin/brand/edit" element={<ABMBrandPage/>}></Route>
-          <Route path="/admin/brand/list" element={<ListBrandPage/>}></Route>
-        </Routes>
-      </div>
-    </BrandProvider>
+    <CategoryProvider>
+      <BrandProvider>
+        <SubCategoryProvider>
+          <NavBarAdmin />
+          <div>
+            <Routes>
+              <Route path="/*" element={<Navigate to="/admin" />}></Route>
+              <Route path="/admin" element={<HomeAdminPage />}></Route>
+              <Route
+                path="/admin/brand/create"
+                element={<ABMBrandPage />}
+              ></Route>
+              <Route
+                path="/admin/brand/edit"
+                element={<ABMBrandPage />}
+              ></Route>
+              <Route
+                path="/admin/brand/list"
+                element={<ListBrandPage />}
+              ></Route>
+              <Route
+                path="/admin/category/create"
+                element={<ABMCategoryPage />}
+              ></Route>
+              <Route
+                path="/admin/category/edit"
+                element={<ABMCategoryPage />}
+              ></Route>
+              <Route
+                path="/admin/category/list"
+                element={<ListCategoryPage />}
+              ></Route>
+              <Route
+                path="/admin/subcategory/create"
+                element={<ABMSubCategoryPage />}
+              ></Route>
+              <Route
+                path="/admin/subcategory/edit"
+                element={<ABMSubCategoryPage />}
+              ></Route>
+              <Route
+                path="/admin/subcategory/list"
+                element={<ListSubCategoryPage />}
+              ></Route>
+            </Routes>
+          </div>
+        </SubCategoryProvider>
+      </BrandProvider>
+    </CategoryProvider>
 
-    // <UserProvider>
-    //   <LoginPage />
-    // </UserProvider>
     // <UserProvider>
     //   <ProductProvider>
     //     <CartProvider>
     //       {/* Renderiza NavBar solo si no está en las rutas de login o register */}
     //       {!hideNavBarAndFooter && <NavBar />}
-    //       <div className="container">
+    //       <div>
     //         <Routes>
     //           {/* Especifico qué elementos (componente) debo mostrar al tener la ruta localhost:5174/*/}
     //           <Route path="/" element={<ProductsPage />}></Route>
