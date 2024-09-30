@@ -83,7 +83,7 @@ export const CartPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container-cart-page">
       <div className="top-container">
         <table className="table">
           <thead>
@@ -112,7 +112,6 @@ export const CartPage = () => {
                 </td>
 
                 <td>
-                  $
                   {product.price.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
@@ -165,7 +164,7 @@ export const CartPage = () => {
             <b>Resumen de compra</b>
             <br />
             <p>Cantidad de productos: {calculateTotalQuantity()}</p>
-            <b>Total: ${calculateTotal()}</b>
+            <b>Total: {calculateTotal()}</b>
           </div>
           <div className="d-grid gap-2">
             <button
