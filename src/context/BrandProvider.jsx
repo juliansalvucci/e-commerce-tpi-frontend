@@ -56,7 +56,7 @@ const BrandProvider = ({ children }) => {
           },
         });
       } else {
-        console.error("Error al crear marca:", error);
+        console.error("Error al crear marca:", error); // Por ahora mostramos el error por consola por comodidad
       }
     }
   };
@@ -92,6 +92,9 @@ const BrandProvider = ({ children }) => {
           confirmButton: "swal-ok-button",
         },
       });
+      } else {
+        console.error("Error al editar marca:", error); // Por ahora mostramos el error por consola por comodidad
+      }
     }
   };
 
@@ -122,14 +125,7 @@ const BrandProvider = ({ children }) => {
           },
         });
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Hubo un error al eliminar la marca",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
+        console.error("Error al eliminar marca:", error); // Por ahora mostramos el error por consola por comodidad
       }
     }
   };
@@ -140,7 +136,7 @@ const BrandProvider = ({ children }) => {
       await axios.post(`http://localhost:8080/brand/recover/${id}`);
       fetchBrands();
     } catch (error) {
-      console.error("Error al restaurar marca:", error);
+      console.error("Error al restaurar marca:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
