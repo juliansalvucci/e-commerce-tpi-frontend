@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BrandContext } from "./BrandContext";
+import formatDateTime from "../utils/formatDateTimeUtils";
 
 const BrandProvider = ({ children }) => {
   const [brands, setBrands] = useState([]);
@@ -16,9 +17,17 @@ const BrandProvider = ({ children }) => {
           ? "http://localhost:8080/brand/deleted"
           : "http://localhost:8080/brand"
       );
-      setBrands(response.data);
+      const updatedBrands = response.data.map((brand) => ({
+        ...brand,
+        deleted: brand.deleted === true,
+        creationDatetime: formatDateTime(brand.creationDatetime),
+        deleteDatetime: brand.deleteDatetime
+          ? formatDateTime(brand.deleteDatetime)
+          : null,
+      }));
+      setBrands(updatedBrands);
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.error("Error (fetch marca):", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
