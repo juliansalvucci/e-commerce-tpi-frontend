@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
-import Swal from "sweetalert2";
 import "../styles/CartPage.css";
-import trashIcon from "../assets/trash-icon.png";
 
 export const CartPage = () => {
-  const { shoppingList, removeProduct, incrementQuantity, decrementQuantity } =
+  const navigate = useNavigate();
+  const { shoppingList, removeProduct, incrementQuantity, decrementQuantity, emptyCart } =
     useContext(CartContext);
 
   const calculateTotal = () => {
@@ -38,38 +37,44 @@ export const CartPage = () => {
         },
       });
     } else {
-    //Mostramos una alerta en el que se muestre el listado de los productos comprados (su titulo y cantidad)
-    Swal.fire({
-      title: "Finalizar compra",
-      text: "¿Desea confirmar la compra?",
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      cancelButtonText: "Cancelar",
-      customClass: {
-        popup: "swal-question-popup",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Mostrar la segunda alerta si el usuario confirma la primera
-        const productsPurchased = shoppingList
-          .map((product) => `<li>${product.name} x ${product.quantity}</li>`)
-          .join(""); // Generar elementos de lista para cada producto
-        Swal.fire({
-          icon: "success",
-          title: "La compra se ha realizado con éxito",
-          html: `
-          <p>Has comprado:</p>
-          <ul>${productsPurchased}</ul> <!-- Mostrar productos en una lista -->
-        `,
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button", // Clase personalizada para el botón "OK"
-          },
-        });
-      }
-    });
+      //Mostramos una alerta en el que se muestre el listado de los productos comprados (su titulo y cantidad)
+      Swal.fire({
+        title: "Finalizar compra",
+        text: "¿Desea confirmar la compra?",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+        customClass: {
+          popup: "swal-question-popup",
+          confirmButton: "swal-confirm-button",
+          cancelButton: "swal-cancel-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Mostrar la segunda alerta si el usuario confirma la primera
+          const productsPurchased = shoppingList
+            .map((product) => `<li>${product.name} x ${product.quantity}</li>`)
+            .join(""); // Generar elementos de lista para cada producto
+          Swal.fire({
+            icon: "success",
+            title: "La compra se ha realizado con éxito",
+            html: `
+            <p>Has comprado:</p>
+            <ul>${productsPurchased}</ul> <!-- Mostrar productos en una lista -->
+          `,
+            customClass: {
+              popup: "swal-success-popup",
+              confirmButton: "swal-ok-button", // Clase personalizada para el botón "OK"
+            },
+          }).then((result) => {
+            if (result.isConfirmed) {
+              emptyCart();
+              navigate("/");
+            }
+          });
+        }
+      });
+    }
   };
 
   return (

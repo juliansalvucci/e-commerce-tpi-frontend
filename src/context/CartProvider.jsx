@@ -38,6 +38,8 @@ export const CartProvider = ({ children }) => {
             return { ...product, quantity: cant };
           return product;
         });
+      case "[CART] Empty Cart":
+        return [];
 
       default:
         return state;
@@ -79,6 +81,13 @@ export const CartProvider = ({ children }) => {
     dispatch(action);
   };
 
+  const emptyCart = () => {
+    const action = {
+      type: "[CART] Empty Cart",
+    };
+    dispatch(action);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -87,6 +96,7 @@ export const CartProvider = ({ children }) => {
         removeProduct,
         incrementQuantity,
         decrementQuantity,
+        emptyCart,
       }}
     >
       {children}
