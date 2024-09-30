@@ -17,9 +17,15 @@ export const CartProvider = ({ children }) => {
         //Recorro los productos y el que coincide con el id del producto, se le incrementa la cantidad
         return state.map((product) => {
           // Si la cantidad es menor que el stock disponible, se incrementa la cantidad
-          if (product.id === action.payload && product.quantity < product.stock) {
+          if (
+            product.id === action.payload &&
+            product.quantity < product.stock
+          ) {
             return { ...product, quantity: product.quantity + 1 };
-          } else if (product.id === action.payload && product.quantity >= product.stock) {
+          } else if (
+            product.id === action.payload &&
+            product.quantity >= product.stock
+          ) {
             // Si se alcanza el stock disponible, mostrar alerta
             Swal.fire({
               icon: "warning",

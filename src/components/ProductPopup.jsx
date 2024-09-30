@@ -145,7 +145,9 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
               >
                 -
               </button>
-              <button className="btn btn-primary local-quantity">{localQuantity}</button>
+              <button className="btn btn-primary local-quantity">
+                {localQuantity}
+              </button>
               <button
                 className="btn btn-outline-primary"
                 onClick={handleIncrement}

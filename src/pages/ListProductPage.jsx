@@ -43,7 +43,7 @@ const ListProductPage = () => {
   const { brands } = useContext(BrandContext);
   const { categories } = useContext(CategoryContext);
   const { subCategories } = useContext(SubCategoryContext);
- 
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
   const [openRows, setOpenRows] = useState({}); // Maneja Collapse
@@ -105,7 +105,7 @@ const ListProductPage = () => {
           product,
           categories,
           subCategories,
-          brands,
+          brands
         );
         if (formattedProduct) {
           selectProductForEdit(formattedProduct);
@@ -324,7 +324,7 @@ const ListProductPage = () => {
             />
           </Paper>
         </Box>
-        
+
         <Stack
           direction="row"
           justifyContent="center"

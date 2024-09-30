@@ -49,7 +49,15 @@ export const CardComponent = ({
     const productInCart = shoppingList.find((item) => item.id === id);
     const quantity = productInCart ? productInCart.quantity : 1;
 
-    setSelectedProduct({ id, image, title, description, price, quantity, stock });
+    setSelectedProduct({
+      id,
+      image,
+      title,
+      description,
+      price,
+      quantity,
+      stock,
+    });
     setIsPopupVisible(true);
   };
 
@@ -74,7 +82,7 @@ export const CardComponent = ({
           <h5 className="card_title" onClick={showProductPopup}>
             {title}
           </h5>
-          
+
           <p className="card_price" onClick={showProductPopup}>
             $
             {price.toLocaleString("en-US", {

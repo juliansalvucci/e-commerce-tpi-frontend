@@ -198,12 +198,12 @@ const CategoryProvider = ({ children }) => {
   const findCategoryById = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.name : "";
-  }
+  };
 
   const findCategoryByName = (categoryName) => {
     const category = categories.find((cat) => cat.name === categoryName);
     return category ? category.id : "";
-  }
+  };
 
   return (
     <CategoryContext.Provider

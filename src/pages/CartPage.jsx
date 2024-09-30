@@ -7,8 +7,13 @@ import "../styles/CartPage.css";
 
 export const CartPage = () => {
   const navigate = useNavigate();
-  const { shoppingList, removeProduct, incrementQuantity, decrementQuantity, emptyCart } =
-    useContext(CartContext);
+  const {
+    shoppingList,
+    removeProduct,
+    incrementQuantity,
+    decrementQuantity,
+    emptyCart,
+  } = useContext(CartContext);
 
   const calculateTotal = () => {
     return shoppingList
