@@ -29,12 +29,17 @@ const ABMBrandPage = () => {
   return (
     <Box className="background" sx={{ padding: 2 }}>
       <Box className="container abm-brand-page">
+        {/*Typography queda muy feo aca, mejor HTML*/}
         <h2 className="title">
           {selectedBrand ? "Editar Marca" : "Creá una Marca"}
+          <p className="subtitle">
+            {selectedBrand ? `${selectedBrand.name}` : ""}
+          </p>
         </h2>
         <Formik
           initialValues={{ nombre: selectedBrand ? selectedBrand.name : "" }}
           validationSchema={brandSchema}
+          validateOnChange={true}
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
