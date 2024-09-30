@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -14,7 +14,6 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import axios from "axios";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton";
@@ -23,16 +22,22 @@ import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import { BrandContext } from "../context/BrandContext";
 import "../styles/List.css";
-import formatDateTime from "../utils/formatDateTimeUtils";
 
 const ListBrandPage = () => {
   const navigate = useNavigate();
-  const { selectBrandForEdit } = useContext(BrandContext); // Obtener el setter del contexto
-  const [brands, setBrands] = useState([]);
+  const {
+    brands,
+    showDeleted,
+    setShowDeleted,
+    deleteBrand,
+    restoreBrand,
+    selectBrandForEdit,
+  } = useContext(BrandContext);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showDeleted, setShowDeleted] = useState(false);
 
+  // Definición de las columnas de la tabla
   const columns = [
     { id: "name", label: "Nombre", minWidth: 170 },
     { id: "creationDateTime", label: "Fecha de Creación", minWidth: 170 },
@@ -42,39 +47,14 @@ const ListBrandPage = () => {
     { id: "actions", label: "Acciones", minWidth: 170 },
   ];
 
-  const fetchBrands = async () => {
-    try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/brand/deleted"
-          : "http://localhost:8080/brand"
-      );
-      const updatedBrands = response.data.map((brand) => ({
-        ...brand,
-        deleted: brand.deleted === true,
-        creationDatetime: formatDateTime(brand.creationDatetime),
-        deleteDatetime: brand.deleteDatetime
-          ? formatDateTime(brand.deleteDatetime)
-          : null,
-      }));
-      setBrands(updatedBrands);
-    } catch (error) {
-      console.error("Error fetching items:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBrands();
-  }, [showDeleted]);
-
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
     setPage(0);
   };
 
   const filteredBrands = showDeleted
-    ? brands.filter((brand) => brand.deleted)
-    : brands.filter((brand) => !brand.deleted);
+    ? brands.filter((brand) => brand.deleted) // Muestra solo las eliminadas
+    : brands.filter((brand) => !brand.deleted); // Muestra solo las activas
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -99,35 +79,13 @@ const ListBrandPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        selectBrandForEdit(brand); // Actualiza el contexto con la marca seleccionada
+        selectBrandForEdit(brand);
         navigate(`/admin/brand/edit`);
       }
     });
   };
 
-  const deleteBrand = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/brand/${id}`);
-      fetchBrands();
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "La marca no puede ser eliminada",
-          text: "La marca tiene productos asociados.",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al borrar marca:", error);
-      }
-    }
-  };
-
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Borrar Marca",
       text: "¿Estás seguro que quieres borrar esta marca?",
@@ -146,16 +104,7 @@ const ListBrandPage = () => {
     });
   };
 
-  const recoverBrand = async (id) => {
-    try {
-      await axios.post(`http://localhost:8080/brand/recover/${id}`);
-      fetchBrands();
-    } catch (error) {
-      console.error("Error restaurando marca:", error);
-    }
-  };
-
-  const handleRestore = async (id) => {
+  const handleRestore = (id) => {
     Swal.fire({
       title: "Restaurar Marca",
       text: "¿Estás seguro que quieres restaurar esta marca?",
@@ -169,7 +118,7 @@ const ListBrandPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        recoverBrand(id);
+        restoreBrand(id);
       }
     });
   };
@@ -209,6 +158,7 @@ const ListBrandPage = () => {
               <Table stickyHeader aria-label="brand tabla">
                 <TableHead>
                   <TableRow>
+                    {/* Mapea las columnas para crear las celdas del encabezado */}
                     {columns.map((column) => (
                       <TableCell
                         key={column.id}
@@ -225,6 +175,7 @@ const ListBrandPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  {/* Mapea las categorías filtradas para mostrar los datos en filas */}
                   {brands
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((brand) => (
