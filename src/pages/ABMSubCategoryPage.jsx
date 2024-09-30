@@ -1,95 +1,60 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Box } from "@mui/material";
-import axios from "axios";
 import { Formik, Form } from "formik";
-import Swal from "sweetalert2";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import ABMSelectComponent from "../components/ABMSelectComponent";
+import { CategoryContext } from "../context/CategoryContext";
+import { SubCategoryContext } from "../context/SubCategoryContext";
 import { subCategorySchema } from "../schemas";
 import "../styles/ABM.css";
-import isUnique from "../utils/isUniqueUtils";
-
-// Función que se ejecutará al enviar el form
-const onSubmit = async (
-  values,
-  { resetForm, setSubmitting, setFieldError }
-) => {
-  try {
-    const isUniqueResult = await isUnique("subcategory", values.nombre);
-    if (!isUniqueResult) {
-      setFieldError("nombre", "Ya existe una subcategoría con ese nombre");
-      setSubmitting(false);
-      return;
-    }
-    const response = await axios.post("http://localhost:8080/subcategory", {
-      name: values.nombre,
-      categoryId: values.categoria,
-    });
-    //console.log("Respuesta del servidor:", response.data);
-    const subCategoryDetails = `
-      <ul>
-        <p><strong>Nombre:</strong> ${response.data.name}</p>
-        <p><strong>Categoría:</strong> ${response.data.category}</p>
-      </ul>
-    `;
-    Swal.fire({
-      icon: "success",
-      title: "Exito!",
-      text: `La subcategoría ${response.data.name} fue creada con éxito!`,
-      html: subCategoryDetails,
-      customClass: {
-        popup: "swal-success-popup",
-        confirmButton: "swal-ok-button",
-      },
-    });
-    resetForm();
-  } catch (error) {
-    //console.error("Error en el registro:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Hubo un error al crear la subcategoria",
-      customClass: {
-        popup: "swal-success-popup",
-        confirmButton: "swal-ok-button",
-      },
-    });
-  } finally {
-    setSubmitting(false);
-  }
-  /*
-  console.log("Formulario enviado con valores:", values);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  resetForm();
-  alert("Formulario enviado");
-  */
-};
 
 const ABMSubCategoryPage = () => {
-  const [categories, setCategories] = useState([]); // Estado para almacenar las categorías
-  useEffect(() => {
-    // useEffect para obtener las categorías desde la API
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/category");
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error al obtener las categorías:", error);
-      }
-    };
+  const { createSubCategory, editSubCategory, selectedSubCategory } =
+    useContext(SubCategoryContext);
 
-    fetchCategories(); // Llamada a la API cuando el componente se monta
-  }, []); // Solo se ejecuta una vez cuando el componente se monta
+  const { categories } = useContext(CategoryContext);
+
+  const onSubmit = async (values, { resetForm, setSubmitting }) => {
+    try {
+      if (!selectedSubCategory) {
+        await createSubCategory({
+          name: values.nombre,
+          categoryId: values.categoria,
+        });
+        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+      } else {
+        await editSubCategory(selectedSubCategory.id, {
+          name: values.nombre,
+          categoryId: values.categoria,
+        });
+      }
+    } catch (error) {
+      console.error("Error al crear o editar subcategoría:", error); // Por ahora mostramos el error por consola por comodidad
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Box className="background" sx={{}}>
       <Box className="container abm-subcategory-page">
-        <h2 className="title">Creá una SubCategoría</h2>
+        {/*Typography queda muy feo aca, mejor HTML*/}
+        <h2 className="title">
+          {selectedSubCategory
+            ? "Editar Subcategoría"
+            : "Creá una Subcategoría"}
+          <p className="subtitle">
+            {selectedSubCategory ? `${selectedSubCategory.name}` : ""}
+          </p>
+        </h2>
         <Formik
-          initialValues={{ nombre: "", categoria: "" }}
+          initialValues={{
+            nombre: selectedSubCategory?.name || "",
+            categoria: selectedSubCategory?.categoryId || "",
+          }}
           validationSchema={subCategorySchema}
-          validateOnBlur={true} // Solo valida al perder foco
-          validateOnChange={false} // Deshabilitar validación en cada cambio
+          validateOnChange={true}
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
@@ -109,12 +74,12 @@ const ABMSubCategoryPage = () => {
                   options={categories.map((cat) => ({
                     value: cat.id, // Usamos el ID de la categoría como valor
                     label: cat.name, // Usamos el nombre de la categoría como label
-                  }))} // Pasamos las categorías que vienen del estado
+                  }))}
                 />
               </Box>
               <ABMActionButton
                 is={isSubmitting}
-                accion="Crear"
+                accion={selectedSubCategory ? "Guardar" : "Crear"}
                 tipoClase="Subcategoría"
               />
             </Form>

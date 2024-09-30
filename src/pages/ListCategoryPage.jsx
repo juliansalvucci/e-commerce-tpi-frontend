@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -13,22 +14,28 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import axios from "axios";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import { CategoryContext } from "../context/CategoryContext";
 import "../styles/List.css";
-import formatDateTime from "../utils/formatDateTimeUtils";
-import hasProducts from "../utils/hasProductsUtils";
 
 const ListCategoryPage = () => {
-  const [categories, setCategories] = useState([]);
-  const [page, setPage] = useState(0); // Página actual
-  const [rowsPerPage, setRowsPerPage] = useState(3); // Número de filas por página
-  const [showDeleted, setShowDeleted] = useState(false);
+  const navigate = useNavigate();
+  const {
+    categories,
+    showDeleted,
+    setShowDeleted,
+    deleteCategory,
+    restoreCategory,
+    selectCategoryForEdit,
+  } = useContext(CategoryContext);
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
 
   // Definición de las columnas de la tabla
   const columns = [
@@ -40,87 +47,30 @@ const ListCategoryPage = () => {
     { id: "actions", label: "Acciones", minWidth: 170 },
   ];
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/category/deleted"
-          : "http://localhost:8080/category"
-      );
-      const updatedCategories = response.data.map((cat) => ({
-        ...cat,
-        deleted: cat.deleted === true,
-        creationDatetime: formatDateTime(cat.creationDatetime),
-        deleteDatetime: cat.deleteDatetime
-          ? formatDateTime(cat.deleteDatetime)
-          : null,
-      }));
-      setCategories(updatedCategories);
-    } catch (error) {
-      console.error("Error fetching items:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, [showDeleted]);
-
-  // Maneja el cambio entre mostrar categorías eliminadas y activas
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
-    setPage(0); // Resetea la página a la primera cuando se cambia la vista
+    setPage(0);
   };
 
-  // Filtra las categorías según el estado de "eliminadas" o "activas"
   const filteredCategories = showDeleted
     ? categories.filter((category) => category.deleted) // Muestra solo las eliminadas
     : categories.filter((category) => !category.deleted); // Muestra solo las activas
 
-  // Cambia la página en la paginación
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Cambia el número de filas por página
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0); // Resetea la página a la primera cuando cambia la cantidad de filas
+    setPage(0);
   };
 
-  const handleEdit = async (id) => {
-    // Aca va la lógica de navegar hacia ABM Categoría con los datos del objeto
-    console.log("Hola");
-  };
-
-  const deleteCategory = async (id, name) => {
-    const hasProductsResult = await hasProducts("category", name);
-    if (hasProductsResult) {
-      Swal.fire({
-        icon: "error",
-        title: "La categoría no puede ser eliminada",
-        text: "La categoría tiene productos asociados.",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-      return;
-    }
-    try {
-      await axios.delete(`http://localhost:8080/category/${id}`);
-      fetchCategories();
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  };
-
-  const handleDelete = async (id, name) => {
+  const handleEdit = (cat) => {
     Swal.fire({
-      title: "Borrar Categoría",
-      text: "¿Estas seguro que quieres borrar esta categoría?",
+      title: "Editar Categoría",
+      text: "¿Estás seguro que quieres editar esta categoría?",
       showCancelButton: true,
-      confirmButtonText: "Si",
+      confirmButtonText: "Sí",
       cancelButtonText: "No",
       customClass: {
         popup: "swal-question-popup",
@@ -129,21 +79,32 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteCategory(id, name);
+        selectCategoryForEdit(cat);
+        navigate(`/admin/category/edit`);
       }
     });
   };
 
-  const recoverCategory = async (id) => {
-    try {
-      await axios.post(`http://localhost:8080/category/recover/${id}`);
-      fetchCategories();
-    } catch (error) {
-      console.error("Error restoring item:", error);
-    }
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Borrar Categoría",
+      text: "¿Estás seguro que quieres borrar esta categoría?",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteCategory(id);
+      }
+    });
   };
 
-  const handleRestore = async (id) => {
+  const handleRestore = (id) => {
     Swal.fire({
       title: "Restaurar Categoría",
       text: "¿Estas seguro que quieres restaurar esta categoría?",
@@ -157,7 +118,7 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        recoverCategory(id);
+        restoreCategory(id);
       }
     });
   };
@@ -169,7 +130,7 @@ const ListCategoryPage = () => {
         sx={{ width: "70%", display: "flex", justifyContent: "center" }}
       >
         <Box className="title-box">
-          {/* Título dinámico según el estado de "showDeleted" */}
+          {/* Título depende de showDeleted */}
           <Typography variant="h3" className="title" align="center">
             {showDeleted
               ? "Listado de Categorías Eliminadas"
@@ -182,7 +143,7 @@ const ListCategoryPage = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%", // Asegura que el contenedor ocupe todo el ancho disponible
+            width: "100%",
           }}
         >
           <Paper
@@ -206,7 +167,7 @@ const ListCategoryPage = () => {
                           fontWeight: "bold",
                           minWidth: column.minWidth,
                         }}
-                        align="center" // Centrar el texto del encabezado
+                        align="center"
                       >
                         {column.label}
                       </TableCell>
@@ -216,18 +177,16 @@ const ListCategoryPage = () => {
                 <TableBody>
                   {/* Mapea las categorías filtradas para mostrar los datos en filas */}
                   {categories
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Muestra las categorías de acuerdo a la paginación
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((category) => (
                       <TableRow hover tabIndex={-1} key={category.id}>
-                        <TableCell align="center">{category.name}</TableCell>{" "}
-                        {/* Centrar contenido de la celda */}
+                        <TableCell align="center">{category.name}</TableCell>
                         <TableCell align="center">
                           {category.creationDatetime}
-                        </TableCell>{" "}
-                        {/* Centrar contenido de la celda */}
+                        </TableCell>
                         {showDeleted && (
                           <TableCell align="center">
-                            {category.deleteDatetime || "N/A"}{" "}
+                            {category.deleteDatetime || "N/A"}
                             {/* Centrar contenido de la celda */}
                           </TableCell>
                         )}
@@ -238,19 +197,14 @@ const ListCategoryPage = () => {
                               spacing={1}
                               justifyContent="center"
                             >
-                              {" "}
-                              {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() =>
-                                  handleDelete(category.id, category.name)
-                                }
+                                onClick={() => handleDelete(category.id)}
                               />
                               <ListEditButton
-                                onClick={() => handleEdit(category.id)}
+                                onClick={() => handleEdit(category)}
                               />
                             </Stack>
                           ) : (
-                            // Botón para restaurar categoría eliminada
                             <ListRestoreButton
                               onClick={() => handleRestore(category.id)}
                             />
@@ -263,18 +217,17 @@ const ListCategoryPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]} // Opciones de filas por página
+              rowsPerPageOptions={[3, 5, 10]}
               component="div"
-              count={filteredCategories.length} // Cantidad total de categorías filtradas
-              rowsPerPage={rowsPerPage} // Filas por página actual
-              page={page} // Página actual
-              onPageChange={handleChangePage} // Cambio de página
-              onRowsPerPageChange={handleChangeRowsPerPage} // Cambio de cantidad de filas por página
+              count={filteredCategories.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
         </Box>
 
-        {/* Botón para alternar entre categorías eliminadas y activas */}
         <Stack
           direction="row"
           justifyContent="center"

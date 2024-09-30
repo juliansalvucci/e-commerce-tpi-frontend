@@ -1,69 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box } from "@mui/material";
-import axios from "axios";
 import { Formik, Form } from "formik";
-import Swal from "sweetalert2";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
+import { BrandContext } from "../context/BrandContext";
 import { brandSchema } from "../schemas";
 import "../styles/ABM.css";
-import isUnique from "../utils/isUniqueUtils";
-
-// Función que se ejecutará al enviar el form
-const onSubmit = async (
-  values,
-  { resetForm, setSubmitting, setFieldError }
-) => {
-  try {
-    const isUniqueResult = await isUnique("brand", values.nombre);
-    if (!isUniqueResult) {
-      setFieldError("nombre", "Ya existe una marca con ese nombre");
-      setSubmitting(false);
-      return;
-    }
-    const response = await axios.post("http://localhost:8080/brand", {
-      name: values.nombre,
-    });
-    //console.log("Respuesta del servidor:", response.data);
-    Swal.fire({
-      icon: "success",
-      title: "Exito!",
-      text: `La marca ${response.data.name} fue creada con éxito!`,
-      customClass: {
-        popup: "swal-success-popup",
-        confirmButton: "swal-ok-button",
-      },
-    });
-    resetForm();
-  } catch (error) {
-    //console.error("Error en el registro:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Hubo un error al crear la marca",
-      customClass: {
-        popup: "swal-success-popup",
-        confirmButton: "swal-ok-button",
-      },
-    });
-  } finally {
-    setSubmitting(false);
-  }
-  /*
-  console.log("Formulario enviado con valores:", values);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  resetForm();
-  alert("Formulario enviado");
-  */
-};
 
 const ABMBrandPage = () => {
+  const { createBrand, editBrand, selectedBrand } = useContext(BrandContext);
+
+  // Función que se ejecutará al enviar el form
+  const onSubmit = async (values, { resetForm, setSubmitting }) => {
+    try {
+      if (!selectedBrand) {
+        await createBrand({ name: values.nombre });
+        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+      } else {
+        await editBrand(selectedBrand.id, { name: values.nombre });
+      }
+    } catch (error) {
+      console.error("Error al crear o editar marca:", error); // Por ahora mostramos el error por consola por comodidad
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <Box className="background" sx={{ padding: 2 }}>
       <Box className="container abm-brand-page">
-        {/* Typography queda muy feo aca, mejor HTML*/}
-        <h2 className="title">Creá una Marca</h2>
+        {/*Typography queda muy feo aca, mejor HTML*/}
+        <h2 className="title">
+          {selectedBrand ? "Editar Marca" : "Creá una Marca"}
+          <p className="subtitle">
+            {selectedBrand ? `${selectedBrand.name}` : ""}
+          </p>
+        </h2>
         <Formik
-          initialValues={{ nombre: "" }}
+          initialValues={{ nombre: selectedBrand ? selectedBrand.name : "" }}
           validationSchema={brandSchema}
           validateOnChange={true}
           onSubmit={onSubmit}
@@ -78,7 +52,7 @@ const ABMBrandPage = () => {
               />
               <ABMActionButton
                 is={isSubmitting}
-                accion="Crear"
+                accion={selectedBrand ? "Guardar" : "Crear"}
                 tipoClase="Marca"
               />
             </Form>
