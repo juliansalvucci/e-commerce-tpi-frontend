@@ -65,8 +65,8 @@ const BrandProvider = ({ children }) => {
       if (error.response && error.response.status === 409) {
         Swal.fire({
           icon: "error",
-          title: "La marca no puede ser eliminada",
-          text: "La marca tiene productos asociados.",
+          title: "La marca no pudo ser creada",
+          text: "Ya existe una marca con ese nombre",
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -82,6 +82,20 @@ const BrandProvider = ({ children }) => {
   // Función para editar una marca existente
   const editBrand = async (id, updatedBrand) => {
     try {
+      if (updatedBrand.name === selectedBrand?.name) {
+        // el ? es para que no de error si no hay marca seleccionada
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se ha modificado el nombre de la marca",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+        return;
+      }
+      const prevBrand = selectedBrand.name;
       const response = await axios.put(
         `http://localhost:8080/brand/${id}`,
         updatedBrand
@@ -94,7 +108,7 @@ const BrandProvider = ({ children }) => {
       Swal.fire({
         icon: "success",
         title: "Exito!",
-        text: `La marca ${response.data.name} fue editada con éxito!`,
+        text: `La marca ${prevBrand} fue editada con éxito a ${response.data.name}!`,
         customClass: {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
@@ -103,14 +117,17 @@ const BrandProvider = ({ children }) => {
       selectBrandForEdit(null);
       navigate("/admin/brand/list");
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Hubo un error al editar la marca",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "La marca no pudo ser editada",
+          text: "Ya existe una marca con ese nombre",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
       } else {
         console.error("Error al editar marca:", error); // Por ahora mostramos el error por consola por comodidad
       }
@@ -135,8 +152,8 @@ const BrandProvider = ({ children }) => {
       if (error.response && error.response.status === 409) {
         Swal.fire({
           icon: "error",
-          title: "La marca no puede ser eliminada",
-          text: "La marca tiene productos asociados.",
+          title: "La marca no pudo ser eliminada",
+          text: "La marca tiene productos asociados",
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -153,7 +170,17 @@ const BrandProvider = ({ children }) => {
   const restoreBrand = async (id) => {
     try {
       await axios.post(`http://localhost:8080/brand/recover/${id}`);
-      fetchBrands();
+      await fetchBrands();
+      const restoredBrand = brands.find((brand) => brand.id === id);
+      Swal.fire({
+        icon: "success",
+        title: "Exito!",
+        text: `La marca ${restoredBrand.name} fue recuperada con éxito!`,
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
     } catch (error) {
       console.error("Error al restaurar marca:", error); // Por ahora mostramos el error por consola por comodidad
     }
