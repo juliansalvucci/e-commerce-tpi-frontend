@@ -1,6 +1,6 @@
 # **MegaStore**
 ## **Descripción del Proyecto**
-Este proyecto consiste en la Implementación de un Sistema de Gestión para una Plataforma de Comercio Electrónico. El objetivo es desarrollar un sistema de gestión integral para la nueva plataforma de eCommerce de la empresa MegaStore, que permita mejorar la eficiencia de sus operaciones en la web y ofrecer una excelente experiencia de compra a sus clientes. El sistema abarca la gestión de productos, usuarios, pedidos, inventarios, promociones, pagos, envíos y soporte al cliente, entre otros aspectos clave para el comercio en línea
+Este proyecto consiste en la Implementación de un Sistema de Gestión para una Plataforma de eCommerce. El objetivo es desarrollar un sistema de gestión integral para la nueva plataforma de eCommerce de la empresa MegaStore, que permita mejorar la eficiencia de sus operaciones en la web y ofrecer una excelente experiencia de compra a sus clientes. El sistema abarcará la gestión de productos, usuarios, pedidos, stock, promociones y soporte al cliente, entre otros aspectos clave para el comercio en línea.
 
 ---
 
@@ -30,13 +30,15 @@ Para el desarrollo de la plataforma utilizamos las siguientes tecnologías:
 El proyecto tiene la siguiente estructura de carpetas:
 
 - src
-    - assets/          # Imágenes y assets utilizados en el proyecto
-    - components/      # Componentes principales del proyecto
-    - context/         # Manejo de contexto y estado global
-    - pages/           # Páginas de la aplicación
-    - styles/          # Archivos CSS para el estilizado
-    - App.js           # Punto de entrada principal de la aplicación
-- README.md            # Documentación del proyecto
+    - assets/            . Imágenes y assets utilizados en el proyecto
+    - components/        . Componentes principales del proyecto
+    - context/           . Manejo de contexto y estado global
+    - pages/             . Páginas de la aplicación
+    - styles/            . Archivos CSS para el estilizado
+    - utils/             . Funciones que realizan tareas reutilizables
+    - CarritoApp.jsx     . Punto de entrada principal de la aplicación
+- README.md              . Documentación del proyecto
+- CONTRIBUTING.md        . Guía para contribuír en el proyecto
 
 ---
 
@@ -47,6 +49,7 @@ El equipo de desarrollo está compuesto por los siguientes participantes:
 - **Ariel Cometto** - [arielcometto@gmail.com](mailto:arielcometto@gmail.com)
 - **Felipe Del Zoppo** - [felipedelzoppo@gmail.com](mailto:felipedelzoppo@gmail.com)
 - **Julian Fassetta** - [julianfassetta@gmail.com](mailto:julianfassetta@gmail.com)
+- **Manuel Namuncurá** - [mnamun94@gmail.com](mailto:mnamun94@gmail.com)
 - **Ana Elisa Pizzi** - [anapizzi02@gmail.com](mailto:anapizzi02@gmail.com)
 - **Marisol Rojas López** - [mrojaslopez03@gmail.com](mailto:mrojaslopez03@gmail.com)
 - **Lohana Rumis** - [rumislohana@gmail.com](mailto:rumislohana@gmail.com)
