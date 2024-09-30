@@ -60,15 +60,7 @@ export const productSchema = yup.object().shape({
   stock: yup
     .number()
     .min(0, "El stock disponible debe ser mayor o igual a 0")
-    .required("Obligatorio")
-    .test(
-      "stock-mayor-que-stockMin",
-      "El stock debe ser mayor o igual al stock mínimo",
-      function (value) {
-        const { stockMin } = this.parent;
-        return value >= stockMin;
-      }
-    ),
+    .required("Obligatorio"),
   stockMin: yup
     .number()
     .min(0, "El stock minimo debe ser mayor o igual a 0")
@@ -76,4 +68,32 @@ export const productSchema = yup.object().shape({
   imagen: yup.string().notRequired().url("Debe ser una URL válida"),
   marca: yup.string().required("Obligatorio"),
   subcategoria: yup.string().required("Obligatorio"),
+  color: yup.string().notRequired(),
+  tamaño: yup.string().notRequired(),
+});
+
+export const registerSchema = yup.object().shape({
+  nombre: yup.string().required("El nombre es obligatorio"),
+  apellido: yup.string().required("El apellido es obligatorio"),
+  email: yup
+    .string()
+    .email("Correo electrónico inválido")
+    .required("El correo electrónico es obligatorio"),
+  password: yup
+    .string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .max(22, "La contraseña debe tener como máximo 22 caracteres")
+    .required("La contraseña es obligatoria"),
+});
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email("Correo electrónico inválido")
+    .required("El correo electrónico es obligatorio"),
+  password: yup
+    .string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .max(22, "La contraseña debe tener como máximo 22 caracteres")
+    .required("La contraseña es obligatoria"),
 });

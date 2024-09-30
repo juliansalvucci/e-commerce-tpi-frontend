@@ -54,12 +54,12 @@
 /* Estiliza las imágenes */
 .products img {
   border-radius: 8px;
-  width: 200px;
-  height: 200px;
+  width: 35vh;
+  height: 35vh;
   aspect-ratio: 16/9;
   display: block;
   object-fit: cover;
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 /* Estilo específico para los botones dentro del card component */
@@ -102,13 +102,19 @@
   border-radius: 30px;
   background: #a6a6a6;
   opacity: 0.8;
-  flex-wrap: nowrap;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   position: absolute;
-  top: 155px;
-  right: 28px;
+  top: 180px;
+  right: 15px;
   z-index: 1;
+  flex-direction: column;
+}
+
+.stock {
+  color: #f10b0b;
+  font-size: 0.7rem;
+  font-weight:normal;
 }
 
 /*Paginación de productos*/

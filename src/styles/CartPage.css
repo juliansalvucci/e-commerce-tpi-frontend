@@ -36,8 +36,8 @@
 }
 
 .product-img {
-  width: 60px;
-  height: 60px;
+  width: 12vh;
+  height: 11vh;
   margin-right: 10px;
 }
 
@@ -129,5 +129,8 @@ td {
 }
 
 .bottom-container .btn-primary:hover {
-  background-color: #5f8cc7;
+  background-color: rgb(97, 139, 194);
+  border-color: rgb(97, 139, 194);
+  color: white;
+  cursor: pointer;
 }

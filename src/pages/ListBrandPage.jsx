@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -13,22 +14,28 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import axios from "axios";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import { BrandContext } from "../context/BrandContext";
 import "../styles/List.css";
-import formatDateTime from "../utils/formatDateTimeUtils";
-import hasProducts from "../utils/hasProductsUtils";
 
 const ListBrandPage = () => {
-  const [brands, setBrands] = useState([]);
-  const [page, setPage] = useState(0); // Página actual
-  const [rowsPerPage, setRowsPerPage] = useState(3); // Número de filas por página
-  const [showDeleted, setShowDeleted] = useState(false);
+  const navigate = useNavigate();
+  const {
+    brands,
+    showDeleted,
+    setShowDeleted,
+    deleteBrand,
+    restoreBrand,
+    selectBrandForEdit,
+  } = useContext(BrandContext);
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
 
   // Definición de las columnas de la tabla
   const columns = [
@@ -40,87 +47,30 @@ const ListBrandPage = () => {
     { id: "actions", label: "Acciones", minWidth: 170 },
   ];
 
-  const fetchBrands = async () => {
-    try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/brand/deleted"
-          : "http://localhost:8080/brand"
-      );
-      const updatedBrands = response.data.map((brand) => ({
-        ...brand,
-        deleted: brand.deleted === true,
-        creationDatetime: formatDateTime(brand.creationDatetime),
-        deleteDatetime: brand.deleteDatetime
-          ? formatDateTime(brand.deleteDatetime)
-          : null,
-      }));
-      setBrands(updatedBrands);
-    } catch (error) {
-      console.error("Error fetching items:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBrands();
-  }, [showDeleted]);
-
-  // Maneja el cambio entre mostrar marcas eliminadas y activas
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
-    setPage(0); // Resetea la página a la primera cuando se cambia la vista
+    setPage(0);
   };
 
-  // Filtra las marcas según el estado de "eliminadas" o "activas"
   const filteredBrands = showDeleted
     ? brands.filter((brand) => brand.deleted) // Muestra solo las eliminadas
     : brands.filter((brand) => !brand.deleted); // Muestra solo las activas
 
-  // Cambia la página en la paginación
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Cambia el número de filas por página
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0); // Resetea la página a la primera cuando cambia la cantidad de filas
+    setPage(0);
   };
 
-  const handleEdit = async (id) => {
-    // Aca va la lógica de navegar hacia ABM Marca con los datos del objeto
-    console.log("Hola");
-  };
-
-  const deleteBrand = async (id, name) => {
-    const hasProductsResult = await hasProducts("brand", name);
-    if (hasProductsResult) {
-      Swal.fire({
-        icon: "error",
-        title: "La marca no puede ser eliminada",
-        text: "La marca tiene productos asociados.",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-      return;
-    }
-    try {
-      await axios.delete(`http://localhost:8080/brand/${id}`);
-      fetchBrands();
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  };
-
-  const handleDelete = async (id, name) => {
+  const handleEdit = (brand) => {
     Swal.fire({
-      title: "Borrar Marca",
-      text: "¿Estas seguro que quieres borrar esta marca?",
+      title: "Editar Marca",
+      text: "¿Estás seguro que quieres editar esta marca?",
       showCancelButton: true,
-      confirmButtonText: "Si",
+      confirmButtonText: "Sí",
       cancelButtonText: "No",
       customClass: {
         popup: "swal-question-popup",
@@ -129,26 +79,18 @@ const ListBrandPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteBrand(id, name);
+        selectBrandForEdit(brand);
+        navigate(`/admin/brand/edit`);
       }
     });
   };
 
-  const recoverBrand = async (id) => {
-    try {
-      await axios.post(`http://localhost:8080/brand/recover/${id}`);
-      fetchBrands();
-    } catch (error) {
-      console.error("Error restoring item:", error);
-    }
-  };
-
-  const handleRestore = async (id) => {
+  const handleDelete = (id) => {
     Swal.fire({
-      title: "Restaurar Marca",
-      text: "¿Estas seguro que quieres restaurar esta marca?",
+      title: "Borrar Marca",
+      text: "¿Estás seguro que quieres borrar esta marca?",
       showCancelButton: true,
-      confirmButtonText: "Si",
+      confirmButtonText: "Sí",
       cancelButtonText: "No",
       customClass: {
         popup: "swal-question-popup",
@@ -157,7 +99,26 @@ const ListBrandPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        recoverBrand(id);
+        deleteBrand(id);
+      }
+    });
+  };
+
+  const handleRestore = (id) => {
+    Swal.fire({
+      title: "Restaurar Marca",
+      text: "¿Estás seguro que quieres restaurar esta marca?",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        restoreBrand(id);
       }
     });
   };
@@ -169,7 +130,7 @@ const ListBrandPage = () => {
         sx={{ width: "70%", display: "flex", justifyContent: "center" }}
       >
         <Box className="title-box">
-          {/* Título dinámico según el estado de "showDeleted" */}
+          {/* Título depende de showDeleted */}
           <Typography variant="h3" className="title" align="center">
             {showDeleted
               ? "Listado de Marcas Eliminadas"
@@ -182,7 +143,7 @@ const ListBrandPage = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%", // Asegura que el contenedor ocupe todo el ancho disponible
+            width: "100%",
           }}
         >
           <Paper
@@ -206,7 +167,7 @@ const ListBrandPage = () => {
                           fontWeight: "bold",
                           minWidth: column.minWidth,
                         }}
-                        align="center" // Centrar el texto del encabezado
+                        align="center"
                       >
                         {column.label}
                       </TableCell>
@@ -214,21 +175,18 @@ const ListBrandPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* Mapea las marcas filtradas para mostrar los datos en filas */}
+                  {/* Mapea las categorías filtradas para mostrar los datos en filas */}
                   {brands
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Muestra las marcas de acuerdo a la paginación
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((brand) => (
                       <TableRow hover tabIndex={-1} key={brand.id}>
-                        <TableCell align="center">{brand.name}</TableCell>{" "}
-                        {/* Centrar contenido de la celda */}
+                        <TableCell align="center">{brand.name}</TableCell>
                         <TableCell align="center">
                           {brand.creationDatetime}
-                        </TableCell>{" "}
-                        {/* Centrar contenido de la celda */}
+                        </TableCell>
                         {showDeleted && (
                           <TableCell align="center">
-                            {brand.deleteDatetime || "N/A"}{" "}
-                            {/* Centrar contenido de la celda */}
+                            {brand.deleteDatetime || "N/A"}
                           </TableCell>
                         )}
                         <TableCell align="center">
@@ -238,19 +196,14 @@ const ListBrandPage = () => {
                               spacing={1}
                               justifyContent="center"
                             >
-                              {" "}
-                              {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() =>
-                                  handleDelete(brand.id, brand.name)
-                                }
+                                onClick={() => handleDelete(brand.id)}
                               />
                               <ListEditButton
-                                onClick={() => handleEdit(brand.id)}
+                                onClick={() => handleEdit(brand)}
                               />
                             </Stack>
                           ) : (
-                            // Botón para restaurar marca eliminada
                             <ListRestoreButton
                               onClick={() => handleRestore(brand.id)}
                             />
@@ -263,18 +216,17 @@ const ListBrandPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]} // Opciones de filas por página
+              rowsPerPageOptions={[3, 5, 10]}
               component="div"
-              count={filteredBrands.length} // Cantidad total de marcas filtradas
-              rowsPerPage={rowsPerPage} // Filas por página actual
-              page={page} // Página actual
-              onPageChange={handleChangePage} // Cambio de página
-              onRowsPerPageChange={handleChangeRowsPerPage} // Cambio de cantidad de filas por página
+              count={filteredBrands.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
         </Box>
 
-        {/* Botón para alternar entre marcas eliminadas y activas */}
         <Stack
           direction="row"
           justifyContent="center"
@@ -284,8 +236,8 @@ const ListBrandPage = () => {
           <Stack direction="row" spacing={2}>
             <ListCreateButton label="Marca" />
             <ListShowDeletedButton
-              showDeleted={showDeleted} // Estado actual
-              onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas
+              showDeleted={showDeleted}
+              onClick={handleShowDeletedToggle}
             />
           </Stack>
         </Stack>

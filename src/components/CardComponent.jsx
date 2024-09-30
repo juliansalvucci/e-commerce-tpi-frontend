@@ -10,6 +10,7 @@ export const CardComponent = ({
   image,
   title,
   price,
+  stock,
   description,
   handlerAdd,
   handlerRemove,
@@ -48,7 +49,7 @@ export const CardComponent = ({
     const productInCart = shoppingList.find((item) => item.id === id);
     const quantity = productInCart ? productInCart.quantity : 1;
 
-    setSelectedProduct({ id, image, title, description, price, quantity });
+    setSelectedProduct({ id, image, title, description, price, quantity, stock });
     setIsPopupVisible(true);
   };
 
@@ -73,9 +74,16 @@ export const CardComponent = ({
           <h5 className="card_title" onClick={showProductPopup}>
             {title}
           </h5>
+          
           <p className="card_price" onClick={showProductPopup}>
-            ${price.toFixed(2)}
+            $
+            {price.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </p>
+
+          <p className="stock">Stock disponible: {stock}</p>
         </div>
         {added ? (
           //En el caso de que ya se haya añadido el producto al carrito y el usuario quiere quitarla

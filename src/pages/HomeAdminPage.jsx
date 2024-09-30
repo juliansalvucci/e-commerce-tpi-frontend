@@ -13,9 +13,6 @@ import {
   Inventory as InventoryIcon,
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
-import(
-  "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-);
 
 const HomeAdminPage = () => {
   const [anchorEl, setAnchorEl] = useState(null);
