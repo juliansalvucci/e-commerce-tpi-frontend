@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -13,21 +14,31 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import axios from "axios";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import { CategoryContext } from "../context/CategoryContext";
+import { SubCategoryContext } from "../context/SubCategoryContext";
 import "../styles/List.css";
-import formatDateTime from "../utils/formatDateTimeUtils";
 
-const ListCategoryPage = () => {
-  const [subCategories, setSubCategories] = useState([]);
-  const [page, setPage] = useState(0); // Página actual
-  const [rowsPerPage, setRowsPerPage] = useState(3); // Número de filas por página
-  const [showDeleted, setShowDeleted] = useState(false); // Mostrar categorías eliminadas o activas
+const ListSubCategoryPage = () => {
+  const navigate = useNavigate();
+  const {
+    subCategories,
+    showDeleted,
+    setShowDeleted,
+    deleteSubCategory,
+    restoreSubCategory,
+    formatSubCategoryForEdit,
+    selectSubCategoryForEdit,
+  } = useContext(SubCategoryContext);
+  const { categories } = useContext(CategoryContext);
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
 
   // Definición de las columnas de la tabla
   const columns = [
@@ -40,81 +51,51 @@ const ListCategoryPage = () => {
     { id: "actions", label: "Acciones", minWidth: 170 },
   ];
 
-  const fetchSubCategories = async () => {
-    try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/subcategory/deleted"
-          : "http://localhost:8080/subcategory"
-      );
-      const updatedSubCategories = response.data.map((subCat) => ({
-        ...subCat,
-        deleted: subCat.deleted === true,
-        creationDatetime: formatDateTime(subCat.creationDatetime),
-        deleteDatetime: subCat.deleteDatetime
-          ? formatDateTime(subCat.deleteDatetime)
-          : null,
-      }));
-      setSubCategories(updatedSubCategories);
-    } catch (error) {
-      console.error("Error fetching items:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSubCategories();
-  }, [showDeleted]);
-
-  // Maneja el cambio entre mostrar subCategorías eliminadas y activas
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
-    setPage(0); // Resetea la página a la primera cuando se cambia la vista
+    setPage(0);
   };
 
-  // Filtra las categorías según el estado de "eliminadas" o "activas"
   const filteredSubCategories = showDeleted
     ? subCategories.filter((subCategory) => subCategory.deleted) // Muestra solo las eliminadas
     : subCategories.filter((subCategory) => !subCategory.deleted); // Muestra solo las activas
 
-  // Cambia la página en la paginación
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Cambia el número de filas por página
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0); // Resetea la página a la primera cuando cambia la cantidad de filas
+    setPage(0);
   };
 
-  const handleEdit = async (id) => {
-    // Aca va la lógica de navegar hacia ABM Categoría con los datos del objeto
-    console.log("Hola");
-  };
-
-  const deleteSubCategory = async (id, name) => {
-    try {
-      await axios.delete(`http://localhost:8080/subcategory/${id}`);
-      fetchSubCategories();
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "La subcategoria no puede ser eliminada",
-          text: "La subcategoria tiene productos asociados.",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al borrar subcategoria:", error);
+  const handleEdit = (subcat) => {
+    Swal.fire({
+      title: "Editar Subcategoría",
+      text: "¿Estás seguro que quieres editar esta subcategoría?",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formattedSubCategory = formatSubCategoryForEdit(
+          subcat,
+          categories
+        );
+        if (formattedSubCategory) {
+          selectSubCategoryForEdit(formattedSubCategory);
+          navigate(`/admin/subcategory/edit`);
+        }
       }
-    }
+    });
   };
 
-  const handleDelete = async (id, name) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Borrar Subcategoría",
       text: "¿Estas seguro que quieres borrar esta subcategoría?",
@@ -128,21 +109,12 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteSubCategory(id, name);
+        deleteSubCategory(id);
       }
     });
   };
 
-  const recoverSubCategory = async (id) => {
-    try {
-      await axios.post(`http://localhost:8080/subcategory/recover/${id}`);
-      fetchSubCategories();
-    } catch (error) {
-      console.error("Error restoring item:", error);
-    }
-  };
-
-  const handleRestore = async (id) => {
+  const handleRestore = (id) => {
     Swal.fire({
       title: "Restaurar Subcategoría",
       text: "¿Estas seguro que quieres restaurar esta subcategoría?",
@@ -156,7 +128,7 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        recoverSubCategory(id);
+        restoreSubCategory(id);
       }
     });
   };
@@ -168,7 +140,7 @@ const ListCategoryPage = () => {
         sx={{ width: "70%", display: "flex", justifyContent: "center" }}
       >
         <Box className="title-box">
-          {/* Título dinámico según el estado de "showDeleted" */}
+          {/* Título depende de showDeleted */}
           <Typography variant="h3" className="title" align="center">
             {showDeleted
               ? "Listado de SubCategorías Eliminadas"
@@ -181,7 +153,7 @@ const ListCategoryPage = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%", // Asegura que el contenedor ocupe todo el ancho disponible
+            width: "100%",
           }}
         >
           <Paper
@@ -205,7 +177,7 @@ const ListCategoryPage = () => {
                           fontWeight: "bold",
                           minWidth: column.minWidth,
                         }}
-                        align="center" // Centrar el texto del encabezado
+                        align="center"
                       >
                         {column.label}
                       </TableCell>
@@ -215,19 +187,19 @@ const ListCategoryPage = () => {
                 <TableBody>
                   {/* Mapea las categorías filtradas para mostrar los datos en filas */}
                   {subCategories
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Muestra las categorías de acuerdo a la paginación
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((subCategory) => (
                       <TableRow hover tabIndex={-1} key={subCategory.id}>
-                        <TableCell align="center">{subCategory.name}</TableCell>{" "}
+                        <TableCell align="center">{subCategory.name}</TableCell>
                         <TableCell align="center">
                           {subCategory.category}
-                        </TableCell>{" "}
+                        </TableCell>
                         <TableCell align="center">
                           {subCategory.creationDatetime}
-                        </TableCell>{" "}
+                        </TableCell>
                         {showDeleted && (
                           <TableCell align="center">
-                            {subCategory.deleteDatetime || "N/A"}{" "}
+                            {subCategory.deleteDatetime || "N/A"}
                           </TableCell>
                         )}
                         <TableCell align="center">
@@ -237,19 +209,14 @@ const ListCategoryPage = () => {
                               spacing={1}
                               justifyContent="center"
                             >
-                              {" "}
-                              {/* Centrar botones */}
                               <ListDeleteButton
-                                onClick={() =>
-                                  handleDelete(subCategory.id, subCategory.name)
-                                }
+                                onClick={() => handleDelete(subCategory.id)}
                               />
                               <ListEditButton
-                                onClick={() => handleEdit(subCategory.id)}
+                                onClick={() => handleEdit(subCategory)}
                               />
                             </Stack>
                           ) : (
-                            // Botón para restaurar categoría eliminada
                             <ListRestoreButton
                               onClick={() => handleRestore(subCategory.id)}
                             />
@@ -262,13 +229,13 @@ const ListCategoryPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]} // Opciones de filas por página
+              rowsPerPageOptions={[3, 5, 10]}
               component="div"
-              count={filteredSubCategories.length} // Cantidad total de categorías filtradas
-              rowsPerPage={rowsPerPage} // Filas por página actual
-              page={page} // Página actual
-              onPageChange={handleChangePage} // Cambio de página
-              onRowsPerPageChange={handleChangeRowsPerPage} // Cambio de cantidad de filas por página
+              count={filteredSubCategories.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
         </Box>
@@ -293,4 +260,4 @@ const ListCategoryPage = () => {
   );
 };
 
-export default ListCategoryPage;
+export default ListSubCategoryPage;
