@@ -1,14 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-//import { useNavigate } from "react-router-dom";
 
-const ListCreateButton = ({ label }) => {
-  //const navigate = useNavigate();
+const ListCreateButton = ({ label, tipoClase }) => {
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    console.log("Crear Categoría");
-    //navigate("/create-category"); // Cambia la ruta según tu configuración
+    navigate(`/admin/${tipoClase}/create`);
   };
 
   return (
