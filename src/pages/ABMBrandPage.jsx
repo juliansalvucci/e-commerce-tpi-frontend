@@ -1,45 +1,26 @@
 import React, { useContext } from "react";
 import { Box } from "@mui/material";
 import { Formik, Form } from "formik";
-import Swal from "sweetalert2";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
+import { BrandContext } from "../context/BrandContext";
 import { brandSchema } from "../schemas";
 import "../styles/ABM.css";
-import { BrandContext } from "../context/BrandContext";
-import isUnique from "../utils/isUniqueUtils";
 
 const ABMBrandPage = () => {
-  const { createBrand, editBrand, selectedBrand, selectBrandForEdit } =
-    useContext(BrandContext);
+  const { createBrand, editBrand, selectedBrand } = useContext(BrandContext);
 
   // Función que se ejecutará al enviar el form
-  const onSubmit = async (
-    values,
-    { resetForm, setSubmitting, setFieldError }
-  ) => {
+  const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedBrand) {
-        const isUniqueResult = await isUnique("brand", values.nombre);
-        if (!isUniqueResult) {
-          setFieldError("nombre", "Ya existe una marca con ese nombre");
-          setSubmitting(false);
-          return;
-        }
         await createBrand({ name: values.nombre });
+        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
       } else {
         await editBrand(selectedBrand.id, { name: values.nombre });
       }
-      resetForm();
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Hubo un error al crear o editar la marca",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
+      console.error("Error al crear o editar marca:", error); // Por ahora mostramos el error por consola por comodidad
     } finally {
       setSubmitting(false);
     }
