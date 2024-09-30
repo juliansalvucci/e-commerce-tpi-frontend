@@ -247,7 +247,7 @@ const ListSubCategoryPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="SubCategoría" />
+            <ListCreateButton label="SubCategoría" tipoClase={"subcategory"} />
             <ListShowDeletedButton
               showDeleted={showDeleted}
               onClick={handleShowDeletedToggle}

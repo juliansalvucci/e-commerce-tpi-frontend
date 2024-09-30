@@ -332,7 +332,7 @@ const ListProductPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Producto" />
+            <ListCreateButton label="Producto" tipoClase={"product"} />
             <ListShowDeletedButton
               showDeleted={showDeleted}
               onClick={handleShowDeletedToggle}

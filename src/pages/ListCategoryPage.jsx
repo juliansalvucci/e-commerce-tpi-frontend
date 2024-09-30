@@ -235,7 +235,7 @@ const ListCategoryPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Categoría" />
+            <ListCreateButton label="Categoría" tipoClase={"category"} />
             <ListShowDeletedButton
               showDeleted={showDeleted} // Estado actual
               onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas

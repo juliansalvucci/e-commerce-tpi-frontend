@@ -234,7 +234,7 @@ const ListBrandPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Marca" />
+            <ListCreateButton label="Marca" tipoClase={"brand"} />
             <ListShowDeletedButton
               showDeleted={showDeleted}
               onClick={handleShowDeletedToggle}
