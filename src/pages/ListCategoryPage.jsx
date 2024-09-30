@@ -217,7 +217,7 @@ const ListCategoryPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]}
+              rowsPerPageOptions={[5, 8, 10]}
               component="div"
               count={filteredCategories.length}
               rowsPerPage={rowsPerPage}

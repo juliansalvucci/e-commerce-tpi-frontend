@@ -216,7 +216,7 @@ const ListBrandPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]}
+              rowsPerPageOptions={[5, 8, 10]}
               component="div"
               count={filteredBrands.length}
               rowsPerPage={rowsPerPage}
