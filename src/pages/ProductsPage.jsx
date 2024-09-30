@@ -27,7 +27,7 @@ export const ProductsPage = () => {
 
   return (
     <>
-      <div className="products">
+      <div className="products-page">
         <h1>Nuestros productos</h1>
         <hr />
 
