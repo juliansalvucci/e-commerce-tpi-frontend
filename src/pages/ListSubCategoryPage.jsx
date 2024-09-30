@@ -143,8 +143,8 @@ const ListSubCategoryPage = () => {
           {/* Título depende de showDeleted */}
           <Typography variant="h3" className="title" align="center">
             {showDeleted
-              ? "Listado de SubCategorías Eliminadas"
-              : "Listado de SubCategorías Activas"}
+              ? "Listado de Subcategorías Eliminadas"
+              : "Listado de Subcategorías Activas"}
           </Typography>
         </Box>
 
@@ -229,7 +229,7 @@ const ListSubCategoryPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]}
+              rowsPerPageOptions={[5, 8, 10]}
               component="div"
               count={filteredSubCategories.length}
               rowsPerPage={rowsPerPage}
@@ -247,7 +247,7 @@ const ListSubCategoryPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="SubCategoría" />
+            <ListCreateButton label="SubCategoría" tipoClase={"subcategory"} />
             <ListShowDeletedButton
               showDeleted={showDeleted}
               onClick={handleShowDeletedToggle}

@@ -216,7 +216,7 @@ const ListBrandPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]}
+              rowsPerPageOptions={[5, 8, 10]}
               component="div"
               count={filteredBrands.length}
               rowsPerPage={rowsPerPage}
@@ -234,7 +234,7 @@ const ListBrandPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Marca" />
+            <ListCreateButton label="Marca" tipoClase={"brand"} />
             <ListShowDeletedButton
               showDeleted={showDeleted}
               onClick={handleShowDeletedToggle}

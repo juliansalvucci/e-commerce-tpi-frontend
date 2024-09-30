@@ -217,7 +217,7 @@ const ListCategoryPage = () => {
             </TableContainer>
             {/* Paginación de la tabla */}
             <TablePagination
-              rowsPerPageOptions={[3, 5, 10]}
+              rowsPerPageOptions={[5, 8, 10]}
               component="div"
               count={filteredCategories.length}
               rowsPerPage={rowsPerPage}
@@ -235,7 +235,7 @@ const ListCategoryPage = () => {
           sx={{ mt: 2 }}
         >
           <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Categoría" />
+            <ListCreateButton label="Categoría" tipoClase={"category"} />
             <ListShowDeletedButton
               showDeleted={showDeleted} // Estado actual
               onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas

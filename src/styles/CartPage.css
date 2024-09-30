@@ -1,4 +1,4 @@
-.container {
+.container-cart-page { 
   border-radius: 20px;
 }
 
@@ -9,16 +9,17 @@
   font-size: large;
 }
 
-.container .top-container {
+.container-cart-page .top-container {
   padding: 20px;
   height: 90%;
+  width: 90%;
   border: 2px solid gray;
   margin: 30px auto;
   border-radius: 20px;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
-.container .bottom-container {
+.container-cart-page .bottom-container {
   padding-top: 20px;
   background-color: #f0f0f0;
   border-radius: 10px; /* Opcional: para bordes redondeados */
