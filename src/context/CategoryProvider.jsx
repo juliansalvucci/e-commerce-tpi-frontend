@@ -195,6 +195,16 @@ const CategoryProvider = ({ children }) => {
     setSelectedCategory(category);
   };
 
+  const findCategoryById = (categoryId) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.name : "";
+  }
+
+  const findCategoryByName = (categoryName) => {
+    const category = categories.find((cat) => cat.name === categoryName);
+    return category ? category.id : "";
+  }
+
   return (
     <CategoryContext.Provider
       value={{
@@ -208,6 +218,8 @@ const CategoryProvider = ({ children }) => {
         restoreCategory,
         setShowDeleted,
         selectCategoryForEdit,
+        findCategoryById,
+        findCategoryByName,
       }}
     >
       {children}
