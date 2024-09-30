@@ -17,6 +17,8 @@ import ABMBrandPage from "./pages/ABMBrandPage";
 import ListBrandPage from "./pages/ListBrandPage";
 import ABMCategoryPage from "./pages/ABMCategoryPage";
 import ListCategoryPage from "./pages/ListCategoryPage";
+import ABMProductPage from "./pages/ABMProductPage";
+import ListProductPage from "./pages/ListProductPage";
 import ABMSubCategoryPage from "./pages/ABMSubCategoryPage";
 import ListSubCategoryPage from "./pages/ListSubCategoryPage";
 
@@ -29,55 +31,69 @@ export const CarritoApp = () => {
   );
 
   return (
-    <CategoryProvider>
-      <BrandProvider>
-        <SubCategoryProvider>
-          <NavBarAdmin />
-          <div>
-            <Routes>
-              <Route path="/*" element={<Navigate to="/admin" />}></Route>
-              <Route path="/admin" element={<HomeAdminPage />}></Route>
-              <Route
-                path="/admin/brand/create"
-                element={<ABMBrandPage />}
-              ></Route>
-              <Route
-                path="/admin/brand/edit"
-                element={<ABMBrandPage />}
-              ></Route>
-              <Route
-                path="/admin/brand/list"
-                element={<ListBrandPage />}
-              ></Route>
-              <Route
-                path="/admin/category/create"
-                element={<ABMCategoryPage />}
-              ></Route>
-              <Route
-                path="/admin/category/edit"
-                element={<ABMCategoryPage />}
-              ></Route>
-              <Route
-                path="/admin/category/list"
-                element={<ListCategoryPage />}
-              ></Route>
-              <Route
-                path="/admin/subcategory/create"
-                element={<ABMSubCategoryPage />}
-              ></Route>
-              <Route
-                path="/admin/subcategory/edit"
-                element={<ABMSubCategoryPage />}
-              ></Route>
-              <Route
-                path="/admin/subcategory/list"
-                element={<ListSubCategoryPage />}
-              ></Route>
-            </Routes>
-          </div>
-        </SubCategoryProvider>
-      </BrandProvider>
-    </CategoryProvider>
+    <ProductProvider>
+      <CategoryProvider>
+        <BrandProvider>
+          <SubCategoryProvider>
+            <NavBarAdmin />
+            <div>
+              <Routes>
+                <Route path="/*" element={<Navigate to="/admin" />}></Route>
+                <Route path="/admin" element={<HomeAdminPage />}></Route>
+                <Route
+                  path="/admin/brand/create"
+                  element={<ABMBrandPage />}
+                ></Route>
+                <Route
+                  path="/admin/brand/edit"
+                  element={<ABMBrandPage />}
+                ></Route>
+                <Route
+                  path="/admin/brand/list"
+                  element={<ListBrandPage />}
+                ></Route>
+                <Route
+                  path="/admin/category/create"
+                  element={<ABMCategoryPage />}
+                ></Route>
+                <Route
+                  path="/admin/category/edit"
+                  element={<ABMCategoryPage />}
+                ></Route>
+                <Route
+                  path="/admin/category/list"
+                  element={<ListCategoryPage />}
+                ></Route>
+                <Route
+                  path="/admin/product/create"
+                  element={<ABMProductPage />}
+                ></Route>
+                <Route
+                  path="/admin/product/edit"
+                  element={<ABMProductPage />}
+                ></Route>
+                <Route
+                  path="/admin/product/list"
+                  element={<ListProductPage />}
+                ></Route>
+                <Route
+                  path="/admin/subcategory/create"
+                  element={<ABMSubCategoryPage />}
+                ></Route>
+                <Route
+                  path="/admin/subcategory/edit"
+                  element={<ABMSubCategoryPage />}
+                ></Route>
+                <Route
+                  path="/admin/subcategory/list"
+                  element={<ListSubCategoryPage />}
+                ></Route>
+              </Routes>
+            </div>
+          </SubCategoryProvider>
+        </BrandProvider>
+      </CategoryProvider>
+    </ProductProvider>
 
     // <UserProvider>
     //   <ProductProvider>
