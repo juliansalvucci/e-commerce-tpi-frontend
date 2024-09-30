@@ -44,7 +44,7 @@ const SubCategoryProvider = ({ children }) => {
     fetchSubCategories();
   }, [showDeleted]);
 
-  // Función para crear una nueva categoría
+  // Función para crear una nueva subcategoría
   const createSubCategory = async (newSubCategory) => {
     try {
       const response = await axios.post(
@@ -85,8 +85,6 @@ const SubCategoryProvider = ({ children }) => {
   // Función para editar una subcategoría existente
   const editSubCategory = async (id, updatedSubCategory) => {
     try {
-      console.log(selectedSubCategory.id);
-      console.log(updatedSubCategory);
       if (
         updatedSubCategory.name === selectedSubCategory?.name &&
         updatedSubCategory.categoryId === selectedSubCategory?.categoryId
@@ -209,7 +207,7 @@ const SubCategoryProvider = ({ children }) => {
     };
   };
 
-  // Función para manejar la selección de una categoría para editar
+  // Función para manejar la selección de una subcategoría para editar
   const selectSubCategoryForEdit = (subCategory) => {
     setSelectedSubCategory(subCategory);
   };

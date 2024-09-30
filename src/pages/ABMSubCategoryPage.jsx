@@ -12,7 +12,6 @@ import "../styles/ABM.css";
 const ABMSubCategoryPage = () => {
   const { createSubCategory, editSubCategory, selectedSubCategory } =
     useContext(SubCategoryContext);
-
   const { categories } = useContext(CategoryContext);
 
   const onSubmit = async (values, { resetForm, setSubmitting }) => {

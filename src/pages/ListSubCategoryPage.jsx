@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -185,7 +185,7 @@ const ListSubCategoryPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* Mapea las categorías filtradas para mostrar los datos en filas */}
+                  {/* Mapea las subcategorías */}
                   {subCategories
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((subCategory) => (
@@ -240,7 +240,6 @@ const ListSubCategoryPage = () => {
           </Paper>
         </Box>
 
-        {/* Botón para alternar entre categorías eliminadas y activas */}
         <Stack
           direction="row"
           justifyContent="center"
@@ -250,8 +249,8 @@ const ListSubCategoryPage = () => {
           <Stack direction="row" spacing={2}>
             <ListCreateButton label="SubCategoría" />
             <ListShowDeletedButton
-              showDeleted={showDeleted} // Estado actual
-              onClick={handleShowDeletedToggle} // Alternar entre eliminadas y activas
+              showDeleted={showDeleted}
+              onClick={handleShowDeletedToggle}
             />
           </Stack>
         </Stack>
