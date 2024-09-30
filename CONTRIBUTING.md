@@ -11,8 +11,7 @@ Para mantener un historial de commits claro y consistente, utilizamos las siguie
 - **refactor**: Refactoreo de código de la app;
 - **docs**: Todo lo relacionado a documentación;
 - **style**: Formateo de código (sin cambios en la lógica del código);
-- **test**: Todo lo relacionado a testing;
-- **chore**: Cambios que no se encuentren en ***src*** o ***test*** (como la actualización de dependencias).
+- **chore**: Cambios que no se encuentren en ***src***
 
 ## Cómo contribuir
 
