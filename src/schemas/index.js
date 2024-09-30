@@ -68,6 +68,8 @@ export const productSchema = yup.object().shape({
   imagen: yup.string().notRequired().url("Debe ser una URL válida"),
   marca: yup.string().required("Obligatorio"),
   subcategoria: yup.string().required("Obligatorio"),
+  color: yup.string().notRequired(),
+  tamaño: yup.string().notRequired(),
 });
 
 export const registerSchema = yup.object().shape({
