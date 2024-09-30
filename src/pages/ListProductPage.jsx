@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -16,25 +17,40 @@ import {
   IconButton,
 } from "@mui/material";
 import { KeyboardArrowUp, KeyboardArrowDown } from "@mui/icons-material";
-import axios from "axios";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import { BrandContext } from "../context/BrandContext";
+import { CategoryContext } from "../context/CategoryContext";
+import { ProductContext } from "../context/ProductContext";
+import { SubCategoryContext } from "../context/SubCategoryContext";
 import "../styles/List.css";
-import formatDateTime from "../utils/formatDateTimeUtils";
 
 const ListProductPage = () => {
-  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+  const {
+    products,
+    showDeleted,
+    setShowDeleted,
+    deleteProduct,
+    restoreProduct,
+    formatProductForEdit,
+    selectProductForEdit,
+  } = useContext(ProductContext);
+  const { brands } = useContext(BrandContext);
+  const { categories } = useContext(CategoryContext);
+  const { subCategories } = useContext(SubCategoryContext);
+ 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showDeleted, setShowDeleted] = useState(false);
-  const [openRows, setOpenRows] = useState({}); // Estado para manejar filas colapsables
+  const [openRows, setOpenRows] = useState({}); // Maneja Collapse
 
+  // Definición de las columnas de la tabla
   const columns = [
-    { id: "expand", label: "", minWidth: 30 }, // Nueva columna para expandir/colapsar
+    { id: "expand", label: "", minWidth: 30 }, // Columna de Collapse
     { id: "name", label: "Nombre", minWidth: 80 },
     { id: "brand", label: "Marca", minWidth: 80 },
     { id: "subCategory", label: "Subcategoria", minWidth: 80 },
@@ -44,6 +60,7 @@ const ListProductPage = () => {
     { id: "actions", label: "Acciones", minWidth: 80 },
   ];
 
+  // Definición de las columnas dentro del Collapse
   const columnsInside = [
     { id: "description", label: "Descripción", minWidth: 80 },
     { id: "creationDateTime", label: "Fecha de Creación", minWidth: 80 },
@@ -51,31 +68,6 @@ const ListProductPage = () => {
       ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 80 }]
       : []),
   ];
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/product/deleted"
-          : "http://localhost:8080/product"
-      );
-      const updatedProducts = response.data.map((product) => ({
-        ...product,
-        deleted: product.deleted === true,
-        creationDatetime: formatDateTime(product.creationDatetime),
-        deleteDatetime: product.deleteDatetime
-          ? formatDateTime(product.deleteDatetime)
-          : null,
-      }));
-      setProducts(updatedProducts);
-    } catch (error) {
-      console.error("Error fetching items:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [showDeleted]);
 
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
@@ -95,33 +87,35 @@ const ListProductPage = () => {
     setPage(0);
   };
 
-  const handleEdit = async (id) => {
-    console.log("Edit product with ID:", id);
-  };
-
-  const deleteProduct = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/product/${id}`);
-      fetchProducts();
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El producto no puede ser eliminado",
-          text: "El producto aun tiene stock.",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al borrar categoria:", error);
+  const handleEdit = (product) => {
+    Swal.fire({
+      title: "Editar Producto",
+      text: "¿Estás seguro que quieres editar este producto?",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formattedProduct = formatProductForEdit(
+          product,
+          categories,
+          subCategories,
+          brands,
+        );
+        if (formattedProduct) {
+          selectProductForEdit(formattedProduct);
+          navigate(`/admin/product/edit`);
+        }
       }
-    }
+    });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Borrar Producto",
       text: "¿Estas seguro que quieres borrar este producto?",
@@ -140,16 +134,7 @@ const ListProductPage = () => {
     });
   };
 
-  const recoverProduct = async (id) => {
-    try {
-      await axios.post(`http://localhost:8080/product/recover/${id}`);
-      fetchProducts();
-    } catch (error) {
-      console.error("Error restoring item:", error);
-    }
-  };
-
-  const handleRestore = async (id) => {
+  const handleRestore = (id) => {
     Swal.fire({
       title: "Restaurar Producto",
       text: "¿Estas seguro que quieres restaurar este producto?",
@@ -163,7 +148,7 @@ const ListProductPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        recoverProduct(id);
+        restoreProduct(id);
       }
     });
   };
@@ -182,6 +167,7 @@ const ListProductPage = () => {
         sx={{ width: "80%", display: "flex", justifyContent: "center" }}
       >
         <Box className="title-box">
+          {/* Título depende de showDeleted */}
           <Typography variant="h3" className="title" align="center">
             {showDeleted
               ? "Listado de Productos Eliminadas"
@@ -209,6 +195,7 @@ const ListProductPage = () => {
               <Table stickyHeader aria-label="producto tabla">
                 <TableHead>
                   <TableRow>
+                    {/* Mapea las columnas para crear las celdas del encabezado */}
                     {columns.map((column) => (
                       <TableCell
                         key={column.id}
@@ -225,6 +212,7 @@ const ListProductPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  {/* Mapea los productos */}
                   {products
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((product) => (
@@ -262,7 +250,7 @@ const ListProductPage = () => {
                                   onClick={() => handleDelete(product.id)}
                                 />
                                 <ListEditButton
-                                  onClick={() => handleEdit(product.id)}
+                                  onClick={() => handleEdit(product)}
                                 />
                               </Stack>
                             ) : (
@@ -283,6 +271,7 @@ const ListProductPage = () => {
                                 <Table size="small">
                                   <TableHead>
                                     <TableRow>
+                                      {/* Mapea los atributos restantes */}
                                       {columnsInside.map((column) => (
                                         <TableCell
                                           key={column.id}
@@ -323,10 +312,11 @@ const ListProductPage = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            {/* Paginación de la tabla */}
             <TablePagination
               rowsPerPageOptions={[3, 5, 10, 25, 100]}
               component="div"
-              count={products.length}
+              count={filteredProducts.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -334,6 +324,7 @@ const ListProductPage = () => {
             />
           </Paper>
         </Box>
+        
         <Stack
           direction="row"
           justifyContent="center"
