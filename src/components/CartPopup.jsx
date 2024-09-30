@@ -30,14 +30,14 @@ export const CartPopup = ({ isVisible, onClose }) => {
         data-bs-spy="scroll"
         data-bs-target="#cart-nav"
         className="scroll-container"
-        tabindex="0"
+        tabIndex="0"
       >
         <h3>Carrito de Compras</h3>
 
         <ul>
           {shoppingList.map((product) => (
-            <div className="cart-product">
-              <li key={product.id}>
+            <div className="cart-product" key={product.id}>
+              <li>
                 <button className="x-btn" onClick={onClose}>
                   X
                 </button>
