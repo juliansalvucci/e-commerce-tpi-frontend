@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BrandContext } from "./BrandContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
 
 const BrandProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [brands, setBrands] = useState([]);
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -30,6 +33,12 @@ const BrandProvider = ({ children }) => {
       console.error("Error (fetch marca):", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
+
+  useEffect(() => {
+    if (location.pathname === "/admin/brand/list") {
+      fetchBrands();
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     fetchBrands();
@@ -92,6 +101,7 @@ const BrandProvider = ({ children }) => {
         },
       });
       selectBrandForEdit(null);
+      navigate("/admin/brand/list");
     } catch (error) {
       Swal.fire({
         icon: "error",
