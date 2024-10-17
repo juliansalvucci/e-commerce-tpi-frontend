@@ -38,7 +38,7 @@ const ListSubCategoryPage = () => {
   const { categories } = useContext(CategoryContext);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Definición de las columnas de la tabla
   const columns = [

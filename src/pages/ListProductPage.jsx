@@ -45,7 +45,7 @@ const ListProductPage = () => {
   const { subCategories } = useContext(SubCategoryContext);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openRows, setOpenRows] = useState({}); // Maneja Collapse
 
   // Definición de las columnas de la tabla
