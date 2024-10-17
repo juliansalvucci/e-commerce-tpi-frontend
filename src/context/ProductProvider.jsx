@@ -193,13 +193,13 @@ export const ProductProvider = ({ children }) => {
     const matchedSubCategory = subCategories.find(
       (subcat) => subcat.name === product.subCategory
     );
-    console.log(matchedSubCategory);
+    //console.log(matchedSubCategory);
     const matchedBrand = brands.find((brand) => brand.name === product.brand);
-    console.log(matchedBrand);
+    //console.log(matchedBrand);
     const matchedCategory = categories.find(
       (category) => category.name === matchedSubCategory.category
     );
-    console.log(matchedCategory);
+    //console.log(matchedCategory);
     return {
       id: product.id,
       name: product.name,
