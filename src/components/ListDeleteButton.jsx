@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const ListDeleteButton = ({ onClick }) => {
   return (
-    <Tooltip title="Borrar" placement="right" arrow>
+    <Tooltip title="Borrar" placement="left" arrow>
       <IconButton sx={{ color: "black" }} onClick={onClick}>
         <DeleteIcon />
       </IconButton>
