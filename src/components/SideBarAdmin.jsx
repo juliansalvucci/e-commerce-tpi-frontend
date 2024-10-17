@@ -21,6 +21,8 @@ import {
   ShowChart,
   ExpandLess,
   ExpandMore,
+  Add as AddIcon,
+  List as ListIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
@@ -86,11 +88,11 @@ const Sidebar = () => {
       >
         <Avatar
           sx={{ width: 80, height: 80 }}
-          src="/path-to-user-photo.jpg"
-          alt="User Photo"
+          src="/logo.jpg" //Aca iría la imagen del usuario (si es que agregamos)
+          alt="Admin"
         />
         <Typography variant="h6" sx={{ marginTop: 1 }}>
-          Nombre Usuario
+          Admin
         </Typography>
         <Typography variant="body2" sx={{ color: "yellow" }}>
           Admin
@@ -106,7 +108,14 @@ const Sidebar = () => {
         </ListItem>
 
         <Typography
-          sx={{ paddingLeft: 2, marginTop: 2, marginBottom: 1 }}
+          sx={{
+            paddingLeft: 2,
+            marginTop: 2,
+            marginBottom: 1,
+            color: "#9e9e9e",
+            fontSize: "0.8rem",
+            fontStyle: "normal",
+          }}
           variant="subtitle2"
         >
           Administración
@@ -126,14 +135,22 @@ const Sidebar = () => {
               component={NavLink}
               to="/admin/brand/create"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <AddIcon />
+              </ListItemIcon>
               <ListItemText primary="Crear" />
             </ListItem>
             <ListItem
               component={NavLink}
               to="/admin/brand/list"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ListIcon />
+              </ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItem>
           </List>
@@ -153,14 +170,22 @@ const Sidebar = () => {
               component={NavLink}
               to="/admin/category/create"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <AddIcon />
+              </ListItemIcon>
               <ListItemText primary="Crear" />
             </ListItem>
             <ListItem
               component={NavLink}
               to="/admin/category/list"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ListIcon />
+              </ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItem>
           </List>
@@ -180,14 +205,22 @@ const Sidebar = () => {
               component={NavLink}
               to="/admin/subcategory/create"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <AddIcon />
+              </ListItemIcon>
               <ListItemText primary="Crear" />
             </ListItem>
             <ListItem
               component={NavLink}
               to="/admin/subcategory/list"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ListIcon />
+              </ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItem>
           </List>
@@ -207,21 +240,36 @@ const Sidebar = () => {
               component={NavLink}
               to="/admin/product/create"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <AddIcon />
+              </ListItemIcon>
               <ListItemText primary="Crear" />
             </ListItem>
             <ListItem
               component={NavLink}
               to="/admin/product/list"
               style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
             >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ListIcon />
+              </ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItem>
           </List>
         </Collapse>
 
         <Typography
-          sx={{ paddingLeft: 2, marginTop: 2, marginBottom: 1 }}
+          sx={{
+            paddingLeft: 2,
+            marginTop: 2,
+            marginBottom: 1,
+            color: "#9e9e9e",
+            fontSize: "0.8rem",
+            fontStyle: "normal",
+          }}
           variant="subtitle2"
         >
           Reportes
@@ -229,35 +277,33 @@ const Sidebar = () => {
 
         <ListItem
           component={NavLink}
-          to="/admin/reports/barchart"
+          to="/admin/reports/sales"
           style={navLinkStyle}
         >
           <ListItemIcon sx={{ color: "#fff" }}>
             <InsertChart />
           </ListItemIcon>
-          <ListItemText primary="Bar Chart" />
+          <ListItemText primary="Reporte de Ventas" />
         </ListItem>
-
         <ListItem
           component={NavLink}
-          to="/admin/reports/piechart"
+          to="/admin/reports/pie"
           style={navLinkStyle}
         >
           <ListItemIcon sx={{ color: "#fff" }}>
             <PieChart />
           </ListItemIcon>
-          <ListItemText primary="Pie Chart" />
+          <ListItemText primary="Reporte de ALGO" />
         </ListItem>
-
         <ListItem
           component={NavLink}
-          to="/admin/reports/linechart"
+          to="/admin/reports/line"
           style={navLinkStyle}
         >
           <ListItemIcon sx={{ color: "#fff" }}>
             <ShowChart />
           </ListItemIcon>
-          <ListItemText primary="Line Chart" />
+          <ListItemText primary="Reporte de OTRA COSITA" />
         </ListItem>
       </List>
     </Drawer>
