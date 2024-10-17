@@ -73,7 +73,7 @@ const Sidebar = () => {
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: 250,
-          backgroundColor: "#00203D",
+          backgroundColor: "#283b54",
           color: "#fff",
         },
       }}
