@@ -1,27 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Stack,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Box, Typography, Stack, CircularProgress } from "@mui/material";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
+import ListDataGrid from "../components/ListDataGrid";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import { BrandContext } from "../context/BrandContext";
-import "../styles/List.css";
 
 const ListBrandPage = () => {
   const navigate = useNavigate();
@@ -34,36 +21,78 @@ const ListBrandPage = () => {
     selectBrandForEdit,
   } = useContext(BrandContext);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
 
-  // Definición de las columnas de la tabla
-  const columns = [
-    { id: "name", label: "Nombre", minWidth: 170 },
-    { id: "creationDateTime", label: "Fecha de Creación", minWidth: 170 },
-    ...(showDeleted
-      ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 170 }]
-      : []),
-    { id: "actions", label: "Acciones", minWidth: 170 },
-  ];
+  useEffect(() => {
+    const updatePageSize = () => {
+      const gridHeight = window.innerHeight - 200;
+      const rowHeight = 52;
+      const newPageSize = Math.floor(gridHeight / rowHeight);
+      setPageSize(newPageSize);
+    };
+
+    updatePageSize();
+    window.addEventListener("resize", updatePageSize);
+    return () => window.removeEventListener("resize", updatePageSize);
+  }, []);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [brands]);
 
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
-    setPage(0);
   };
 
-  const filteredBrands = showDeleted
-    ? brands.filter((brand) => brand.deleted) // Muestra solo las eliminadas
-    : brands.filter((brand) => !brand.deleted); // Muestra solo las activas
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  // Definición de las columnas de la tabla
+  const columns = [
+    {
+      field: "name",
+      headerName: "Nombre",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "creationDatetime",
+      headerName: "Fecha de Creación",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    showDeleted && {
+      field: "deleteDatetime",
+      headerName: "Fecha de Borrado",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "actions",
+      headerName: "Acciones",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Stack direction="row" spacing={1} justifyContent="center">
+          {!showDeleted ? (
+            <>
+              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
+              <ListEditButton onClick={() => handleEdit(params.row)} />
+            </>
+          ) : (
+            <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
+          )}
+        </Stack>
+      ),
+    },
+  ].filter(Boolean);
 
   const handleEdit = (brand) => {
     Swal.fire({
@@ -124,124 +153,52 @@ const ListBrandPage = () => {
   };
 
   return (
-    <Box className="background">
-      <Container
-        className="container"
-        sx={{ width: "70%", display: "flex", justifyContent: "center" }}
-      >
-        <Box className="title-box">
-          {/* Título depende de showDeleted */}
-          <Typography variant="h3" className="title" align="center">
-            {showDeleted
-              ? "Listado de Marcas Eliminadas"
-              : "Listado de Marcas Activas"}
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <Paper
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+      }}
+    >
+      <Typography variant="h3" align="center" color="white" gutterBottom>
+        {showDeleted
+          ? "Listado de Marcas Eliminadas"
+          : "Listado de Marcas Activas"}
+      </Typography>
+      <Box sx={{ height: "calc(100vh - 180px)" }}>
+        {loading || brands.length === 0 ? (
+          <Box
             sx={{
-              width: "90%",
-              overflow: "hidden",
-              mt: 2,
-              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
           >
-            <TableContainer sx={{ maxHeight: 440, width: "100%" }}>
-              <Table stickyHeader aria-label="brand tabla">
-                <TableHead>
-                  <TableRow>
-                    {/* Mapea las columnas para crear las celdas del encabezado */}
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "bold",
-                          minWidth: column.minWidth,
-                        }}
-                        align="center"
-                      >
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {/* Mapea las categorías filtradas para mostrar los datos en filas */}
-                  {brands
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((brand) => (
-                      <TableRow hover tabIndex={-1} key={brand.id}>
-                        <TableCell align="center">{brand.name}</TableCell>
-                        <TableCell align="center">
-                          {brand.creationDatetime}
-                        </TableCell>
-                        {showDeleted && (
-                          <TableCell align="center">
-                            {brand.deleteDatetime || "N/A"}
-                          </TableCell>
-                        )}
-                        <TableCell align="center">
-                          {!showDeleted ? (
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              justifyContent="center"
-                            >
-                              <ListDeleteButton
-                                onClick={() => handleDelete(brand.id)}
-                              />
-                              <ListEditButton
-                                onClick={() => handleEdit(brand)}
-                              />
-                            </Stack>
-                          ) : (
-                            <ListRestoreButton
-                              onClick={() => handleRestore(brand.id)}
-                            />
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {/* Paginación de la tabla */}
-            <TablePagination
-              rowsPerPageOptions={[5, 8, 10]}
-              component="div"
-              count={filteredBrands.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </Box>
-
+            <CircularProgress />
+          </Box>
+        ) : (
+          <ListDataGrid
+            rows={brands}
+            columns={columns}
+            pageSize={pageSize}
+            rowsPerPageOptions={[pageSize]}
+            disableSelectionOnClick
+          />
+        )}
         <Stack
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ mt: 2 }}
+          spacing={2}
+          mt={2}
         >
-          <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Marca" tipoClase={"brand"} />
-            <ListShowDeletedButton
-              showDeleted={showDeleted}
-              onClick={handleShowDeletedToggle}
-            />
-          </Stack>
+          <ListCreateButton label="Marca" tipoClase={"brand"} />
+          <ListShowDeletedButton
+            showDeleted={showDeleted}
+            onClick={handleShowDeletedToggle}
+          />
         </Stack>
-      </Container>
+      </Box>
     </Box>
   );
 };
