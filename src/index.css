@@ -4,6 +4,40 @@
   padding: 0;
 }
 
+.app-layout {
+  display: flex;
+  background-color: #233349;
+}
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 /*Alertas de conformación para finalizar compra*/
 .swal-confirm-button {
   background-color: #466388;
