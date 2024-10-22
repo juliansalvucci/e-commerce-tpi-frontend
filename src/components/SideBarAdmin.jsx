@@ -94,7 +94,7 @@ const Sidebar = () => {
         <Typography variant="h6" sx={{ marginTop: 1 }}>
           Admin
         </Typography>
-        <Typography variant="body2" sx={{ color: "yellow" }}>
+        <Typography variant="body2" sx={{ color: "#d7c4ab" }}>
           Admin
         </Typography>
       </Box>
