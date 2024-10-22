@@ -174,12 +174,18 @@ const ListSubCategoryPage = () => {
         minHeight: "100vh",
       }}
     >
-      <Typography variant="h3" align="center" color="white" gutterBottom>
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
         {showDeleted
           ? "Listado de Subcategorías Eliminadas"
           : "Listado de Subcategorías Activas"}
       </Typography>
-      <Box sx={{ height: "calc(100vh - 180px)" }}>
+      <Box sx={{ height: "calc(100vh - 200px)" }}>
         {loading || subCategories.length === 0 ? (
           <Box
             sx={{

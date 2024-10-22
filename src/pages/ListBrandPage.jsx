@@ -27,7 +27,7 @@ const ListBrandPage = () => {
   useEffect(() => {
     const updatePageSize = () => {
       const gridHeight = window.innerHeight - 200;
-      const rowHeight = 52;
+      const rowHeight = 40;
       const newPageSize = Math.floor(gridHeight / rowHeight);
       setPageSize(newPageSize);
     };
@@ -159,12 +159,18 @@ const ListBrandPage = () => {
         minHeight: "100vh",
       }}
     >
-      <Typography variant="h3" align="center" color="white" gutterBottom>
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
         {showDeleted
           ? "Listado de Marcas Eliminadas"
           : "Listado de Marcas Activas"}
       </Typography>
-      <Box sx={{ height: "calc(100vh - 180px)" }}>
+      <Box sx={{ height: "calc(100vh - 200px)" }}>  
         {loading || brands.length === 0 ? (
           <Box
             sx={{

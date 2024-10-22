@@ -215,12 +215,18 @@ const ListProductPage = () => {
         minHeight: "100vh",
       }}
     >
-      <Typography variant="h3" align="center" color="white" gutterBottom>
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
         {showDeleted
           ? "Listado de Productos Eliminados"
           : "Listado de Productos Activos"}
       </Typography>
-      <Box sx={{ height: "calc(100vh - 180px)" }}>
+      <Box sx={{ height: "calc(100vh - 200px)" }}>
         {loading || products.length === 0 ? (
           <Box
             sx={{
