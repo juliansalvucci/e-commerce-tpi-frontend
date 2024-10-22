@@ -14,10 +14,11 @@ const ListCreateButton = ({ label, tipoClase }) => {
     <Button
       variant="contained"
       sx={{
-        backgroundColor: "#bed0dd",
-        color: "black",
+        backgroundColor: "#283b54",
+        color: "white",
         "&:hover": {
-          backgroundColor: "grey",
+          backgroundColor: "#bed0dd",
+          color: "black",
         },
       }}
       startIcon={<AddIcon />}
