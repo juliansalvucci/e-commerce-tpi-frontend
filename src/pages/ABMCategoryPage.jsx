@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Formik, Form } from "formik";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import { categorySchema } from "../schemas";
-import "../styles/ABM.css";
 
 const ABMCategoryPage = () => {
   const { createCategory, editCategory, selectedCategory } =
@@ -28,15 +27,41 @@ const ABMCategoryPage = () => {
   };
 
   return (
-    <Box className="background" sx={{ padding: 2 }}>
-      <Box className="container abm-category-page">
-        {/*Typography queda muy feo aca, mejor HTML*/}
-        <h2 className="title">
-          {selectedCategory ? "Editar Categoría" : "Creá una Categoría"}
-          <p className="subtitle">
-            {selectedCategory ? `${selectedCategory.name}` : ""}
-          </p>
-        </h2>
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
+        {selectedCategory ? "Editar Categoría" : "Crear Categoría"}
+        <Typography
+          variant="overline"
+          align="center"
+          color="white"
+          gutterBottom
+          sx={{ display: "block", fontFamily: "Poppins" }}
+        >
+          {selectedCategory ? `${selectedCategory.name}` : ""}
+        </Typography>
+      </Typography>
+      <Box
+        sx={{
+          backgroundColor: "#283b54",
+          borderRadius: "20px",
+          padding: 3,
+          width: "50%",
+        }}
+      >
         <Formik
           initialValues={{
             nombre: selectedCategory ? selectedCategory.name : "",
@@ -47,12 +72,20 @@ const ABMCategoryPage = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInputComponent
-                label="Nombre"
-                name="nombre"
-                type="text"
-                placeholder="Ingrese el nombre"
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <ABMInputComponent
+                  label="Nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                />
+              </Box>
               <ABMActionButton
                 is={isSubmitting}
                 accion={selectedCategory ? "Guardar" : "Crear"}
