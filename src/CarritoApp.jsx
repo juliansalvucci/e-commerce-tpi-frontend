@@ -39,6 +39,7 @@ export const CarritoApp = () => {
             <div className="app-layout">
               <SideBarAdmin className="sidebar" />
               <div className="content">
+                <NavBarAdmin className="topbar" />
                 <Routes>
                   <Route path="/*" element={<Navigate to="/admin" />}></Route>
                   <Route path="/admin" element={<HomeAdminPage />}></Route>
