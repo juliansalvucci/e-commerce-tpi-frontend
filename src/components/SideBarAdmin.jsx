@@ -17,8 +17,6 @@ import {
   SubdirectoryArrowRight,
   ProductionQuantityLimits,
   InsertChart,
-  PieChart,
-  ShowChart,
   ExpandLess,
   ExpandMore,
   Add as AddIcon,
@@ -31,12 +29,14 @@ const Sidebar = () => {
   const [openCategory, setOpenCategory] = useState(false);
   const [openSubCategory, setOpenSubCategory] = useState(false);
   const [openProduct, setOpenProduct] = useState(false);
+  const [openReports, setOpenReports] = useState(false);
 
   const handleToggleBrand = () => {
     setOpenBrand(!openBrand);
     if (openCategory) setOpenCategory(false);
     if (openProduct) setOpenProduct(false);
     if (openSubCategory) setOpenSubCategory(false);
+    if (openReports) setOpenReports(false);
   };
 
   const handleToggleCategory = () => {
@@ -44,6 +44,7 @@ const Sidebar = () => {
     if (openBrand) setOpenBrand(false);
     if (openProduct) setOpenProduct(false);
     if (openSubCategory) setOpenSubCategory(false);
+    if (openReports) setOpenReports(false);
   };
 
   const handleToggleProduct = () => {
@@ -51,12 +52,22 @@ const Sidebar = () => {
     if (openBrand) setOpenBrand(false);
     if (openCategory) setOpenCategory(false);
     if (openSubCategory) setOpenSubCategory(false);
+    if (openReports) setOpenReports(false);
   };
 
   const handleToggleSubCategory = () => {
     setOpenSubCategory(!openSubCategory);
     if (openBrand) setOpenBrand(false);
     if (openCategory) setOpenCategory(false);
+    if (openProduct) setOpenProduct(false);
+    if (openReports) setOpenReports(false);
+  };
+
+  const handleToggleReports = () => {
+    setOpenReports(!openReports);
+    if (openBrand) setOpenBrand(false);
+    if (openCategory) setOpenCategory(false);
+    if (openSubCategory) setOpenSubCategory(false);
     if (openProduct) setOpenProduct(false);
   };
 
@@ -88,7 +99,7 @@ const Sidebar = () => {
       >
         <Avatar
           sx={{ width: 80, height: 80 }}
-          src="/logo.jpg" //Aca iría la imagen del usuario (si es que agregamos)
+          src="/logo.jpg" // Aca iría la imagen del usuario (si es que agregamos)
           alt="Admin"
         />
         <Typography variant="h6" sx={{ marginTop: 1 }}>
@@ -100,11 +111,25 @@ const Sidebar = () => {
       </Box>
 
       <List>
+        <Typography
+          sx={{
+            paddingLeft: 2,
+            marginTop: 2,
+            marginBottom: 1,
+            color: "#9e9e9e",
+            fontSize: "0.8rem",
+            fontStyle: "normal",
+          }}
+          variant="subtitle2"
+        >
+          Principal
+        </Typography>
+
         <ListItem component={NavLink} to="/admin" style={navLinkStyle}>
           <ListItemIcon sx={{ color: "#fff" }}>
             <Dashboard />
           </ListItemIcon>
-          <ListItemText primary="DASHBOARD" />
+          <ListItemText primary="Dashboard" />
         </ListItem>
 
         <Typography
@@ -258,8 +283,31 @@ const Sidebar = () => {
               </ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItem>
+            <ListItem
+              component={NavLink}
+              to="/admin/product/stock"
+              style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
+            >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary="Stock" />
+            </ListItem>
           </List>
         </Collapse>
+
+        {/* Pedido */}
+        <ListItem
+          component={NavLink}
+          to="/admin/order/list"
+          style={navLinkStyle}
+        >
+          <ListItemIcon sx={{ color: "#fff" }}>
+            <Dashboard />
+          </ListItemIcon>
+          <ListItemText primary="Pedido" />
+        </ListItem>
 
         <Typography
           sx={{
@@ -275,36 +323,51 @@ const Sidebar = () => {
           Reportes
         </Typography>
 
-        <ListItem
-          component={NavLink}
-          to="/admin/reports/sales"
-          style={navLinkStyle}
-        >
+        {/* Reportes */}
+        <ListItem button="true" onClick={handleToggleReports}>
           <ListItemIcon sx={{ color: "#fff" }}>
             <InsertChart />
           </ListItemIcon>
-          <ListItemText primary="Reporte de Ventas" />
+          <ListItemText primary="Reportes" />
+          {openReports ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <ListItem
-          component={NavLink}
-          to="/admin/reports/pie"
-          style={navLinkStyle}
-        >
-          <ListItemIcon sx={{ color: "#fff" }}>
-            <PieChart />
-          </ListItemIcon>
-          <ListItemText primary="Reporte de ALGO" />
-        </ListItem>
-        <ListItem
-          component={NavLink}
-          to="/admin/reports/line"
-          style={navLinkStyle}
-        >
-          <ListItemIcon sx={{ color: "#fff" }}>
-            <ShowChart />
-          </ListItemIcon>
-          <ListItemText primary="Reporte de OTRA COSITA" />
-        </ListItem>
+        <Collapse in={openReports} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem
+              component={NavLink}
+              to="/admin/report/sales"
+              style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
+            >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <InsertChart />
+              </ListItemIcon>
+              <ListItemText primary="Ventas" />
+            </ListItem>
+            <ListItem
+              component={NavLink}
+              to="/admin/report/stock"
+              style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
+            >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <InsertChart />
+              </ListItemIcon>
+              <ListItemText primary="Stock" />
+            </ListItem>
+            <ListItem
+              component={NavLink}
+              to="/admin/report/clients"
+              style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
+            >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <InsertChart />
+              </ListItemIcon>
+              <ListItemText primary="Clientes" />
+            </ListItem>
+          </List>
+        </Collapse>
       </List>
     </Drawer>
   );
