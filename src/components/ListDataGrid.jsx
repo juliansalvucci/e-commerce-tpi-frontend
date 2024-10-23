@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 
-const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+const StyledDataGrid = styled(DataGrid)(({}) => ({
   border: "none",
   borderRadius: "15px",
   "& .MuiDataGrid-main": {
@@ -11,6 +11,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     backgroundColor: "#283b54",
     color: "#ffffff",
     borderRadius: 0,
+    fontSize: "15px",
   },
   "& .MuiDataGrid-cell": {
     backgroundColor: "white",
@@ -25,7 +26,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .MuiDataGrid-columnSeparator": {
     display: "none",
   },
-  "& .MuiDataGrid-menuIcon, & .MuiDataGrid-menuIconButton, & .MuiDataGrid-sortIcon": {
+  "& .MuiDataGrid-menuIcon, & .MuiDataGrid-sortIcon": {
     color: "#ffffff",
   },
   "& .MuiCheckbox-root": {
@@ -36,8 +37,6 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   },
   "& .MuiDataGrid-toolbarContainer": {
     backgroundColor: "#283b54",
-    borderTopLeftRadius: "15px",
-    borderTopRightRadius: "15px",
     padding: "8px 16px",
   },
   "& .MuiButton-root": {
