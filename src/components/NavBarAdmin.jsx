@@ -8,6 +8,7 @@ const NavBarAdmin = () => {
 
   // Lógica para Breadcrumbs basada en la ruta actual
   const breadcrumbsMap = {
+    "/admin": ["Principal", "Dashboard"],
     "/admin/brand/create": ["Administración", "Marca", "Crear"],
     "/admin/brand/edit": ["Administración", "Marca", "Editar"],
     "/admin/brand/list": ["Administración", "Marca", "Listado"],
@@ -17,9 +18,14 @@ const NavBarAdmin = () => {
     "/admin/product/create": ["Administración", "Producto", "Crear"],
     "/admin/product/edit": ["Administración", "Producto", "Editar"],
     "/admin/product/list": ["Administración", "Producto", "Listado"],
+    "/admin/product/stock": ["Administración", "Producto", "Stock"],
     "/admin/subcategory/create": ["Administración", "Subcategoría", "Crear"],
     "/admin/subcategory/edit": ["Administración", "Subcategoría", "Editar"],
     "/admin/subcategory/list": ["Administración", "Subcategoría", "Listado"],
+    "/admin/order/list": ["Administración", "Pedido", "Listado"],
+    "/admin/report/clients": ["Reportes", "Clientes"],
+    "/admin/report/sales": ["Reportes", "Ventas"],
+    "/admin/report/stock": ["Reportes", "Stock"],
   };
 
   const breadcrumbs = breadcrumbsMap[location.pathname] || [""];
@@ -34,21 +40,7 @@ const NavBarAdmin = () => {
               key={index}
               color={index === breadcrumbs.length - 1 ? "#d7c4ab" : "white"}
             >
-              {index === breadcrumbs.length - 1 ? (
-                crumb
-              ) : (
-                <Link
-                  component={NavLink}
-                  to={location.pathname
-                    .split("/")
-                    .slice(0, index + 2)
-                    .join("/")}
-                  underline="hover"
-                  sx={{ color: "white" }}
-                >
-                  {crumb}
-                </Link>
-              )}
+              {crumb}
             </Typography>
           ))}
         </Breadcrumbs>
@@ -57,10 +49,10 @@ const NavBarAdmin = () => {
       {/* Iconos */}
       <Box display="flex">
         <IconButton>
-          <NotificationsOutlinedIcon />
+          <NotificationsOutlinedIcon sx={{ color: "white" }} />
         </IconButton>
         <IconButton>
-          <HomeOutlinedIcon />
+          <HomeOutlinedIcon sx={{ color: "white" }} />
         </IconButton>
       </Box>
     </Box>
