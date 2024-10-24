@@ -4,8 +4,10 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { ProductContext } from "./ProductContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
+import useNoImage from "../utils/useNoImage";
 
 export const ProductProvider = ({ children }) => {
+  const noImageURL = useNoImage();
   const navigate = useNavigate();
   const location = useLocation();
   const [products, setProducts] = useState([]);
@@ -21,9 +23,7 @@ export const ProductProvider = ({ children }) => {
       );
       const updatedProducts = response.data.map((product) => ({
         ...product,
-        imageURL: product.imageURL
-          ? product.imageURL
-          : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksvTrc5jnygex4Lc_TVY0JLsNq_k1E9WSUA&s",
+        imageURL: product.imageURL ? product.imageURL : noImageURL,
         deleted: product.deleted === true,
         creationDatetime: formatDateTime(product.creationDatetime),
         updateDatetime: product.updateDatetime

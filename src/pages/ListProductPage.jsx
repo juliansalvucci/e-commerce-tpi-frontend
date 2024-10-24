@@ -8,6 +8,7 @@ import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import ListShowImage from "../components/ListShowImage";
 import { BrandContext } from "../context/BrandContext";
 import { CategoryContext } from "../context/CategoryContext";
 import { ProductContext } from "../context/ProductContext";
@@ -137,6 +138,7 @@ const ListProductPage = () => {
       headerAlign: "center",
       renderCell: (params) => (
         <Stack direction="row" spacing={1} justifyContent="center">
+          <ListShowImage imageURL={params.row.imageURL} />
           {!showDeleted ? (
             <>
               <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
