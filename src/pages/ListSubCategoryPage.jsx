@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Stack, CircularProgress } from "@mui/material";
+import { GridToolbar } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDataGrid from "../components/ListDataGrid";
@@ -26,6 +27,12 @@ const ListSubCategoryPage = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    name: true,
+    category: true,
+    creationDatetime: true,
+    updateDatetime: true,
+  });
 
   useEffect(() => {
     const updatePageSize = () => {
@@ -40,7 +47,7 @@ const ListSubCategoryPage = () => {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { // Simular carga de página
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -100,8 +107,8 @@ const ListSubCategoryPage = () => {
         <Stack direction="row" spacing={1} justifyContent="center">
           {!showDeleted ? (
             <>
-              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
               <ListEditButton onClick={() => handleEdit(params.row)} />
+              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
             </>
           ) : (
             <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
@@ -109,7 +116,7 @@ const ListSubCategoryPage = () => {
         </Stack>
       ),
     },
-  ].filter(Boolean);
+  ].filter(Boolean); //Asegura que no hay columnas undefined (showDeleted=false entonces no se muestra la columna 'deleteDatetime')
 
   const handleEdit = (subcat) => {
     Swal.fire({
@@ -211,7 +218,13 @@ const ListSubCategoryPage = () => {
             columns={columns}
             pageSize={pageSize}
             rowsPerPageOptions={[pageSize]}
+            disableColumnMenu={true}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) =>
+              setColumnVisibilityModel(newModel)
+            }
             disableSelectionOnClick
+            slots={{ footer: GridToolbar }}
           />
         )}
         <Stack

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Stack, CircularProgress } from "@mui/material";
+import { GridToolbar } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDataGrid from "../components/ListDataGrid";
@@ -31,6 +32,20 @@ const ListProductPage = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    name: true,
+    brand: true,
+    category: false,
+    subCategory: true,
+    price: true,
+    stock: true,
+    stockMin: false,
+    description: false,
+    color: false,
+    size: false,
+    creationDatetime: true,
+    updateDatetime: false,
+  });
 
   useEffect(() => {
     const updatePageSize = () => {
@@ -45,7 +60,7 @@ const ListProductPage = () => {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { // Simular carga de página
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -141,8 +156,8 @@ const ListProductPage = () => {
           <ListShowImage imageURL={params.row.imageURL} />
           {!showDeleted ? (
             <>
-              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
               <ListEditButton onClick={() => handleEdit(params.row)} />
+              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
             </>
           ) : (
             <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
@@ -150,7 +165,7 @@ const ListProductPage = () => {
         </Stack>
       ),
     },
-  ].filter(Boolean);
+  ].filter(Boolean); //Asegura que no hay columnas undefined (showDeleted=false entonces no se muestra la columna 'deleteDatetime')
 
   const handleEdit = (product) => {
     Swal.fire({
@@ -254,7 +269,13 @@ const ListProductPage = () => {
             columns={columns}
             pageSize={pageSize}
             rowsPerPageOptions={[pageSize]}
+            disableColumnMenu={true}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) =>
+              setColumnVisibilityModel(newModel)
+            }
             disableSelectionOnClick
+            slots={{ footer: GridToolbar }}
           />
         )}
         <Stack

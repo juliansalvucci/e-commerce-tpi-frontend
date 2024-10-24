@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Stack, CircularProgress } from "@mui/material";
+import { GridToolbar } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
 import ListDataGrid from "../components/ListDataGrid";
@@ -23,6 +24,11 @@ const ListBrandPage = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    name: true,
+    creationDatetime: true,
+    updateDatetime: true,
+  });
 
   useEffect(() => {
     const updatePageSize = () => {
@@ -37,8 +43,7 @@ const ListBrandPage = () => {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
-  useEffect(() => {
-    // Simulate loading delay
+  useEffect(() => { // Simular carga de página
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -91,8 +96,8 @@ const ListBrandPage = () => {
         <Stack direction="row" spacing={1} justifyContent="center">
           {!showDeleted ? (
             <>
-              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
               <ListEditButton onClick={() => handleEdit(params.row)} />
+              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
             </>
           ) : (
             <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
@@ -100,7 +105,7 @@ const ListBrandPage = () => {
         </Stack>
       ),
     },
-  ].filter(Boolean);
+  ].filter(Boolean); //Asegura que no hay columnas undefined (showDeleted=false entonces no se muestra la columna 'deleteDatetime')
 
   const handleEdit = (brand) => {
     Swal.fire({
@@ -178,7 +183,7 @@ const ListBrandPage = () => {
           ? "Listado de Marcas Eliminadas"
           : "Listado de Marcas Activas"}
       </Typography>
-      <Box sx={{ height: "calc(100vh - 200px)" }}>  
+      <Box sx={{ height: "calc(100vh - 200px)" }}>
         {loading || brands.length === 0 ? (
           <Box
             sx={{
@@ -196,7 +201,13 @@ const ListBrandPage = () => {
             columns={columns}
             pageSize={pageSize}
             rowsPerPageOptions={[pageSize]}
+            disableColumnMenu={true}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) =>
+              setColumnVisibilityModel(newModel)
+            }
             disableSelectionOnClick
+            slots={{ footer: GridToolbar }}
           />
         )}
         <Stack
