@@ -101,6 +101,21 @@ const ListProductPage = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      renderCell: (params) => {
+        const formattedPrice =
+          params.value % 1 === 0 // Para ver si tiene decimales
+            ? params.value.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })
+            : params.value.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+              });
+        return <span>{formattedPrice}</span>;
+      },
     },
     {
       field: "stock",
@@ -122,6 +137,22 @@ const ListProductPage = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+    },
+    {
+      field: "color",
+      headerName: "Color",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
+    },
+    {
+      field: "size",
+      headerName: "Tamaño",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
     },
     {
       field: "creationDatetime",
