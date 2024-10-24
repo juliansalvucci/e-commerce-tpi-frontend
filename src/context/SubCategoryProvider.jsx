@@ -24,6 +24,9 @@ const SubCategoryProvider = ({ children }) => {
         ...subcat,
         deleted: subcat.deleted === true,
         creationDatetime: formatDateTime(subcat.creationDatetime),
+        updateDatetime: subcat.updateDatetime
+          ? formatDateTime(subcat.updateDatetime)
+          : "N/A",
         deleteDatetime: subcat.deleteDatetime
           ? formatDateTime(subcat.deleteDatetime)
           : null,

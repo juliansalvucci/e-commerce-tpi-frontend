@@ -24,6 +24,9 @@ const CategoryProvider = ({ children }) => {
         ...cat,
         deleted: cat.deleted === true,
         creationDatetime: formatDateTime(cat.creationDatetime),
+        updateDatetime: cat.updateDatetime
+          ? formatDateTime(cat.updateDatetime)
+          : "N/A",
         deleteDatetime: cat.deleteDatetime
           ? formatDateTime(cat.deleteDatetime)
           : null,

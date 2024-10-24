@@ -75,6 +75,14 @@ const ListSubCategoryPage = () => {
       align: "center",
       headerAlign: "center",
     },
+    {
+      field: "updateDatetime",
+      headerName: "Fecha de Actualización",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
+    },
     showDeleted && {
       field: "deleteDatetime",
       headerName: "Fecha de Borrado",

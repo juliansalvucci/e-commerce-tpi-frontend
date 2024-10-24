@@ -26,6 +26,9 @@ export const ProductProvider = ({ children }) => {
           : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksvTrc5jnygex4Lc_TVY0JLsNq_k1E9WSUA&s",
         deleted: product.deleted === true,
         creationDatetime: formatDateTime(product.creationDatetime),
+        updateDatetime: product.updateDatetime
+          ? formatDateTime(product.updateDatetime)
+          : "N/A",
         deleteDatetime: product.deleteDatetime
           ? formatDateTime(product.deleteDatetime)
           : null,
@@ -200,6 +203,7 @@ export const ProductProvider = ({ children }) => {
       (category) => category.name === matchedSubCategory.category
     );
     //console.log(matchedCategory);
+    //console.log(product);
     return {
       id: product.id,
       name: product.name,

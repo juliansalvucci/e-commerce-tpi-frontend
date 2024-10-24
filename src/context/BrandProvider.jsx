@@ -24,6 +24,9 @@ const BrandProvider = ({ children }) => {
         ...brand,
         deleted: brand.deleted === true,
         creationDatetime: formatDateTime(brand.creationDatetime),
+        updateDatetime: brand.updateDatetime
+          ? formatDateTime(brand.updateDatetime)
+          : "N/A",
         deleteDatetime: brand.deleteDatetime
           ? formatDateTime(brand.deleteDatetime)
           : null,
