@@ -14,7 +14,7 @@ const ABMCategoryPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedCategory) {
-        await createCategory({ name: values.nombre });
+        await createCategory({ name: values.nombre.trim() }); // trim(): Quitar espacios al final (y al principio)
         resetForm();
       } else {
         await editCategory(selectedCategory.id, { name: values.nombre });

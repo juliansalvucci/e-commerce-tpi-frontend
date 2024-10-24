@@ -30,8 +30,8 @@ const ABMProductPage = () => {
     try {
       if (!selectedProduct) {
         await createProduct({
-          name: values.nombre,
-          description: values.descripcion,
+          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
+          description: values.descripcion.trim(),
           price: values.precio,
           stock: values.stock,
           stockMin: values.stockMin,

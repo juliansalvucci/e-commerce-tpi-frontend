@@ -17,7 +17,7 @@ const ABMSubCategoryPage = () => {
     try {
       if (!selectedSubCategory) {
         await createSubCategory({
-          name: values.nombre,
+          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
           categoryId: values.categoria,
         });
         resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
