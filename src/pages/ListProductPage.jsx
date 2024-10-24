@@ -163,7 +163,7 @@ const ListProductPage = () => {
     },
     {
       field: "updateDatetime",
-      headerName: "Fecha de Actualización",
+      headerName: "Fecha de Modificación",
       flex: 1,
       align: "center",
       headerAlign: "center",
