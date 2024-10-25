@@ -124,7 +124,7 @@ const ListProductPage = () => {
         return <span>{formattedPrice}</span>;
       },
     },
-    {
+    !showDeleted && {
       field: "stock",
       headerName: "Stock Disp.",
       description: "Stock Disponible",
