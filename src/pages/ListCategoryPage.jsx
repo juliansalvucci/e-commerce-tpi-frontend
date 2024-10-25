@@ -81,7 +81,7 @@ const ListCategoryPage = () => {
     },
     showDeleted && {
       field: "deleteDatetime",
-      headerName: "Fecha de Borrado",
+      headerName: "Fecha de Eliminación",
       flex: 1,
       align: "center",
       headerAlign: "center",
