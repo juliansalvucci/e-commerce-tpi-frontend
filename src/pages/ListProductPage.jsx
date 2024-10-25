@@ -130,6 +130,17 @@ const ListProductPage = () => {
       description: "Stock Disponible",
       align: "center",
       headerAlign: "center",
+      width: 70,
+      renderCell: (params) => {
+        const { stock, stockMin } = params.row;
+        let color = "#283b54";
+
+        if (stock <= stockMin) {
+          color = "red"; // stock <= stockMin
+        }
+
+        return <span style={{ color }}>{stock}</span>;
+      },
     },
     {
       field: "stockMin",
