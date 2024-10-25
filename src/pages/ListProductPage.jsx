@@ -89,6 +89,13 @@ const ListProductPage = () => {
       headerAlign: "center",
     },
     {
+      field: "category",
+      headerName: "Categoría",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
       field: "subCategory",
       headerName: "Subcategoría",
       flex: 1,
@@ -120,16 +127,17 @@ const ListProductPage = () => {
     {
       field: "stock",
       headerName: "Stock Disp.",
-      flex: 1,
+      description: "Stock Disponible",
       align: "center",
       headerAlign: "center",
     },
     {
       field: "stockMin",
       headerName: "Stock Min.",
-      flex: 1,
+      description: "Alerta de Stock Min.",
       align: "center",
       headerAlign: "center",
+      width: 70,
     },
     {
       field: "description",

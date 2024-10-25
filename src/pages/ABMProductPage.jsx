@@ -105,7 +105,7 @@ const ABMProductPage = () => {
             color: selectedProduct?.color || "",
             tamaño: selectedProduct?.size || "",
             marca: selectedProduct?.brandId || "",
-            categoría: selectedProduct?.categoryId || "",
+            categoria: selectedProduct?.categoryId || "",
             subcategoria: selectedProduct?.subCategoryId || "",
             precio: selectedProduct?.price || "",
             stock: selectedProduct?.stock || "",
@@ -154,7 +154,7 @@ const ABMProductPage = () => {
                 <ABMSelectComponent
                   label="Categoría"
                   id="categoria"
-                  name="categoría"
+                  name="categoria"
                   options={categories.map((cat) => ({
                     value: cat.id,
                     label: cat.name,
@@ -162,7 +162,7 @@ const ABMProductPage = () => {
                   onChange={(event) => {
                     const categoryId = event.target.value;
                     const categoryName = findCategoryById(categoryId);
-                    setFieldValue("categoría", categoryId);
+                    setFieldValue("categoria", categoryId);
                     setselectedCategoryP(categoryId);
                     setFieldValue("subcategoria", "");
                     setFilteredSC(
@@ -192,10 +192,18 @@ const ABMProductPage = () => {
                     type="number"
                     step="100.0"
                     placeholder="Ingrese el precio"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">$</InputAdornment>
-                      ),
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            sx={{ color: "white" }}
+                          >
+                            $
+                          </InputAdornment>
+                        ),
+                        sx: { color: "white" },
+                      },
                     }}
                   />
                 </FormControl>
