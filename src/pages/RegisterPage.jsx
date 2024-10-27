@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import fondo2 from "../assets/fondo-register.png";
-import logo from "../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 import {
-  TextField,
   Button,
   Box,
   Typography,
@@ -12,26 +8,20 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Formik, Form } from "formik";
+import fondo2 from "../assets/fondo-register.png";
+import logo from "../assets/logo.png";
+import ABMInputComponent from "../components/ABMInputComponent";
 import { useUser } from "../context/UserProvider.jsx";
+import { registerSchema } from "../schemas";
 
 export const RegisterPage = () => {
+  const navigate = useNavigate();
   const { register } = useUser();
-  // Esquema de validación con Yup
-  const validationSchema = Yup.object({
-    firstName: Yup.string().required("El nombre es obligatorio"),
-    lastName: Yup.string().required("El apellido es obligatorio"),
-    email: Yup.string()
-      .email("Correo electrónico inválido")
-      .required("El correo electrónico es obligatorio"),
-    password: Yup.string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres")
-      .max(22, "La contraseña no debe tener más de 22 caracteres")
-      .required("La contraseña es obligatoria"),
-  });
-
   // Estado para mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
+  // Función para controlar la visibilidad de la contraseña
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -46,6 +36,7 @@ export const RegisterPage = () => {
         justifyContent: "center",
         boxShadow: 3,
         backgroundColor: "#f5f5f5",
+        border: "1px solid #ccc",
       }}
     >
       {/* Imagen en el lado izquierdo */}
@@ -54,11 +45,10 @@ export const RegisterPage = () => {
         src={fondo2} // Reemplaza con la ruta de tu imagen
         alt="Imagen de bienvenida"
         sx={{
-          width: "120vh", // Ajusta el tamaño según sea necesario
+          width: "120vh",
           height: "90vh",
         }}
       />
-      
       <Box
         sx={{
           width: "120vh",
@@ -72,9 +62,9 @@ export const RegisterPage = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center", // Centra horizontalmente
-            alignItems: "center", // Centra verticalmente
-            mb: 4, // Margen inferior para separación
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 4,
           }}
         >
           <Box
@@ -82,12 +72,14 @@ export const RegisterPage = () => {
             src={logo} // Reemplaza con la ruta de tu imagen
             alt="Imagen de bienvenida"
             sx={{
-              width: "100px", // Ajusta el tamaño según sea necesario
-              height: "100px", // Cambia a "auto" para mantener la proporción
+              width: "100px",
+              height: "100px",
               borderRadius: "50px",
               boxShadow: 5,
-              mt: 2, // Margen superior para separación
+              mt: 2,
+              cursor: "pointer",
             }}
+            onClick={() => navigate("/")}
           />
         </Box>
         <Typography variant="h5" align="center" gutterBottom>
@@ -96,81 +88,42 @@ export const RegisterPage = () => {
 
         <Formik
           initialValues={{
-            firstName: "",
-            lastName: "",
+            nombre: "",
+            apellido: "",
             email: "",
             password: "",
           }}
-          validationSchema={validationSchema}
+          validationSchema={registerSchema}
+          validateOnBlur={true}
+          validateOnChange={true}
           onSubmit={register}
         >
-          {({
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-            touched,
-            errors,
-          }) => (
+          {({ isSubmitting }) => (
             <Form>
               <Box mb={2}>
-                <TextField
-                  fullWidth
-                  id="firstName"
-                  name="firstName"
-                  label="Nombre"
-                  value={values.firstName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.firstName && Boolean(errors.firstName)}
-                  helperText={touched.firstName && errors.firstName}
-                  variant="outlined"
-                />
+                <ABMInputComponent label="Nombre" name="nombre" type="text" />
               </Box>
-
               <Box mb={2}>
-                <TextField
-                  fullWidth
-                  id="lastName"
-                  name="lastName"
+                <ABMInputComponent
                   label="Apellido"
-                  value={values.lastName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.lastName && Boolean(errors.lastName)}
-                  helperText={touched.lastName && errors.lastName}
-                  variant="outlined"
+                  name="apellido"
+                  type="text"
                 />
               </Box>
 
               <Box mb={2}>
-                <TextField
-                  fullWidth
-                  id="email"
-                  name="email"
+                <ABMInputComponent
                   label="Correo Electrónico"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                  variant="outlined"
+                  name="email"
+                  type="text"
                 />
               </Box>
 
               <Box mb={2}>
-                <TextField
-                  fullWidth
-                  id="password"
-                  name="password"
+                <ABMInputComponent
                   label="Contraseña"
+                  name="password"
                   type={showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.password && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
-                  variant="outlined"
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">

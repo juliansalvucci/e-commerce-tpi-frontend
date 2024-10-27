@@ -9,25 +9,42 @@ import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import ListShowImage from "../components/ListShowImage";
+import { BrandContext } from "../context/BrandContext";
 import { CategoryContext } from "../context/CategoryContext";
+import { ProductContext } from "../context/ProductContext";
+import { SubCategoryContext } from "../context/SubCategoryContext";
 
-const ListCategoryPage = () => {
+const ListProductPage = () => {
   const navigate = useNavigate();
   const {
-    categories,
+    products,
     showDeleted,
     setShowDeleted,
-    deleteCategory,
-    restoreCategory,
-    selectCategoryForEdit,
-  } = useContext(CategoryContext);
+    deleteProduct,
+    restoreProduct,
+    formatProductForEdit,
+    selectProductForEdit,
+  } = useContext(ProductContext);
+  const { brands } = useContext(BrandContext);
+  const { categories } = useContext(CategoryContext);
+  const { subCategories } = useContext(SubCategoryContext);
 
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     name: true,
+    brand: true,
+    category: false,
+    subCategory: true,
+    price: true,
+    stock: true,
+    stockMin: false,
+    description: false,
+    color: false,
+    size: false,
     creationDatetime: true,
-    updateDatetime: true,
+    updateDatetime: false,
   });
 
   useEffect(() => {
@@ -49,7 +66,7 @@ const ListCategoryPage = () => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [categories]);
+  }, [products]);
 
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
@@ -63,6 +80,98 @@ const ListCategoryPage = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+    },
+    {
+      field: "brand",
+      headerName: "Marca",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "category",
+      headerName: "Categoría",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "subCategory",
+      headerName: "Subcategoría",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "price",
+      headerName: "Precio",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => {
+        const formattedPrice =
+          params.value % 1 === 0 // Para ver si tiene decimales
+            ? params.value.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })
+            : params.value.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+              });
+        return <span>{formattedPrice}</span>;
+      },
+    },
+    !showDeleted && {
+      field: "stock",
+      headerName: "Stock Disp.",
+      description: "Stock Disponible",
+      align: "center",
+      headerAlign: "center",
+      width: 70,
+      renderCell: (params) => {
+        const { stock, stockMin } = params.row;
+        let color = "#283b54";
+
+        if (stock <= stockMin) {
+          color = "red"; // stock <= stockMin
+        }
+
+        return <span style={{ color }}>{stock}</span>;
+      },
+    },
+    {
+      field: "stockMin",
+      headerName: "Stock Min.",
+      description: "Alerta de Stock Min.",
+      align: "center",
+      headerAlign: "center",
+      width: 70,
+    },
+    {
+      field: "description",
+      headerName: "Descripción",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "color",
+      headerName: "Color",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
+    },
+    {
+      field: "size",
+      headerName: "Tamaño",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
     },
     {
       field: "creationDatetime",
@@ -94,6 +203,7 @@ const ListCategoryPage = () => {
       headerAlign: "center",
       renderCell: (params) => (
         <Stack direction="row" spacing={1} justifyContent="center">
+          <ListShowImage imageURL={params.row.imageURL} />
           {!showDeleted ? (
             <>
               <ListEditButton onClick={() => handleEdit(params.row)} />
@@ -107,10 +217,10 @@ const ListCategoryPage = () => {
     },
   ].filter(Boolean); //Asegura que no hay columnas undefined (showDeleted=false entonces no se muestra la columna 'deleteDatetime')
 
-  const handleEdit = (cat) => {
+  const handleEdit = (product) => {
     Swal.fire({
-      title: "Editar Categoría",
-      text: "¿Estás seguro que quieres editar esta categoría?",
+      title: "Editar Producto",
+      text: "¿Estás seguro que quieres editar este producto?",
       showCancelButton: true,
       confirmButtonText: "Sí",
       cancelButtonText: "No",
@@ -121,35 +231,24 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        selectCategoryForEdit(cat);
-        navigate(`/admin/category/edit`);
+        const formattedProduct = formatProductForEdit(
+          product,
+          categories,
+          subCategories,
+          brands
+        );
+        if (formattedProduct) {
+          selectProductForEdit(formattedProduct);
+          navigate(`/admin/product/edit`);
+        }
       }
     });
   };
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "Borrar Categoría",
-      text: "¿Estás seguro que quieres borrar esta categoría?",
-      showCancelButton: true,
-      confirmButtonText: "Sí",
-      cancelButtonText: "No",
-      customClass: {
-        popup: "swal-question-popup",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteCategory(id);
-      }
-    });
-  };
-
-  const handleRestore = (id) => {
-    Swal.fire({
-      title: "Restaurar Categoría",
-      text: "¿Estas seguro que quieres restaurar esta categoría?",
+      title: "Borrar Producto",
+      text: "¿Estas seguro que quieres borrar este producto?",
       showCancelButton: true,
       confirmButtonText: "Si",
       cancelButtonText: "No",
@@ -160,7 +259,26 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        restoreCategory(id);
+        deleteProduct(id);
+      }
+    });
+  };
+
+  const handleRestore = (id) => {
+    Swal.fire({
+      title: "Restaurar Producto",
+      text: "¿Estas seguro que quieres restaurar este producto?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        restoreProduct(id);
       }
     });
   };
@@ -180,11 +298,11 @@ const ListCategoryPage = () => {
         sx={{ fontFamily: "Poppins" }}
       >
         {showDeleted
-          ? "Listado de Categorías Eliminadas"
-          : "Listado de Categorías Activas"}
+          ? "Listado de Productos Eliminados"
+          : "Listado de Productos Activos"}
       </Typography>
       <Box sx={{ height: "calc(100vh - 200px)" }}>
-        {loading || categories.length === 0 ? (
+        {loading || products.length === 0 ? (
           <Box
             sx={{
               display: "flex",
@@ -197,7 +315,7 @@ const ListCategoryPage = () => {
           </Box>
         ) : (
           <ListDataGrid
-            rows={categories}
+            rows={products}
             columns={columns}
             pageSize={pageSize}
             rowsPerPageOptions={[pageSize]}
@@ -217,7 +335,7 @@ const ListCategoryPage = () => {
           spacing={2}
           mt={2}
         >
-          <ListCreateButton label="Categoría" tipoClase={"category"} />
+          <ListCreateButton label="Producto" tipoClase={"product"} />
           <ListShowDeletedButton
             showDeleted={showDeleted}
             onClick={handleShowDeletedToggle}
@@ -228,4 +346,4 @@ const ListCategoryPage = () => {
   );
 };
 
-export default ListCategoryPage;
+export default ListProductPage;

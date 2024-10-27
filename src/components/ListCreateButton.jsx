@@ -1,24 +1,24 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-//import { useNavigate } from "react-router-dom";
 
-const ListCreateButton = ({ label }) => {
-  //const navigate = useNavigate();
+const ListCreateButton = ({ label, tipoClase }) => {
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    console.log("Crear Categoría");
-    //navigate("/create-category"); // Cambia la ruta según tu configuración
+    navigate(`/admin/${tipoClase}/create`);
   };
 
   return (
     <Button
       variant="contained"
       sx={{
-        backgroundColor: "#bed0dd",
-        color: "black",
+        backgroundColor: "#283b54",
+        color: "white",
         "&:hover": {
-          backgroundColor: "grey",
+          backgroundColor: "#bed0dd",
+          color: "black",
         },
       }}
       startIcon={<AddIcon />}

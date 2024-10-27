@@ -10,22 +10,26 @@ import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
 import { CategoryContext } from "../context/CategoryContext";
+import { SubCategoryContext } from "../context/SubCategoryContext";
 
-const ListCategoryPage = () => {
+const ListSubCategoryPage = () => {
   const navigate = useNavigate();
   const {
-    categories,
+    subCategories,
     showDeleted,
     setShowDeleted,
-    deleteCategory,
-    restoreCategory,
-    selectCategoryForEdit,
-  } = useContext(CategoryContext);
+    deleteSubCategory,
+    restoreSubCategory,
+    formatSubCategoryForEdit,
+    selectSubCategoryForEdit,
+  } = useContext(SubCategoryContext);
+  const { categories } = useContext(CategoryContext);
 
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     name: true,
+    category: true,
     creationDatetime: true,
     updateDatetime: true,
   });
@@ -49,7 +53,7 @@ const ListCategoryPage = () => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [categories]);
+  }, [subCategories]);
 
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
@@ -60,6 +64,13 @@ const ListCategoryPage = () => {
     {
       field: "name",
       headerName: "Nombre",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "category",
+      headerName: "Categoría",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -107,10 +118,10 @@ const ListCategoryPage = () => {
     },
   ].filter(Boolean); //Asegura que no hay columnas undefined (showDeleted=false entonces no se muestra la columna 'deleteDatetime')
 
-  const handleEdit = (cat) => {
+  const handleEdit = (subcat) => {
     Swal.fire({
-      title: "Editar Categoría",
-      text: "¿Estás seguro que quieres editar esta categoría?",
+      title: "Editar Subcategoría",
+      text: "¿Estás seguro que quieres editar esta subcategoría?",
       showCancelButton: true,
       confirmButtonText: "Sí",
       cancelButtonText: "No",
@@ -121,35 +132,22 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        selectCategoryForEdit(cat);
-        navigate(`/admin/category/edit`);
+        const formattedSubCategory = formatSubCategoryForEdit(
+          subcat,
+          categories
+        );
+        if (formattedSubCategory) {
+          selectSubCategoryForEdit(formattedSubCategory);
+          navigate(`/admin/subcategory/edit`);
+        }
       }
     });
   };
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "Borrar Categoría",
-      text: "¿Estás seguro que quieres borrar esta categoría?",
-      showCancelButton: true,
-      confirmButtonText: "Sí",
-      cancelButtonText: "No",
-      customClass: {
-        popup: "swal-question-popup",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteCategory(id);
-      }
-    });
-  };
-
-  const handleRestore = (id) => {
-    Swal.fire({
-      title: "Restaurar Categoría",
-      text: "¿Estas seguro que quieres restaurar esta categoría?",
+      title: "Borrar Subcategoría",
+      text: "¿Estas seguro que quieres borrar esta subcategoría?",
       showCancelButton: true,
       confirmButtonText: "Si",
       cancelButtonText: "No",
@@ -160,7 +158,26 @@ const ListCategoryPage = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        restoreCategory(id);
+        deleteSubCategory(id);
+      }
+    });
+  };
+
+  const handleRestore = (id) => {
+    Swal.fire({
+      title: "Restaurar Subcategoría",
+      text: "¿Estas seguro que quieres restaurar esta subcategoría?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        restoreSubCategory(id);
       }
     });
   };
@@ -180,11 +197,11 @@ const ListCategoryPage = () => {
         sx={{ fontFamily: "Poppins" }}
       >
         {showDeleted
-          ? "Listado de Categorías Eliminadas"
-          : "Listado de Categorías Activas"}
+          ? "Listado de Subcategorías Eliminadas"
+          : "Listado de Subcategorías Activas"}
       </Typography>
       <Box sx={{ height: "calc(100vh - 200px)" }}>
-        {loading || categories.length === 0 ? (
+        {loading || subCategories.length === 0 ? (
           <Box
             sx={{
               display: "flex",
@@ -197,7 +214,7 @@ const ListCategoryPage = () => {
           </Box>
         ) : (
           <ListDataGrid
-            rows={categories}
+            rows={subCategories}
             columns={columns}
             pageSize={pageSize}
             rowsPerPageOptions={[pageSize]}
@@ -217,7 +234,7 @@ const ListCategoryPage = () => {
           spacing={2}
           mt={2}
         >
-          <ListCreateButton label="Categoría" tipoClase={"category"} />
+          <ListCreateButton label="Subcategoría" tipoClase={"subcategory"} />
           <ListShowDeletedButton
             showDeleted={showDeleted}
             onClick={handleShowDeletedToggle}
@@ -228,4 +245,4 @@ const ListCategoryPage = () => {
   );
 };
 
-export default ListCategoryPage;
+export default ListSubCategoryPage;

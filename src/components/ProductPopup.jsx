@@ -56,11 +56,13 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     }
   };
 
+  /*
   const calculateTotal = () => {
     return shoppingList
       .reduce((total, product) => total + product.price * product.quantity, 0)
       .toFixed(2);
   };
+  */
 
   const handlerPurchase = () => {
     //Mostramos una alerta en el que se muestre el listado de los productos comprados (su titulo y cantidad)
@@ -78,7 +80,6 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         // Mostrar la segunda alerta si el usuario confirma la primera
-
         Swal.fire({
           icon: "success",
           title: "La compra se ha realizado con éxito",
@@ -105,15 +106,27 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
         </div>
 
         <div className="details-container">
-          <h2>{product.title}</h2>
+          <h1>{product.title}</h1>
           <div className="price-container">
             {/* Total por producto */}
             <span>Precio: </span>
-            <p>${(product.price * localQuantity).toFixed(2)}</p>
+            <p>
+              $
+              {(product.price * localQuantity).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </div>
 
           <span>Descripción: </span>
           <p>{product.description}</p>
+
+          {/* Aquí mostramos el stock disponible */}
+          <div className="stock-container">
+            <p>Stock disponible: {product.stock}</p>{" "}
+            {/* Aquí se muestra el stock */}
+          </div>
 
           <div className="buy-counter-buttoms">
             <div className="d-grid gap-2 buy-container">
@@ -125,15 +138,15 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
                 Comprar ahora
               </button>
             </div>
-            <div className="counter-products">
+            <div className="products-counter-buttons">
               <button
                 className="btn btn-outline-primary"
                 onClick={handleDecrement}
               >
                 -
               </button>
-              <button className="btn btn-primary">
-                <span>{localQuantity}</span>
+              <button className="btn btn-primary local-quantity">
+                {localQuantity}
               </button>
               <button
                 className="btn btn-outline-primary"
@@ -141,29 +154,29 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
               >
                 +
               </button>
-            </div>
 
-            {added ? (
-              // Si el producto ya está en el carrito, mostramos el botón para remover
-              <div className="circle">
-                <img
-                  src={removeProductToCart}
-                  alt="Remover del carrito"
-                  className="remove_button"
-                  onClick={handleRemoveProduct}
-                />
-              </div>
-            ) : (
-              // Si el producto no está en el carrito, mostramos el botón para agregar
-              <div className="circle">
-                <img
-                  src={addProductToCart}
-                  alt="Agregar al carrito"
-                  className="add_button"
-                  onClick={handleAddProduct}
-                />
-              </div>
-            )}
+              {added ? (
+                // Si el producto ya está en el carrito, mostramos el botón para remover
+                <div className="circle">
+                  <img
+                    src={removeProductToCart}
+                    alt="Remover del carrito"
+                    className="remove_button"
+                    onClick={handleRemoveProduct}
+                  />
+                </div>
+              ) : (
+                // Si el producto no está en el carrito, mostramos el botón para agregar
+                <div className="circle">
+                  <img
+                    src={addProductToCart}
+                    alt="Agregar al carrito"
+                    className="add_button"
+                    onClick={handleAddProduct}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

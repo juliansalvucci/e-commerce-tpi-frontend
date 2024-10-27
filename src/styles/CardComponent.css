@@ -1,23 +1,23 @@
 /* Asegúrate de que el contenedor de los productos esté estilizado */
-.products {
+.products-page {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
 /* Estiliza la lista de productos como una cuadrícula */
-.products ul {
+.products-page ul {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: minmax(200px, 1fr);
   gap: 2rem;
   list-style-type: none; /* Elimina los puntos de la lista si estás usando ul */
   padding: 0;
-  margin: 0;
+  margin: 50px;
 }
 
 /* Estiliza cada elemento de la lista (producto) */
-.products li {
+.products-page li {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -28,38 +28,39 @@
   padding: 1rem;
 }
 
-.products h1 {
+.products-page h1 {
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 0px;
+  margin-top: 40px;
+  margin-bottom: -5px;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-style: normal;
 }
 
-.products hr {
+.products-page hr {
   margin-bottom: 50px;
   width: 50%; /* Ajusta el ancho según sea necesario */
   border: 2px solid black; /* Color oscuro */
   margin-left: auto;
   margin-right: auto; /* Esto centra el hr */
+  margin-bottom: 0px;
 }
 
 /* Estiliza la descripción y precio */
-.products span {
+.products-page span {
   font-size: 1rem;
   opacity: 0.9;
 }
 
 /* Estiliza las imágenes */
-.products img {
+.products-page img {
   border-radius: 8px;
-  width: 200px;
-  height: 200px;
+  width: 38vh;
+  height: 38vh;
   aspect-ratio: 16/9;
   display: block;
   object-fit: cover;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 /* Estilo específico para los botones dentro del card component */
@@ -102,13 +103,19 @@
   border-radius: 30px;
   background: #a6a6a6;
   opacity: 0.8;
-  flex-wrap: nowrap;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   position: absolute;
-  top: 155px;
-  right: 28px;
+  top: 200px;
+  right: 23px;
   z-index: 1;
+  flex-direction: column;
+}
+
+.stock {
+  color: #f10b0b;
+  font-size: 0.7rem;
+  font-weight: normal;
 }
 
 /*Paginación de productos*/
@@ -117,9 +124,8 @@
   justify-content: center;
   list-style: none;
   padding: 0;
-  margin-top: 80px;
+  margin-top: 40px;
 }
-
 
 .page-item .page-link {
   cursor: pointer;
@@ -140,10 +146,10 @@
 
 /* Cambio de fondo al pasar el mouse sobre los elementos "Anterior" y "Siguiente" */
 .pagination .page-item:not(.disabled) .page-link:hover {
-  background-color: #b1c7e4; 
-  color: white; 
+  background-color: #b1c7e4;
+  color: white;
 }
 
-.product-alert{
+.product-alert {
   cursor: pointer;
 }

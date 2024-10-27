@@ -1,5 +1,6 @@
 import { useReducer } from "react";
 import { CartContext } from "./CartContext";
+import Swal from "sweetalert2";
 
 export const CartProvider = ({ children }) => {
   const initialState = [];
@@ -15,9 +16,23 @@ export const CartProvider = ({ children }) => {
       case "[CART] Increment Quantity":
         //Recorro los productos y el que coincide con el id del producto, se le incrementa la cantidad
         return state.map((product) => {
-          const cant = product.quantity + 1;
-          if (product.id === action.payload)
-            return { ...product, quantity: cant };
+          // Si la cantidad es menor que el stock disponible, se incrementa la cantidad
+          if (
+            product.id === action.payload &&
+            product.quantity < product.stock
+          ) {
+            return { ...product, quantity: product.quantity + 1 };
+          } else if (
+            product.id === action.payload &&
+            product.quantity >= product.stock
+          ) {
+            // Si se alcanza el stock disponible, mostrar alerta
+            Swal.fire({
+              icon: "warning",
+              title: "No hay más stock disponible",
+              text: `El producto ${product.name} ha alcanzado el límite de stock.`,
+            });
+          }
           return product;
         });
       case "[CART] Decrement Quantity":
@@ -29,6 +44,8 @@ export const CartProvider = ({ children }) => {
             return { ...product, quantity: cant };
           return product;
         });
+      case "[CART] Empty Cart":
+        return [];
 
       default:
         return state;
@@ -70,6 +87,13 @@ export const CartProvider = ({ children }) => {
     dispatch(action);
   };
 
+  const emptyCart = () => {
+    const action = {
+      type: "[CART] Empty Cart",
+    };
+    dispatch(action);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -78,6 +102,7 @@ export const CartProvider = ({ children }) => {
         removeProduct,
         incrementQuantity,
         decrementQuantity,
+        emptyCart,
       }}
     >
       {children}
