@@ -3,6 +3,7 @@ import { UserContext } from "./UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -37,13 +38,16 @@ export const UserProvider = ({ children }) => {
   const login = async (values, { setSubmitting }) => {
     try {
       // Llamada POST al backend usando Axios
-      const response = await axios.post("http://localhost:8080/auth/signin", {
+      const response = await api.post("/auth/signin", {
         email: values.email,
         password: values.password,
       });
       //console.log("Respuesta del servidor:", response.data);
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", response.data.firstName +' '+ response.data.lastName );
+      localStorage.setItem(
+        "user",
+        response.data.firstName + " " + response.data.lastName
+      );
       Swal.fire({
         icon: "success",
         title: "Bienvenido",
