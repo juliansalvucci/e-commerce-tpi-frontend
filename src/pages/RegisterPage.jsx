@@ -12,7 +12,7 @@ import { Formik, Form } from "formik";
 import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
 import ABMInputComponent from "../components/ABMInputComponent";
-import DatePickerComponent from "../components/DatePickerComponent"; // Asegúrate de importar el DatePicker
+import DatePickerComponent from "../components/DatePickerComponent";
 import { useUser } from "../context/UserProvider.jsx";
 import { registerSchema } from "../schemas";
 
@@ -90,7 +90,7 @@ export const RegisterPage = () => {
             apellido: "",
             email: "",
             password: "",
-            fechaNacimiento: null, // Nuevo campo de fecha
+            dateBirth: null,
           }}
           validationSchema={registerSchema}
           validateOnBlur={true}
@@ -138,12 +138,10 @@ export const RegisterPage = () => {
                 />
               </Box>
 
-              {/* Nuevo campo de fecha */}
               <Box mb={2}>
                 <DatePickerComponent
                   label="Fecha de Nacimiento"
-                  name="fechaNacimiento"
-                  fullWidth
+                  name="dateBirth"
                 />
               </Box>
 

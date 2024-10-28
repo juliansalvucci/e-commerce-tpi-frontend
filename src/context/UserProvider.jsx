@@ -43,6 +43,7 @@ export const UserProvider = ({ children }) => {
       });
       //console.log("Respuesta del servidor:", response.data);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", response.data.firstName +' '+ response.data.lastName );
       Swal.fire({
         icon: "success",
         title: "Bienvenido",
