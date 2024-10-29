@@ -215,6 +215,11 @@ const SubCategoryProvider = ({ children }) => {
     setSelectedSubCategory(subCategory);
   };
 
+  const findSubCategoryById = (subcatId) => {
+    const subCategory = subCategories.find((subcat) => subcat.id === subcatId);
+    return subCategory ? subCategory.name : "";
+  };
+
   return (
     <SubCategoryContext.Provider
       value={{
@@ -229,6 +234,7 @@ const SubCategoryProvider = ({ children }) => {
         setShowDeleted,
         formatSubCategoryForEdit,
         selectSubCategoryForEdit,
+        findSubCategoryById,
       }}
     >
       {children}

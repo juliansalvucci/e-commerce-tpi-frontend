@@ -194,6 +194,11 @@ const BrandProvider = ({ children }) => {
     setSelectedBrand(brand);
   };
 
+  const findBrandById = (brandId) => {
+    const brand = brands.find((brand) => brand.id === brandId);
+    return brand ? brand.name : "";
+  };
+
   return (
     <BrandContext.Provider
       value={{
@@ -207,6 +212,7 @@ const BrandProvider = ({ children }) => {
         restoreBrand,
         setShowDeleted,
         selectBrandForEdit,
+        findBrandById,
       }}
     >
       {children}
