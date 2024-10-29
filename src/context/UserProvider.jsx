@@ -7,12 +7,14 @@ import api from "../api/api";
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const register = async (values, { setSubmitting }) => {
+    console.log("ingreso a funcion")
     try {
       // Llamada POST al backend usando Axios
       const response = await api.post("/auth/signup", {
         firstName: values.nombre,
         lastName: values.apellido,
         email: values.email,
+        dateBirth: values.dateBirth,
         password: values.password,
       });
       console.log("Respuesta del servidor:", response.data);
@@ -47,6 +49,7 @@ export const UserProvider = ({ children }) => {
         "user",
         response.data.firstName + " " + response.data.lastName
       );
+      redirect(response.data.role);
       Swal.fire({
         icon: "success",
         title: "Bienvenido",
@@ -63,6 +66,15 @@ export const UserProvider = ({ children }) => {
       // Aquí puedes manejar el error, como mostrar un mensaje de error
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const redirect = (role) => {
+    if (role == "USER") {
+      console.log("rutacliente");
+    }
+    if(role == "ADMIN"){
+      console.log("rutasadmin")
     }
   };
 
