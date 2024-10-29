@@ -32,86 +32,92 @@ export const CartPopup = ({ isVisible, onClose }) => {
         className="scroll-container"
         tabIndex="0"
       >
-        <h3>Carrito de Compras</h3>
+        <button className="x-btn" onClick={onClose}>
+          X
+        </button>
 
-        <ul>
-          {shoppingList.map((product) => (
-            <div className="cart-product" key={product.id}>
-              <li>
-                <button className="x-btn" onClick={onClose}>
-                  X
-                </button>
+        {/*Si no hay productos muestra un mensaje*/}
+        {shoppingList.length === 0 ? (
+          <h5>Aún no ha agregado productos al carrito!!</h5>
+        ) : (
+          <>
+            <h3>Carrito de Compras</h3>
+            <ul>
+              {shoppingList.map((product) => (
+                <div className="cart-product" key={product.id}>
+                  <li>
+                    <div className="image-container">
+                      <img
+                        className="cart-img"
+                        src={product.imageURL}
+                        alt={product.name}
+                      />
+                    </div>
 
-                <div className="image-container">
-                  <img
-                    className="cart-img"
-                    src={product.imageURL}
-                    alt={product.name}
-                  />
+                    <div className="title-container">
+                      <strong>{product.name}</strong>
+                    </div>
+                    <div className="price-container">
+                      {/* Total por producto */}
+                      <p>
+                        $
+                        {(product.price * product.quantity).toLocaleString(
+                          "en-US",
+                          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                        )}
+                      </p>
+                    </div>
+
+                    <div className="counter-products">
+                      <div>
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => decrementQuantity(product.id)}
+                        >
+                          -
+                        </button>
+
+                        <button className="btn btn-primary">
+                          {product.quantity}
+                        </button>
+
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => incrementQuantity(product.id)}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="delete-group">
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => removeProduct(product.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  </li>
                 </div>
+              ))}
+            </ul>
 
-                <div className="title-container">
-                  <strong>{product.name}</strong>
-                </div>
-                <div className="price-container">
-                  {/* Total por producto */}
-                  <p>
-                    $
-                    {(product.price * product.quantity).toLocaleString(
-                      "en-US",
-                      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-                    )}
-                  </p>
-                </div>
-
-                <div className="counter-products">
-                  <div>
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={() => decrementQuantity(product.id)}
-                    >
-                      -
-                    </button>
-
-                    <button className="btn btn-primary">
-                      {product.quantity}
-                    </button>
-
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={() => incrementQuantity(product.id)}
-                    >
-                      +
-                    </button>
-                  </div>
-
-                  <div className="delete-group">
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => removeProduct(product.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-              </li>
+            <hr />
+            {/* Mostrar el total de los productos en el carrito */}
+            <div className="total-container">
+              <h4>
+                Total ({calculateTotalQuantity()}): {calculateTotal()}
+              </h4>
             </div>
-          ))}
-        </ul>
 
-        <hr />
-        {/* Mostrar el total de los productos en el carrito */}
-        <div className="total-container">
-          <h4>
-            Total ({calculateTotalQuantity()}): {calculateTotal()}
-          </h4>
-        </div>
-
-        <div className="close-botton">
-          <button className="btn btn-primary" onClick={onClose}>
-            Continuar compra
-          </button>
-        </div>
+            <div className="close-botton">
+              <button className="btn btn-primary" onClick={onClose}>
+                Continuar compra
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
