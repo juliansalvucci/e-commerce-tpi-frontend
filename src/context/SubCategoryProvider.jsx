@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { SubCategoryContext } from "./SubCategoryContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
+import api from "../api/api";
 
 const SubCategoryProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -15,10 +15,10 @@ const SubCategoryProvider = ({ children }) => {
   // Función para obtener todas las subcategorías
   const fetchSubCategories = async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         showDeleted
-          ? "http://localhost:8080/subcategory/deleted"
-          : "http://localhost:8080/subcategory"
+          ? "/subcategory/deleted"
+          : "/subcategory"
       );
       const updatedSubCategories = response.data.map((subcat) => ({
         ...subcat,
@@ -50,8 +50,8 @@ const SubCategoryProvider = ({ children }) => {
   // Función para crear una nueva subcategoría
   const createSubCategory = async (newSubCategory) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/subcategory",
+      const response = await api.post(
+        "/subcategory",
         newSubCategory
       );
       setSubCategories((prevSubCategories) => [
@@ -104,8 +104,8 @@ const SubCategoryProvider = ({ children }) => {
         return;
       }
       const prevSubCategory = selectedSubCategory.name;
-      const response = await axios.put(
-        `http://localhost:8080/subcategory/${id}`,
+      const response = await api.put(
+        `/subcategory/${id}`,
         updatedSubCategory
       );
       setSubCategories((prevSubCategories) =>
@@ -145,7 +145,7 @@ const SubCategoryProvider = ({ children }) => {
   // Función para eliminar una subcategoría
   const deleteSubCategory = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/subcategory/${id}`);
+      await api.delete(`/subcategory/${id}`);
       setSubCategories((prevSubCategories) =>
         prevSubCategories.filter((subcat) => subcat.id !== id)
       );
@@ -179,7 +179,7 @@ const SubCategoryProvider = ({ children }) => {
   // Función para restaurar una subcategoría eliminada
   const restoreSubCategory = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/subcategory/recover/${id}`);
+      await api.post(`/subcategory/recover/${id}`);
       await fetchSubCategories();
       const restoredSubCategory = subCategories.find(
         (subcategory) => subcategory.id === id
