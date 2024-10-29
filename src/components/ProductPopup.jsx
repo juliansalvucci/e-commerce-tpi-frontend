@@ -4,6 +4,7 @@ import addProductToCart from "../assets/add-product.png";
 import removeProductToCart from "../assets/remove-product.png";
 import Swal from "sweetalert2";
 import "../styles/ProductPopUp.css";
+import { useNavigate } from "react-router-dom";
 
 export const ProductPopup = ({ isVisible, onClose, product }) => {
   const {
@@ -12,11 +13,14 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
+    updateStock,
+    emptyCart,
   } = useContext(CartContext);
 
   // Estado local para controlar si el producto ya está en el carrito
   const [added, setAdded] = useState(false); // Aquí se declara `added`
   const [localQuantity, setLocalQuantity] = useState(product.quantity || 1); // Cantidad por defecto
+  const navigate = useNavigate();
 
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {
@@ -56,16 +60,25 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     }
   };
 
-  /*
-  const calculateTotal = () => {
-    return shoppingList
-      .reduce((total, product) => total + product.price * product.quantity, 0)
-      .toFixed(2);
+  const onSubmit = async () => {
+    // Itera sobre los productos en el carrito (shoppingList) para actualizar el stock de cada uno
+    try {
+      // Itera sobre los productos del carrito y actualiza el stock
+      for (const product of shoppingList) {
+        const updatedStock = product.stock - product.quantity;
+
+        // Actualiza el stock en la base de datos
+        if (updatedStock >= 0) {
+          await updateStock(product.id, updatedStock);
+        }
+      }
+    } catch (error) {
+      console.error("Error al procesar la compra:", error);
+    }
   };
-  */
 
   const handlerPurchase = () => {
-    //Mostramos una alerta en el que se muestre el listado de los productos comprados (su titulo y cantidad)
+    //Mostramos una alerta para que el usuario confirme la compre antes de continuar
     Swal.fire({
       title: "Finalizar compra",
       text: "¿Desea confirmar la compra?",
@@ -78,6 +91,7 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
         cancelButton: "swal-cancel-button",
       },
     }).then((result) => {
+      onSubmit();
       if (result.isConfirmed) {
         // Mostrar la segunda alerta si el usuario confirma la primera
         Swal.fire({
@@ -87,6 +101,13 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
             popup: "swal-success-popup",
             confirmButton: "swal-ok-button", // Clase personalizada para el botón "OK"
           },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Solo si confirma en la alerta de éxito
+            emptyCart();
+            navigate("/");
+            window.location.reload(); // Recarga la página después de redirigir al Home
+          }
         });
       }
     });
