@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BrandContext } from "./BrandContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
+import api from "../api/api";
 
 const BrandProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -15,10 +16,10 @@ const BrandProvider = ({ children }) => {
   // Función para obtener todas las marcas
   const fetchBrands = async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         showDeleted
-          ? "http://localhost:8080/brand/deleted"
-          : "http://localhost:8080/brand"
+          ? "/brand/deleted"
+          : "/brand"
       );
       const updatedBrands = response.data.map((brand) => ({
         ...brand,
@@ -50,8 +51,8 @@ const BrandProvider = ({ children }) => {
   // Función para crear una nueva marca
   const createBrand = async (newBrand) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/brand",
+      const response = await api.post(
+        "/brand",
         newBrand
       );
       setBrands((prevBrands) => [...prevBrands, response.data]);
@@ -99,8 +100,8 @@ const BrandProvider = ({ children }) => {
         return;
       }
       const prevBrand = selectedBrand.name;
-      const response = await axios.put(
-        `http://localhost:8080/brand/${id}`,
+      const response = await api.put(
+        `/brand/${id}`,
         updatedBrand
       );
       setBrands((prevBrands) =>
@@ -140,7 +141,7 @@ const BrandProvider = ({ children }) => {
   // Función para eliminar una marca
   const deleteBrand = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/brand/${id}`);
+      await api.delete(`http://localhost:8080/brand/${id}`);
       setBrands((prevBrands) => prevBrands.filter((brand) => brand.id !== id));
       Swal.fire({
         icon: "success",
@@ -172,7 +173,7 @@ const BrandProvider = ({ children }) => {
   // Función para restaurar una marca eliminada
   const restoreBrand = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/brand/recover/${id}`);
+      await api.post(`http://localhost:8080/brand/recover/${id}`);
       await fetchBrands();
       const restoredBrand = brands.find((brand) => brand.id === id);
       Swal.fire({

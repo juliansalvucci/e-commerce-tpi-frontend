@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { UserContext } from "./UserContext";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
@@ -10,7 +9,7 @@ export const UserProvider = ({ children }) => {
   const register = async (values, { setSubmitting }) => {
     try {
       // Llamada POST al backend usando Axios
-      const response = await axios.post("http://localhost:8080/auth/signup", {
+      const response = await api.post("/auth/signup", {
         firstName: values.nombre,
         lastName: values.apellido,
         email: values.email,
