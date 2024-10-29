@@ -29,6 +29,18 @@ const StyledDataGrid = styled(DataGrid)(({}) => ({
   "& .MuiDataGrid-menuIcon, & .MuiDataGrid-sortIcon": {
     color: "#ffffff",
   },
+  "& .MuiDataGrid-cellCheckbox": {
+    color: "#283b54",
+    "& .MuiCheckbox-root": {
+      color: "#283b54",
+      "&.Mui-checked": {
+        color: "#283b54",
+      },
+      "&.Mui-checked:hover": {
+        backgroundColor: "rgba(40, 59, 84, 0.08)",
+      },
+    },
+  },
   "& .MuiCheckbox-root": {
     color: "#ffffff",
   },
