@@ -63,7 +63,7 @@ export const productSchema = yup.object().shape({
   subcategoria: yup.string().required("Obligatorio"),
   precio: yup
     .number()
-    .positive("El precio debe ser mayor a $0")
+    .min(1, "El precio no puede ser menor a $1")
     .required("Obligatorio"),
   stock: yup
     .number()
