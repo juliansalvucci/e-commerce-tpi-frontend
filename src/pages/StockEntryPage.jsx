@@ -73,6 +73,17 @@ const StockEntryPage = () => {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
+  // Limpia el grid entero
+  const handleResetGrid = () => {
+    setSelectedRows([]);
+    setBrandFilter("");
+    setCategoryFilter("");
+    setSubCategoryFilter("");
+    setLowStockFilter(false);
+    setselectedCategoryP("");
+    handleApplyFilters();
+  };
+
   // Maneja la aplicación de filtros
   const handleApplyFilters = () => {
     const isAnyFilterApplied =
@@ -400,6 +411,7 @@ const StockEntryPage = () => {
       <ListStockPopup
         open={dialogOpen}
         onClose={handleDialogClose}
+        resetGrid={handleResetGrid}
         selectedRows={filteredProducts.filter((row) =>
           selectedRows.includes(row.id)
         )}
