@@ -83,6 +83,10 @@ export const productSchema = yup.object().shape({
 export const registerSchema = yup.object().shape({
   nombre: yup.string().required("El nombre es obligatorio"),
   apellido: yup.string().required("El apellido es obligatorio"),
+  dateBirth: yup
+    .date()
+    .typeError("La fecha de nacimiento debe ser válida")
+    .required("La fecha de nacimiento es obligatoria"),
   email: yup
     .string()
     .email("Correo electrónico inválido")

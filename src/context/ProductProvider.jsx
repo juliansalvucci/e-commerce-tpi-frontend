@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { ProductContext } from "./ProductContext";
 import useFormatDateTime from "../utils/useFormatDateTime";
 import useNoImage from "../utils/useNoImage";
+import api from "../api/api";
+
 
 export const ProductProvider = ({ children }) => {
   const noImageURL = useNoImage();
@@ -17,10 +18,10 @@ export const ProductProvider = ({ children }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         showDeleted
-          ? "http://localhost:8080/product/deleted"
-          : "http://localhost:8080/product"
+          ? "/product/deleted"
+          : "/product"
       );
       const updatedProducts = response.data.map((product) => ({
         ...product,
@@ -53,8 +54,8 @@ export const ProductProvider = ({ children }) => {
   // Función para crear un nuevo producto
   const createProduct = async (newProduct) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/product",
+      const response = await api.post(
+        "/product",
         newProduct
       );
       setProducts((prevProducts) => [...prevProducts, response.data]);
@@ -112,8 +113,8 @@ export const ProductProvider = ({ children }) => {
         return;
       }
       const prevProduct = selectedProduct.name;
-      const response = await axios.put(
-        `http://localhost:8080/product/${id}`,
+      const response = await api.put(
+        `/product/${id}`,
         updatedProduct
       );
       setProducts((prevProducts) =>
@@ -153,7 +154,7 @@ export const ProductProvider = ({ children }) => {
   // Función para eliminar un producto
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/product/${id}`);
+      await api.delete(`/product/${id}`);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.id !== id)
       );
@@ -187,7 +188,7 @@ export const ProductProvider = ({ children }) => {
   // Función para restaurar un producto eliminado
   const restoreProduct = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/product/recover/${id}`);
+      await api.post(`/product/recover/${id}`);
       await fetchProducts();
       const restoredProduct = products.find((product) => product.id === id);
       Swal.fire({
