@@ -138,6 +138,41 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Función para crear un nuevo pedido
+  const createOrder = async (newOrder) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/orders",
+        newOrder
+      );
+      setProducts((prevOrders) => [...prevOrders, response.data]);
+      Swal.fire({
+        icon: "success",
+        title: "Exito!",
+        text: `El producto ${response.data.name} fue creado con éxito!`,
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        Swal.fire({
+          icon: "error",
+          title: "La orden no pudo ser creado",
+          text: "Ya existe un pedido con ese nombre",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al crear producto:", error); // Por ahora mostramos el error por consola por comodidad
+      }
+    }
+  };
+
   const selectedProductForEdit = (product) => {
     dispatch(product);
   };
@@ -154,6 +189,7 @@ export const CartProvider = ({ children }) => {
         updateStock,
         selectedProductForEdit,
         emptyCart,
+        createOrder,
       }}
     >
       {children}

@@ -12,6 +12,7 @@ export const CartPage = () => {
     incrementQuantity,
     decrementQuantity,
     updateStock,
+    createOrder,
     emptyCart,
   } = useContext(CartContext);
 
@@ -31,22 +32,47 @@ export const CartPage = () => {
     );
   };
 
+  /*
   const onSubmit = async () => {
     // Itera sobre los productos en el carrito (shoppingList) para actualizar el stock de cada uno
     try {
       // Itera sobre los productos del carrito y actualiza el stock
       for (const product of shoppingList) {
+        
         const updatedStock = product.stock - product.quantity;
 
         // Actualiza el stock en la base de datos
         if (updatedStock >= 0) {
           await updateStock(product.id, updatedStock);
         }
+          
+        
       }
     } catch (error) {
       console.error("Error al procesar la compra:", error);
     }
   };
+  */
+
+  const onSubmit = async () => {
+    try {
+      // Crea el objeto de datos para la solicitud
+      const newOrder = {
+        userEmail: "usuario@ejemplo.com", 
+        orderDetails: shoppingList.map(product => ({
+          productId: product.id, 
+          amount: product.quantity 
+        }))
+      };
+  
+      // Envía la solicitud de creación de orden al backend
+      await createOrder(newOrder);
+      console.log("Orden creada exitosamente");
+    } catch (error) {
+      console.error("Error al procesar la compra:", error);
+    }
+  };
+  
 
   const handlerPurchase = () => {
     if (shoppingList.length === 0) {
