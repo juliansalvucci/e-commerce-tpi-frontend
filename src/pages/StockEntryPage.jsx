@@ -10,12 +10,15 @@ import { BrandContext } from "../context/BrandContext";
 import { CategoryContext } from "../context/CategoryContext";
 import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
+import useTextfieldTheme from "../utils/useTextfieldTheme";
 
 const StockEntryPage = () => {
   const { products } = useContext(ProductContext);
   const { brands, findBrandById } = useContext(BrandContext);
   const { categories, findCategoryById } = useContext(CategoryContext);
   const { subCategories, findSubCategoryById } = useContext(SubCategoryContext);
+
+  const styles = useTextfieldTheme();
 
   const [selectedCategoryP, setselectedCategoryP] = useState("");
   const [filteredSubCategories, setFilteredSC] = useState(subCategories);
@@ -44,21 +47,6 @@ const StockEntryPage = () => {
     updateDatetime: false,
     deleteDatetime: false,
   });
-
-  const styles = {
-    variant: "filled",
-    InputProps: {
-      style: {
-        borderColor: "#d7c4ab",
-        color: "white",
-      },
-    },
-    InputLabelProps: {
-      style: {
-        color: "#d1d1d1",
-      },
-    },
-  };
 
   useEffect(() => {
     const updatePageSize = () => {
@@ -127,7 +115,7 @@ const StockEntryPage = () => {
 
   const handleCreateStockEntryClick = () => {
     if (selectedRows.length > 0) {
-    setDialogOpen(true);
+      setDialogOpen(true);
     } else {
       Swal.fire({
         icon: "error",
