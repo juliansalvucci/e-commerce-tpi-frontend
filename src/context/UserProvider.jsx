@@ -7,11 +7,10 @@ import api from "../api/api";
 
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [role, setRole] = useState();
   const [email, setEmail] = useState();
   const [userName, setUsername] = useState();
-
-  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
