@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Formik, Form } from "formik";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
@@ -7,7 +7,6 @@ import ABMSelectComponent from "../components/ABMSelectComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
 import { subCategorySchema } from "../schemas";
-import "../styles/ABM.css";
 
 const ABMSubCategoryPage = () => {
   const { createSubCategory, editSubCategory, selectedSubCategory } =
@@ -18,7 +17,7 @@ const ABMSubCategoryPage = () => {
     try {
       if (!selectedSubCategory) {
         await createSubCategory({
-          name: values.nombre,
+          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
           categoryId: values.categoria,
         });
         resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
@@ -36,17 +35,41 @@ const ABMSubCategoryPage = () => {
   };
 
   return (
-    <Box className="background" sx={{}}>
-      <Box className="container abm-subcategory-page">
-        {/*Typography queda muy feo aca, mejor HTML*/}
-        <h2 className="title">
-          {selectedSubCategory
-            ? "Editar Subcategoría"
-            : "Creá una Subcategoría"}
-          <p className="subtitle">
-            {selectedSubCategory ? `${selectedSubCategory.name}` : ""}
-          </p>
-        </h2>
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
+        {selectedSubCategory ? "Editar Subcategoría" : "Crear Subcategoría"}
+        <Typography
+          variant="overline"
+          align="center"
+          color="white"
+          gutterBottom
+          sx={{ display: "block", fontFamily: "Poppins" }}
+        >
+          {selectedSubCategory ? `${selectedSubCategory.name}` : ""}
+        </Typography>
+      </Typography>
+      <Box
+        sx={{
+          backgroundColor: "#283b54",
+          borderRadius: "20px",
+          padding: 3,
+          width: "50%",
+        }}
+      >
         <Formik
           initialValues={{
             nombre: selectedSubCategory?.name || "",
@@ -58,7 +81,14 @@ const ABMSubCategoryPage = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Box sx={{ mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
                 <ABMInputComponent
                   label="Nombre"
                   name="nombre"
@@ -66,7 +96,14 @@ const ABMSubCategoryPage = () => {
                   placeholder="Ingrese el nombre"
                 />
               </Box>
-              <Box sx={{ mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
                 <ABMSelectComponent
                   label="Categoría"
                   name="categoria"

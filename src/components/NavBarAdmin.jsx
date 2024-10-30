@@ -1,301 +1,62 @@
-import React, { useState, useEffect } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  Collapse,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
-import { NavLink, useLocation } from "react-router-dom";
-import ListIcon from "@mui/icons-material/List";
-import AssessmentIcon from "@mui/icons-material/Assessment";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import PersonIcon from "@mui/icons-material/Person";
+import { useLocation, NavLink } from "react-router-dom";
+import { Box, IconButton, Breadcrumbs, Typography, Link } from "@mui/material";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 
-const NavBar = () => {
-  const navbarStyle = {
-    backgroundColor: "#283b54",
-  };
-
-  const linkStyle = {
-    color: "#C2E1FF",
-    textDecoration: "none",
-  };
-
-  const [opacity, setOpacity] = useState(1);
-  const [open, setOpen] = useState(false);
-  const [openBrand, setOpenBrand] = useState(false);
-  const [openCategory, setOpenCategory] = useState(false);
-  const [openProduct, setOpenProduct] = useState(false);
-  const [openSubCategory, setOpenSubCategory] = useState(false);
-
+const NavBarAdmin = () => {
   const location = useLocation();
 
-  useEffect(() => {
-    // Resetear el estado cuando cambie la ruta
-    setOpen(false);
-    setOpenBrand(false);
-    setOpenCategory(false);
-    setOpenProduct(false);
-    setOpenSubCategory(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const maxScroll = 200;
-      const newOpacity = Math.max(1 - scrollY / maxScroll, 0);
-      setOpacity(newOpacity);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const handleToggle = () => {
-    setOpen(!open);
+  // Lógica para Breadcrumbs basada en la ruta actual
+  const breadcrumbsMap = {
+    "/admin": ["Principal", "Dashboard"],
+    "/admin/brand/create": ["Administración", "Marca", "Crear"],
+    "/admin/brand/edit": ["Administración", "Marca", "Editar"],
+    "/admin/brand/list": ["Administración", "Marca", "Listado"],
+    "/admin/category/create": ["Administración", "Categoría", "Crear"],
+    "/admin/category/edit": ["Administración", "Categoría", "Editar"],
+    "/admin/category/list": ["Administración", "Categoría", "Listado"],
+    "/admin/product/create": ["Administración", "Producto", "Crear"],
+    "/admin/product/edit": ["Administración", "Producto", "Editar"],
+    "/admin/product/list": ["Administración", "Producto", "Listado"],
+    "/admin/product/stock": ["Administración", "Producto", "Stock"],
+    "/admin/subcategory/create": ["Administración", "Subcategoría", "Crear"],
+    "/admin/subcategory/edit": ["Administración", "Subcategoría", "Editar"],
+    "/admin/subcategory/list": ["Administración", "Subcategoría", "Listado"],
+    "/admin/order/list": ["Administración", "Pedido", "Listado"],
+    "/admin/report/clients": ["Reportes", "Clientes"],
+    "/admin/report/sales": ["Reportes", "Ventas"],
+    "/admin/report/stock": ["Reportes", "Stock"],
   };
 
-  const handleToggleBrand = () => {
-    setOpenBrand(!openBrand);
-    openCategory ? setOpenCategory(!openCategory) : "";
-    openProduct ? setOpenProduct(!openProduct) : "";
-    openSubCategory ? setOpenSubCategory(!openSubCategory) : "";
-  };
-
-  const handleToggleCategory = () => {
-    setOpenCategory(!openCategory);
-    openBrand ? setOpenBrand(!openBrand) : "";
-    openProduct ? setOpenProduct(!openProduct) : "";
-    openSubCategory ? setOpenSubCategory(!openSubCategory) : "";
-  };
-
-  const handleToggleProduct = () => {
-    setOpenProduct(!openProduct);
-    openBrand ? setOpenBrand(!openBrand) : "";
-    openCategory ? setOpenCategory(!openCategory) : "";
-    openSubCategory ? setOpenSubCategory(!openSubCategory) : "";
-  };
-
-  const handleToggleSubCategory = () => {
-    setOpenSubCategory(!openSubCategory);
-    openBrand ? setOpenBrand(!openBrand) : "";
-    openCategory ? setOpenCategory(!openCategory) : "";
-    openProduct ? setOpenProduct(!openProduct) : "";
-  };
+  const breadcrumbs = breadcrumbsMap[location.pathname] || [""];
 
   return (
-    <AppBar position="static" style={{ ...navbarStyle, opacity }}>
-      <Toolbar>
-        <Typography variant="h6" style={linkStyle}>
-          <NavLink to="/admin" style={linkStyle}>
-            MegaStore
-          </NavLink>
-        </Typography>
-
-        <Box
-          display="flex"
-          justifyContent="space-evenly"
-          alignItems="center"
-          flexGrow={1}
-        >
-          <div>
-            <Button
-              color="inherit"
-              startIcon={<ListIcon />}
-              onClick={handleToggle}
+    <Box display="flex" justifyContent="space-between">
+      {/* Breadcrumbs */}
+      <Box display="flex" alignItems="center">
+        <Breadcrumbs aria-label="breadcrumb" sx={{ color: "#d7c4ab", ml: 2 }}>
+          {breadcrumbs.map((crumb, index) => (
+            <Typography
+              key={index}
+              color={index === breadcrumbs.length - 1 ? "#d7c4ab" : "white"}
             >
-              Administración
-            </Button>
-            <Collapse
-              in={open}
-              style={{
-                position: "absolute",
-                top: "64px",
-                width: "200px",
-                zIndex: 1000,
-                backgroundColor: "#283b54",
-              }}
-            >
-              <List>
-                <ListItem
-                  button="true"
-                  component={NavLink}
-                  style={linkStyle}
-                  onClick={handleToggleBrand}
-                >
-                  <ListItemText primary="Brand" />
-                </ListItem>
-                <Collapse
-                  in={openBrand}
-                  style={{
-                    position: "absolute",
-                    top: "10px",
-                    left: "200px",
-                    width: "200px",
-                    zIndex: 1000,
-                    backgroundColor: "#283b54",
-                  }}
-                >
-                  <List component="div" disablePadding>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/brand/create"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="Create" />
-                    </ListItem>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/brand/list"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="List" />
-                    </ListItem>
-                  </List>
-                </Collapse>
-                <ListItem
-                  button="true"
-                  component={NavLink}
-                  style={linkStyle}
-                  onClick={handleToggleCategory}
-                >
-                  <ListItemText primary="Category" />
-                </ListItem>
-                <Collapse
-                  in={openCategory}
-                  style={{
-                    position: "absolute",
-                    top: "55px",
-                    left: "200px",
-                    width: "200px",
-                    zIndex: 1000,
-                    backgroundColor: "#283b54",
-                  }}
-                >
-                  <List component="div" disablePadding>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/category/create"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="Create" />
-                    </ListItem>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/category/list"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="List" />
-                    </ListItem>
-                  </List>
-                </Collapse>
-                <ListItem
-                  button="true"
-                  component={NavLink}
-                  style={linkStyle}
-                  onClick={handleToggleProduct}
-                >
-                  <ListItemText primary="Product" />
-                </ListItem>
-                <Collapse
-                  in={openProduct}
-                  style={{
-                    position: "absolute",
-                    top: "105px",
-                    left: "200px",
-                    width: "200px",
-                    zIndex: 1000,
-                    backgroundColor: "#283b54",
-                  }}
-                >
-                  <List component="div" disablePadding>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/product/create"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="Create" />
-                    </ListItem>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/product/list"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="List" />
-                    </ListItem>
-                  </List>
-                </Collapse>
-                <ListItem
-                  button="true"
-                  component={NavLink}
-                  style={linkStyle}
-                  onClick={handleToggleSubCategory}
-                >
-                  <ListItemText primary="Subcategory" />
-                </ListItem>
-                <Collapse
-                  in={openSubCategory}
-                  style={{
-                    position: "absolute",
-                    top: "152px",
-                    left: "200px",
-                    width: "200px",
-                    zIndex: 1000,
-                    backgroundColor: "#283b54",
-                  }}
-                >
-                  <List component="div" disablePadding>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/subcategory/create"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="Create" />
-                    </ListItem>
-                    <ListItem
-                      button="true"
-                      component={NavLink}
-                      to="/admin/subcategory/list"
-                      style={linkStyle}
-                    >
-                      <ListItemText primary="List" />
-                    </ListItem>
-                  </List>
-                </Collapse>
-              </List>
-            </Collapse>
-          </div>
+              {crumb}
+            </Typography>
+          ))}
+        </Breadcrumbs>
+      </Box>
 
-          <Button color="inherit" startIcon={<AssessmentIcon />}>
-            Reportes
-          </Button>
-          <Button color="inherit" startIcon={<Inventory2Icon />}>
-            Stock
-          </Button>
-        </Box>
-
-        <Box display="flex" justifyContent="flex-end">
-          <Button color="inherit" startIcon={<PersonIcon />}>
-            Usuario
-          </Button>
-        </Box>
-      </Toolbar>
-    </AppBar>
+      {/* Iconos */}
+      <Box display="flex">
+        <IconButton>
+          <NotificationsOutlinedIcon sx={{ color: "white" }} />
+        </IconButton>
+        <IconButton>
+          <HomeOutlinedIcon sx={{ color: "white" }} />
+        </IconButton>
+      </Box>
+    </Box>
   );
 };
 
-export default NavBar;
+export default NavBarAdmin;
