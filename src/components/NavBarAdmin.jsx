@@ -1,10 +1,11 @@
-import { useLocation, NavLink } from "react-router-dom";
-import { Box, IconButton, Breadcrumbs, Typography, Link } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { Box, IconButton, Breadcrumbs, Typography } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 
 const NavBarAdmin = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Lógica para Breadcrumbs basada en la ruta actual
   const breadcrumbsMap = {
@@ -30,6 +31,25 @@ const NavBarAdmin = () => {
 
   const breadcrumbs = breadcrumbsMap[location.pathname] || [""];
 
+  const handleNavigateHome = () => {
+    Swal.fire({
+      title: "Ir a Home Page",
+      text: "¿Estas seguro que quieres ir a Home Page?",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+      customClass: {
+        popup: "swal-question-popup",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <Box display="flex" justifyContent="space-between">
       {/* Breadcrumbs */}
@@ -48,10 +68,7 @@ const NavBarAdmin = () => {
 
       {/* Iconos */}
       <Box display="flex">
-        <IconButton>
-          <NotificationsOutlinedIcon sx={{ color: "white" }} />
-        </IconButton>
-        <IconButton>
+        <IconButton onClick={handleNavigateHome}>
           <HomeOutlinedIcon sx={{ color: "white" }} />
         </IconButton>
       </Box>
