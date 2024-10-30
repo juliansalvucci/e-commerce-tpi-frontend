@@ -72,7 +72,7 @@ const SubCategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La subcategoría no pudo ser creada",
-          text: "Ya existe una subcategoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -129,7 +129,7 @@ const SubCategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La subcategoría no pudo ser editada",
-          text: "Ya existe una subcategoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -163,7 +163,7 @@ const SubCategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La subcategoría no pudo ser eliminada",
-          text: "La subcategoría tiene productos asociados",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",

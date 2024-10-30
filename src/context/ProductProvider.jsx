@@ -72,7 +72,7 @@ export const ProductProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "El producto no pudo ser creado",
-          text: "Ya existe un producto con ese nombre",
+          text: error.response.data["name and color"],
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -133,7 +133,20 @@ export const ProductProvider = ({ children }) => {
       selectProductForEdit(null);
       navigate("/admin/product/list");
     } catch (error) {
-      console.error("Error al editar producto:", error); // Por ahora mostramos el error por consola por comodidad
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "El producto no pudo ser editado",
+          text: error.response.data["name and color"],
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al editar producto:", error); // Por ahora mostramos el error por consola por comodidad
+      }
     }
   };
 
@@ -159,7 +172,6 @@ export const ProductProvider = ({ children }) => {
           icon: "error",
           title: "El producto no pudo ser eliminado",
           text: error.response.data.stock,
-          //text: "No puedes eliminar un producto con stock"
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -226,6 +238,7 @@ export const ProductProvider = ({ children }) => {
     setSelectedProduct(product);
   };
 
+  // Función para crear una entrada de stock
   const createStockEntry = async (selectedRows) => {
     const stockEntryDetails = selectedRows.map((row) => ({
       productId: row.id,
@@ -237,7 +250,6 @@ export const ProductProvider = ({ children }) => {
         stockEntryDetails,
       });
 
-      // Actualizamos el estado de products localmente después de la entrada de stock
       setProducts((prevProducts) =>
         prevProducts.map((product) => {
           const entry = stockEntryDetails.find(
@@ -263,23 +275,11 @@ export const ProductProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El Stock no pudo ser actualizado",
-          text: error.response.data,
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al actualizar stock:", error);
-      }
+      console.error("Error al actualizar stock:", error);
     }
   };
 
+  // Función para manejar la actualización de la cantidad de stock
   const updateStockQuantity = (productId, quantity) => {
     setSelectedQuantities((prevQuantities) => ({
       ...prevQuantities,

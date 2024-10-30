@@ -69,7 +69,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser creada",
-          text: "Ya existe una marca con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -124,7 +124,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser editada",
-          text: "Ya existe una marca con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -156,7 +156,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser eliminada",
-          text: "La marca tiene productos asociados",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -194,6 +194,7 @@ const BrandProvider = ({ children }) => {
     setSelectedBrand(brand);
   };
 
+  // Función para encontrar una marca por su ID
   const findBrandById = (brandId) => {
     const brand = brands.find((brand) => brand.id === brandId);
     return brand ? brand.name : "";
