@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Box, Typography, Stack, TextField, MenuItem } from "@mui/material";
+import Swal from "sweetalert2";
 import ListApplyFilters from "../components/ListApplyFilters";
 import ListCreateStockEntry from "../components/ListCreateStockEntry";
 import ListDataGrid from "../components/ListDataGrid";
@@ -18,17 +19,15 @@ const StockEntryPage = () => {
 
   const [selectedCategoryP, setselectedCategoryP] = useState("");
   const [filteredSubCategories, setFilteredSC] = useState(subCategories);
-
-  const [pageSize, setPageSize] = useState(10);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-
-  // Estados para filtros
   const [brandFilter, setBrandFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [subCategoryFilter, setSubCategoryFilter] = useState("");
   const [lowStockFilter, setLowStockFilter] = useState(false);
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     name: true,
@@ -39,7 +38,7 @@ const StockEntryPage = () => {
     stock: true,
     stockMin: true,
     description: false,
-    color: false,
+    color: true,
     size: false,
     creationDatetime: false,
     updateDatetime: false,
@@ -81,6 +80,7 @@ const StockEntryPage = () => {
 
     if (!isAnyFilterApplied) {
       setFilteredProducts([]);
+      setselectedCategoryP("");
       return;
     }
 
@@ -115,7 +115,20 @@ const StockEntryPage = () => {
   };
 
   const handleCreateStockEntryClick = () => {
+    if (selectedRows.length > 0) {
     setDialogOpen(true);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "No has seleccionado productos",
+        text: "Por favor, selecciona al menos un producto para crear una entrada de stock",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+    }
   };
 
   const handleDialogClose = () => {
@@ -127,6 +140,13 @@ const StockEntryPage = () => {
     {
       field: "name",
       headerName: "Nombre",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "color",
+      headerName: "Color",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -206,14 +226,6 @@ const StockEntryPage = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
-    },
-    {
-      field: "color",
-      headerName: "Color",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => params.value || "N/A",
     },
     {
       field: "size",
