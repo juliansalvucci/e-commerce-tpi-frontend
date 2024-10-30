@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { SubCategoryContext } from "./SubCategoryContext";
-import formatDateTime from "../utils/formatDateTimeUtils";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const SubCategoryProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -23,12 +23,12 @@ const SubCategoryProvider = ({ children }) => {
       const updatedSubCategories = response.data.map((subcat) => ({
         ...subcat,
         deleted: subcat.deleted === true,
-        creationDatetime: formatDateTime(subcat.creationDatetime),
+        creationDatetime: useFormatDateTime(subcat.creationDatetime),
         updateDatetime: subcat.updateDatetime
-          ? formatDateTime(subcat.updateDatetime)
+          ? useFormatDateTime(subcat.updateDatetime)
           : "N/A",
         deleteDatetime: subcat.deleteDatetime
-          ? formatDateTime(subcat.deleteDatetime)
+          ? useFormatDateTime(subcat.deleteDatetime)
           : null,
       }));
       setSubCategories(updatedSubCategories);

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BrandContext } from "./BrandContext";
-import formatDateTime from "../utils/formatDateTimeUtils";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const BrandProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -23,12 +23,12 @@ const BrandProvider = ({ children }) => {
       const updatedBrands = response.data.map((brand) => ({
         ...brand,
         deleted: brand.deleted === true,
-        creationDatetime: formatDateTime(brand.creationDatetime),
+        creationDatetime: useFormatDateTime(brand.creationDatetime),
         updateDatetime: brand.updateDatetime
-          ? formatDateTime(brand.updateDatetime)
+          ? useFormatDateTime(brand.updateDatetime)
           : "N/A",
         deleteDatetime: brand.deleteDatetime
-          ? formatDateTime(brand.deleteDatetime)
+          ? useFormatDateTime(brand.deleteDatetime)
           : null,
       }));
       setBrands(updatedBrands);

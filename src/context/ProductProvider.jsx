@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ProductContext } from "./ProductContext";
-import formatDateTime from "../utils/formatDateTimeUtils";
+import useFormatDateTime from "../utils/useFormatDateTime";
 import useNoImage from "../utils/useNoImage";
 
 export const ProductProvider = ({ children }) => {
@@ -26,12 +26,12 @@ export const ProductProvider = ({ children }) => {
         ...product,
         imageURL: product.imageURL ? product.imageURL : noImageURL,
         deleted: product.deleted === true,
-        creationDatetime: formatDateTime(product.creationDatetime),
+        creationDatetime: useFormatDateTime(product.creationDatetime),
         updateDatetime: product.updateDatetime
-          ? formatDateTime(product.updateDatetime)
+          ? useFormatDateTime(product.updateDatetime)
           : "N/A",
         deleteDatetime: product.deleteDatetime
-          ? formatDateTime(product.deleteDatetime)
+          ? useFormatDateTime(product.deleteDatetime)
           : null,
       }));
       setProducts(updatedProducts);
