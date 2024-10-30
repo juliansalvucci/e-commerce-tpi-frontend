@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { CategoryContext } from "./CategoryContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
 import api from "../api/api";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const CategoryProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -23,12 +24,12 @@ const CategoryProvider = ({ children }) => {
       const updatedCategories = response.data.map((cat) => ({
         ...cat,
         deleted: cat.deleted === true,
-        creationDatetime: formatDateTime(cat.creationDatetime),
+        creationDatetime: useFormatDateTime(cat.creationDatetime),
         updateDatetime: cat.updateDatetime
-          ? formatDateTime(cat.updateDatetime)
+          ? useFormatDateTime(cat.updateDatetime)
           : "N/A",
         deleteDatetime: cat.deleteDatetime
-          ? formatDateTime(cat.deleteDatetime)
+          ? useFormatDateTime(cat.deleteDatetime)
           : null,
       }));
       setCategories(updatedCategories);
@@ -69,7 +70,7 @@ const CategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La categoría no pudo ser creada",
-          text: "Ya existe una categoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -124,7 +125,7 @@ const CategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La categoría no pudo ser editada",
-          text: "Ya existe una categoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -158,7 +159,7 @@ const CategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La categoría no pudo ser eliminada",
-          text: "La categoría tiene subcategorías asociadas.",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -198,11 +199,13 @@ const CategoryProvider = ({ children }) => {
     setSelectedCategory(category);
   };
 
+  // Función para encontrar una categoría por su ID
   const findCategoryById = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.name : "";
   };
 
+  // Función para encontrar una categoría por su nombre
   const findCategoryByName = (categoryName) => {
     const category = categories.find((cat) => cat.name === categoryName);
     return category ? category.id : "";

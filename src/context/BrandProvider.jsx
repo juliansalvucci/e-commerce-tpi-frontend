@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { BrandContext } from "./BrandContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
 import api from "../api/api";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const BrandProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -23,12 +24,12 @@ const BrandProvider = ({ children }) => {
       const updatedBrands = response.data.map((brand) => ({
         ...brand,
         deleted: brand.deleted === true,
-        creationDatetime: formatDateTime(brand.creationDatetime),
+        creationDatetime: useFormatDateTime(brand.creationDatetime),
         updateDatetime: brand.updateDatetime
-          ? formatDateTime(brand.updateDatetime)
+          ? useFormatDateTime(brand.updateDatetime)
           : "N/A",
         deleteDatetime: brand.deleteDatetime
-          ? formatDateTime(brand.deleteDatetime)
+          ? useFormatDateTime(brand.deleteDatetime)
           : null,
       }));
       setBrands(updatedBrands);
@@ -69,7 +70,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser creada",
-          text: "Ya existe una marca con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -124,7 +125,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser editada",
-          text: "Ya existe una marca con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -156,7 +157,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser eliminada",
-          text: "La marca tiene productos asociados",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -194,6 +195,12 @@ const BrandProvider = ({ children }) => {
     setSelectedBrand(brand);
   };
 
+  // Función para encontrar una marca por su ID
+  const findBrandById = (brandId) => {
+    const brand = brands.find((brand) => brand.id === brandId);
+    return brand ? brand.name : "";
+  };
+
   return (
     <BrandContext.Provider
       value={{
@@ -207,6 +214,7 @@ const BrandProvider = ({ children }) => {
         restoreBrand,
         setShowDeleted,
         selectBrandForEdit,
+        findBrandById,
       }}
     >
       {children}

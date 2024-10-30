@@ -19,8 +19,12 @@ import ABMCategoryPage from "./pages/ABMCategoryPage";
 import ListCategoryPage from "./pages/ListCategoryPage";
 import ABMProductPage from "./pages/ABMProductPage";
 import ListProductPage from "./pages/ListProductPage";
+import StockEntryPage from "./pages/StockEntryPage";
 import ABMSubCategoryPage from "./pages/ABMSubCategoryPage";
 import ListSubCategoryPage from "./pages/ListSubCategoryPage";
+import ListOrderPage from "./pages/ListOrderPage";
+import ReportClientsPage from "./pages/ReportClientsPage";
+import ReportSalesPage from "./pages/ReportSalesPage";
 import SideBarAdmin from "./components/SideBarAdmin";
 
 export const CarritoApp = () => {
@@ -80,6 +84,10 @@ export const CarritoApp = () => {
                     element={<ListProductPage />}
                   ></Route>
                   <Route
+                    path="/admin/product/stock"
+                    element={<StockEntryPage />}
+                  ></Route>
+                  <Route
                     path="/admin/subcategory/create"
                     element={<ABMSubCategoryPage />}
                   ></Route>
@@ -90,6 +98,18 @@ export const CarritoApp = () => {
                   <Route
                     path="/admin/subcategory/list"
                     element={<ListSubCategoryPage />}
+                  ></Route>
+                  <Route
+                    path="/admin/order/list"
+                    element={<ListOrderPage />}
+                  ></Route>
+                  <Route
+                    path="/admin/report/sales"
+                    element={<ReportSalesPage />}
+                  ></Route>
+                  <Route
+                    path="/admin/report/clients"
+                    element={<ReportClientsPage />}
                   ></Route>
                 </Routes>
               </div>

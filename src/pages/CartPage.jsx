@@ -1,19 +1,22 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
 import "../styles/CartPage.css";
+import { useNavigate } from "react-router-dom";
 
 export const CartPage = () => {
-  const navigate = useNavigate();
   const {
     shoppingList,
     removeProduct,
     incrementQuantity,
     decrementQuantity,
+    updateStock,
+    createOrder,
     emptyCart,
   } = useContext(CartContext);
+
+  const navigate = useNavigate();
 
   const calculateTotal = () => {
     return shoppingList
@@ -29,6 +32,48 @@ export const CartPage = () => {
     );
   };
 
+  /*
+  const onSubmit = async () => {
+    // Itera sobre los productos en el carrito (shoppingList) para actualizar el stock de cada uno
+    try {
+      // Itera sobre los productos del carrito y actualiza el stock
+      for (const product of shoppingList) {
+        
+        const updatedStock = product.stock - product.quantity;
+
+        // Actualiza el stock en la base de datos
+        if (updatedStock >= 0) {
+          await updateStock(product.id, updatedStock);
+        }
+          
+        
+      }
+    } catch (error) {
+      console.error("Error al procesar la compra:", error);
+    }
+  };
+  */
+
+  const onSubmit = async () => {
+    try {
+      // Crea el objeto de datos para la solicitud
+      const newOrder = {
+        userEmail: "usuario@ejemplo.com", 
+        orderDetails: shoppingList.map(product => ({
+          productId: product.id, 
+          amount: product.quantity 
+        }))
+      };
+  
+      // Envía la solicitud de creación de orden al backend
+      await createOrder(newOrder);
+      console.log("Orden creada exitosamente");
+    } catch (error) {
+      console.error("Error al procesar la compra:", error);
+    }
+  };
+  
+
   const handlerPurchase = () => {
     if (shoppingList.length === 0) {
       Swal.fire({
@@ -42,7 +87,6 @@ export const CartPage = () => {
         },
       });
     } else {
-      //Mostramos una alerta en el que se muestre el listado de los productos comprados (su titulo y cantidad)
       Swal.fire({
         title: "Finalizar compra",
         text: "¿Desea confirmar la compra?",
@@ -56,6 +100,7 @@ export const CartPage = () => {
         },
       }).then((result) => {
         if (result.isConfirmed) {
+          onSubmit();
           // Mostrar la segunda alerta si el usuario confirma la primera
           const productsPurchased = shoppingList
             .map((product) => `<li>${product.name} x ${product.quantity}</li>`)
@@ -66,15 +111,18 @@ export const CartPage = () => {
             html: `
             <p>Has comprado:</p>
             <ul>${productsPurchased}</ul> <!-- Mostrar productos en una lista -->
+            <p>Total: ${calculateTotal()}</p>
           `,
             customClass: {
               popup: "swal-success-popup",
-              confirmButton: "swal-ok-button", // Clase personalizada para el botón "OK"
+              confirmButton: "swal-ok-button",
             },
           }).then((result) => {
             if (result.isConfirmed) {
+              // Solo si confirma en la alerta de éxito
               emptyCart();
               navigate("/");
+              window.location.reload(); // Recarga la página después de redirigir al home
             }
           });
         }

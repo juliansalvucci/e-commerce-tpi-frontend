@@ -1,9 +1,13 @@
 import { useReducer } from "react";
+//import { useNavigate } from "react-router-dom";
 import { CartContext } from "./CartContext";
+import { useState } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 export const CartProvider = ({ children }) => {
   const initialState = [];
+  //const navigate = useNavigate();
 
   const cartReducer = (state = initialState, action = {}) => {
     switch (action.type) {
@@ -47,12 +51,28 @@ export const CartProvider = ({ children }) => {
       case "[CART] Empty Cart":
         return [];
 
+      //despues de esto yo debería actualizar el stock disponible en el backend
+
+      case "[CART] Update Stock":
+        return state.map((product) => {
+          if (product.id === action.payload) {
+            return {
+              ...product,
+              stock: product.stock - action.payload.quantity,
+            };
+          }
+          return product;
+        });
+
       default:
         return state;
     }
   };
 
   const [shoppingList, dispatch] = useReducer(cartReducer, initialState);
+
+  const [products, setProducts] = useState([]);
+  //const [selectedProducts, setSelectedProduct] = useState(null);
 
   const addProduct = (product) => {
     product.quantity = 1; //Comience en 1 cuando agregue un producto
@@ -94,15 +114,82 @@ export const CartProvider = ({ children }) => {
     dispatch(action);
   };
 
+  const updateStock = async (id, updatedStock) => {
+    try {
+      // Enviar la solicitud para actualizar el stock del producto
+      const response = await axios.patch(
+        `http://localhost:8080/product/update-stock/${id}`,
+        { stock: updatedStock }
+      );
+
+      // Si la solicitud es exitosa, actualizamos el estado local
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, stock: updatedStock } : product
+        )
+      );
+    } catch (error) {
+      console.error("Error al actualizar el stock:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo actualizar el stock del producto.",
+      });
+    }
+  };
+
+  // Función para crear un nuevo pedido
+  const createOrder = async (newOrder) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/orders",
+        newOrder
+      );
+      setProducts((prevOrders) => [...prevOrders, response.data]);
+      Swal.fire({
+        icon: "success",
+        title: "Exito!",
+        text: `El producto ${response.data.name} fue creado con éxito!`,
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        Swal.fire({
+          icon: "error",
+          title: "La orden no pudo ser creado",
+          text: "Ya existe un pedido con ese nombre",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al crear producto:", error); // Por ahora mostramos el error por consola por comodidad
+      }
+    }
+  };
+
+  const selectedProductForEdit = (product) => {
+    dispatch(product);
+  };
+
   return (
     <CartContext.Provider
       value={{
         shoppingList,
+        products,
         addProduct,
         removeProduct,
         incrementQuantity,
         decrementQuantity,
+        updateStock,
+        selectedProductForEdit,
         emptyCart,
+        createOrder,
       }}
     >
       {children}

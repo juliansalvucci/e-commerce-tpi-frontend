@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { SubCategoryContext } from "./SubCategoryContext";
 import formatDateTime from "../utils/formatDateTimeUtils";
 import api from "../api/api";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const SubCategoryProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -23,12 +24,12 @@ const SubCategoryProvider = ({ children }) => {
       const updatedSubCategories = response.data.map((subcat) => ({
         ...subcat,
         deleted: subcat.deleted === true,
-        creationDatetime: formatDateTime(subcat.creationDatetime),
+        creationDatetime: useFormatDateTime(subcat.creationDatetime),
         updateDatetime: subcat.updateDatetime
-          ? formatDateTime(subcat.updateDatetime)
+          ? useFormatDateTime(subcat.updateDatetime)
           : "N/A",
         deleteDatetime: subcat.deleteDatetime
-          ? formatDateTime(subcat.deleteDatetime)
+          ? useFormatDateTime(subcat.deleteDatetime)
           : null,
       }));
       setSubCategories(updatedSubCategories);
@@ -72,7 +73,7 @@ const SubCategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La subcategoría no pudo ser creada",
-          text: "Ya existe una subcategoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -129,7 +130,7 @@ const SubCategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La subcategoría no pudo ser editada",
-          text: "Ya existe una subcategoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -163,7 +164,7 @@ const SubCategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La subcategoría no pudo ser eliminada",
-          text: "La subcategoría tiene productos asociados",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -215,6 +216,11 @@ const SubCategoryProvider = ({ children }) => {
     setSelectedSubCategory(subCategory);
   };
 
+  const findSubCategoryById = (subcatId) => {
+    const subCategory = subCategories.find((subcat) => subcat.id === subcatId);
+    return subCategory ? subCategory.name : "";
+  };
+
   return (
     <SubCategoryContext.Provider
       value={{
@@ -229,6 +235,7 @@ const SubCategoryProvider = ({ children }) => {
         setShowDeleted,
         formatSubCategoryForEdit,
         selectSubCategoryForEdit,
+        findSubCategoryById,
       }}
     >
       {children}

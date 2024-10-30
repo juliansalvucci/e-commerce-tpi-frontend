@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Stack, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { GridToolbar } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
@@ -34,6 +34,7 @@ const ListProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     name: true,
+    color: true,
     brand: true,
     category: false,
     subCategory: true,
@@ -41,7 +42,6 @@ const ListProductPage = () => {
     stock: true,
     stockMin: false,
     description: false,
-    color: false,
     size: false,
     creationDatetime: true,
     updateDatetime: false,
@@ -60,7 +60,8 @@ const ListProductPage = () => {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
-  useEffect(() => { // Simular carga de página
+  useEffect(() => {
+    // Simular carga de página
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -77,6 +78,13 @@ const ListProductPage = () => {
     {
       field: "name",
       headerName: "Nombre",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "color",
+      headerName: "Color",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -156,14 +164,6 @@ const ListProductPage = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
-    },
-    {
-      field: "color",
-      headerName: "Color",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => params.value || "N/A",
     },
     {
       field: "size",
