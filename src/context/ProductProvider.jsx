@@ -13,6 +13,7 @@ export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedQuantities, setSelectedQuantities] = useState({});
 
   const fetchProducts = async () => {
     try {
@@ -225,12 +226,74 @@ export const ProductProvider = ({ children }) => {
     setSelectedProduct(product);
   };
 
+  const createStockEntry = async (selectedRows) => {
+    const stockEntryDetails = selectedRows.map((row) => ({
+      productId: row.id,
+      quantity: Number(selectedQuantities[row.id] || 0),
+    }));
+
+    try {
+      await axios.post("http://localhost:8080/stock-entry", {
+        stockEntryDetails,
+      });
+
+      // Actualizamos el estado de products localmente después de la entrada de stock
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => {
+          const entry = stockEntryDetails.find(
+            (entry) => entry.productId === product.id
+          );
+          if (entry) {
+            return {
+              ...product,
+              stock: product.stock + entry.quantity,
+            };
+          }
+          return product;
+        })
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Exito!",
+        text: "Stock de productos actualizado con éxito!",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "El Stock no pudo ser actualizado",
+          text: error.response.data,
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al actualizar stock:", error);
+      }
+    }
+  };
+
+  const updateStockQuantity = (productId, quantity) => {
+    setSelectedQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
+  };
+
   return (
     <ProductContext.Provider
       value={{
         products,
         showDeleted,
         selectedProduct,
+        selectedQuantities,
         fetchProducts,
         createProduct,
         editProduct,
@@ -239,6 +302,8 @@ export const ProductProvider = ({ children }) => {
         setShowDeleted,
         formatProductForEdit,
         selectProductForEdit,
+        createStockEntry,
+        updateStockQuantity,
       }}
     >
       {children}

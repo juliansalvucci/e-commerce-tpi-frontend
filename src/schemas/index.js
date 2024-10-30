@@ -104,3 +104,10 @@ export const loginSchema = yup.object({
     .max(22, "La contraseña debe tener como máximo 22 caracteres")
     .required("La contraseña es obligatoria"),
 });
+
+export const stockEntrySchema = yup.object().shape({
+  cantidad: yup
+    .number()
+    .min(1, "La cantidad debe ser mayor a 0")
+    .required("La cantidad es obligatoria"),
+});
