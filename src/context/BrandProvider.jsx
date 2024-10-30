@@ -140,7 +140,7 @@ const BrandProvider = ({ children }) => {
   // Función para eliminar una marca
   const deleteBrand = async (id) => {
     try {
-      await api.delete(`http://localhost:8080/brand/${id}`);
+      await api.delete(`/brand/${id}`);
       setBrands((prevBrands) => prevBrands.filter((brand) => brand.id !== id));
       Swal.fire({
         icon: "success",
@@ -172,7 +172,7 @@ const BrandProvider = ({ children }) => {
   // Función para restaurar una marca eliminada
   const restoreBrand = async (id) => {
     try {
-      await api.post(`http://localhost:8080/brand/recover/${id}`);
+      await api.post(`/brand/recover/${id}`);
       await fetchBrands();
       const restoredBrand = brands.find((brand) => brand.id === id);
       Swal.fire({
