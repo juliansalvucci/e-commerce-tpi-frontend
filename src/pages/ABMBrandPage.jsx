@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Formik, Form } from "formik";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import { BrandContext } from "../context/BrandContext";
 import { brandSchema } from "../schemas";
-import "../styles/ABM.css";
 
 const ABMBrandPage = () => {
   const { createBrand, editBrand, selectedBrand } = useContext(BrandContext);
@@ -14,7 +13,7 @@ const ABMBrandPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedBrand) {
-        await createBrand({ name: values.nombre });
+        await createBrand({ name: values.nombre.trim() }); // trim(): Quitar espacios al final (y al principio)
         resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
       } else {
         await editBrand(selectedBrand.id, { name: values.nombre });
@@ -27,15 +26,41 @@ const ABMBrandPage = () => {
   };
 
   return (
-    <Box className="background" sx={{ padding: 2 }}>
-      <Box className="container abm-brand-page">
-        {/*Typography queda muy feo aca, mejor HTML*/}
-        <h2 className="title">
-          {selectedBrand ? "Editar Marca" : "Creá una Marca"}
-          <p className="subtitle">
-            {selectedBrand ? `${selectedBrand.name}` : ""}
-          </p>
-        </h2>
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
+        {selectedBrand ? "Editar Marca" : "Crear Marca"}
+        <Typography
+          variant="overline"
+          align="center"
+          color="white"
+          gutterBottom
+          sx={{ display: "block", fontFamily: "Poppins" }}
+        >
+          {selectedBrand ? `${selectedBrand.name}` : ""}
+        </Typography>
+      </Typography>
+      <Box
+        sx={{
+          backgroundColor: "#283b54",
+          borderRadius: "20px",
+          padding: 3,
+          width: "50%",
+        }}
+      >
         <Formik
           initialValues={{ nombre: selectedBrand ? selectedBrand.name : "" }}
           validationSchema={brandSchema}
@@ -44,12 +69,20 @@ const ABMBrandPage = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <ABMInputComponent
-                label="Nombre"
-                name="nombre"
-                type="text"
-                placeholder="Ingrese el nombre"
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <ABMInputComponent
+                  label="Nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Ingrese el nombre"
+                />
+              </Box>
               <ABMActionButton
                 is={isSubmitting}
                 accion={selectedBrand ? "Guardar" : "Crear"}

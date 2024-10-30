@@ -3,14 +3,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ProductContext } from "./ProductContext";
-import formatDateTime from "../utils/formatDateTimeUtils";
+import useFormatDateTime from "../utils/useFormatDateTime";
+import useNoImage from "../utils/useNoImage";
 
 export const ProductProvider = ({ children }) => {
+  const noImageURL = useNoImage();
   const navigate = useNavigate();
   const location = useLocation();
   const [products, setProducts] = useState([]);
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedQuantities, setSelectedQuantities] = useState({});
 
   const fetchProducts = async () => {
     try {
@@ -21,13 +24,14 @@ export const ProductProvider = ({ children }) => {
       );
       const updatedProducts = response.data.map((product) => ({
         ...product,
-        imageURL: product.imageURL
-          ? product.imageURL
-          : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksvTrc5jnygex4Lc_TVY0JLsNq_k1E9WSUA&s",
+        imageURL: product.imageURL ? product.imageURL : noImageURL,
         deleted: product.deleted === true,
-        creationDatetime: formatDateTime(product.creationDatetime),
+        creationDatetime: useFormatDateTime(product.creationDatetime),
+        updateDatetime: product.updateDatetime
+          ? useFormatDateTime(product.updateDatetime)
+          : "N/A",
         deleteDatetime: product.deleteDatetime
-          ? formatDateTime(product.deleteDatetime)
+          ? useFormatDateTime(product.deleteDatetime)
           : null,
       }));
       setProducts(updatedProducts);
@@ -68,7 +72,7 @@ export const ProductProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "El producto no pudo ser creado",
-          text: "Ya existe un producto con ese nombre",
+          text: error.response.data["name and color"],
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -129,7 +133,20 @@ export const ProductProvider = ({ children }) => {
       selectProductForEdit(null);
       navigate("/admin/product/list");
     } catch (error) {
-      console.error("Error al editar producto:", error); // Por ahora mostramos el error por consola por comodidad
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "El producto no pudo ser editado",
+          text: error.response.data["name and color"],
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al editar producto:", error); // Por ahora mostramos el error por consola por comodidad
+      }
     }
   };
 
@@ -155,7 +172,6 @@ export const ProductProvider = ({ children }) => {
           icon: "error",
           title: "El producto no pudo ser eliminado",
           text: error.response.data.stock,
-          //text: "No puedes eliminar un producto con stock"
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -193,13 +209,14 @@ export const ProductProvider = ({ children }) => {
     const matchedSubCategory = subCategories.find(
       (subcat) => subcat.name === product.subCategory
     );
-    console.log(matchedSubCategory);
+    //console.log(matchedSubCategory);
     const matchedBrand = brands.find((brand) => brand.name === product.brand);
-    console.log(matchedBrand);
+    //console.log(matchedBrand);
     const matchedCategory = categories.find(
       (category) => category.name === matchedSubCategory.category
     );
-    console.log(matchedCategory);
+    //console.log(matchedCategory);
+    //console.log(product);
     return {
       id: product.id,
       name: product.name,
@@ -221,12 +238,62 @@ export const ProductProvider = ({ children }) => {
     setSelectedProduct(product);
   };
 
+  // Función para crear una entrada de stock
+  const createStockEntry = async (selectedRows) => {
+    const stockEntryDetails = selectedRows.map((row) => ({
+      productId: row.id,
+      quantity: Number(selectedQuantities[row.id] || 0),
+    }));
+
+    try {
+      await axios.post("http://localhost:8080/stock-entry", {
+        stockEntryDetails,
+      });
+
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => {
+          const entry = stockEntryDetails.find(
+            (entry) => entry.productId === product.id
+          );
+          if (entry) {
+            return {
+              ...product,
+              stock: product.stock + entry.quantity,
+            };
+          }
+          return product;
+        })
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Exito!",
+        text: "Stock de productos actualizado con éxito!",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
+    } catch (error) {
+      console.error("Error al actualizar stock:", error);
+    }
+  };
+
+  // Función para manejar la actualización de la cantidad de stock
+  const updateStockQuantity = (productId, quantity) => {
+    setSelectedQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
+  };
+
   return (
     <ProductContext.Provider
       value={{
         products,
         showDeleted,
         selectedProduct,
+        selectedQuantities,
         fetchProducts,
         createProduct,
         editProduct,
@@ -235,6 +302,8 @@ export const ProductProvider = ({ children }) => {
         setShowDeleted,
         formatProductForEdit,
         selectProductForEdit,
+        createStockEntry,
+        updateStockQuantity,
       }}
     >
       {children}

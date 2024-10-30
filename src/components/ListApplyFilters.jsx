@@ -1,20 +1,15 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-const ListCreateButton = ({ label, tipoClase }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/admin/${tipoClase}/create`);
-  };
-
+const ListApplyFilters = ({ onClick }) => {
   return (
     <Button
       variant="contained"
       sx={{
         backgroundColor: "#283b54",
+        width: "100%",
+        maxWidth: "200px",
         color: "white",
         "&:hover": {
           backgroundColor: "#bed0dd",
@@ -22,11 +17,11 @@ const ListCreateButton = ({ label, tipoClase }) => {
         },
       }}
       startIcon={<AddIcon />}
-      onClick={handleClick}
+      onClick={onClick}
     >
-      Crear {label}
+      Aplicar Filtros
     </Button>
   );
 };
 
-export default ListCreateButton;
+export default ListApplyFilters;

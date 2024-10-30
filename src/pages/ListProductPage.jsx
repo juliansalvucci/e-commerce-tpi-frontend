@@ -1,33 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Stack,
-  Typography,
-  Box,
-  Collapse,
-  IconButton,
-} from "@mui/material";
-import { KeyboardArrowUp, KeyboardArrowDown } from "@mui/icons-material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { GridToolbar } from "@mui/x-data-grid";
 import Swal from "sweetalert2";
 import ListCreateButton from "../components/ListCreateButton";
+import ListDataGrid from "../components/ListDataGrid";
 import ListDeleteButton from "../components/ListDeleteButton";
 import ListEditButton from "../components/ListEditButton";
 import ListRestoreButton from "../components/ListRestoreButton";
 import ListShowDeletedButton from "../components/ListShowDeletedButton";
+import ListShowImage from "../components/ListShowImage";
 import { BrandContext } from "../context/BrandContext";
 import { CategoryContext } from "../context/CategoryContext";
 import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
-import "../styles/List.css";
 
 const ListProductPage = () => {
   const navigate = useNavigate();
@@ -44,48 +30,192 @@ const ListProductPage = () => {
   const { categories } = useContext(CategoryContext);
   const { subCategories } = useContext(SubCategoryContext);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [openRows, setOpenRows] = useState({}); // Maneja Collapse
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    name: true,
+    color: true,
+    brand: true,
+    category: false,
+    subCategory: true,
+    price: true,
+    stock: true,
+    stockMin: false,
+    description: false,
+    size: false,
+    creationDatetime: true,
+    updateDatetime: false,
+  });
 
-  // Definición de las columnas de la tabla
-  const columns = [
-    { id: "expand", label: "", minWidth: 30 }, // Columna de Collapse
-    { id: "name", label: "Nombre", minWidth: 80 },
-    { id: "brand", label: "Marca", minWidth: 80 },
-    { id: "subCategory", label: "Subcategoria", minWidth: 80 },
-    { id: "price", label: "Precio", minWidth: 80 },
-    { id: "stock", label: "Stock Disp.", minWidth: 80 },
-    { id: "stockMin", label: "Stock Min.", minWidth: 80 },
-    { id: "actions", label: "Acciones", minWidth: 80 },
-  ];
+  useEffect(() => {
+    const updatePageSize = () => {
+      const gridHeight = window.innerHeight - 200;
+      const rowHeight = 52;
+      const newPageSize = Math.floor(gridHeight / rowHeight);
+      setPageSize(newPageSize);
+    };
 
-  // Definición de las columnas dentro del Collapse
-  const columnsInside = [
-    { id: "description", label: "Descripción", minWidth: 80 },
-    { id: "creationDateTime", label: "Fecha de Creación", minWidth: 80 },
-    ...(showDeleted
-      ? [{ id: "deleteDatetime", label: "Fecha de Borrado", minWidth: 80 }]
-      : []),
-  ];
+    updatePageSize();
+    window.addEventListener("resize", updatePageSize);
+    return () => window.removeEventListener("resize", updatePageSize);
+  }, []);
+
+  useEffect(() => {
+    // Simular carga de página
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [products]);
 
   const handleShowDeletedToggle = () => {
     setShowDeleted(!showDeleted);
-    setPage(0);
   };
 
-  const filteredProducts = showDeleted
-    ? products.filter((product) => product.deleted)
-    : products.filter((product) => !product.deleted);
+  // Definición de las columnas de la tabla
+  const columns = [
+    {
+      field: "name",
+      headerName: "Nombre",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "color",
+      headerName: "Color",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "brand",
+      headerName: "Marca",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "category",
+      headerName: "Categoría",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "subCategory",
+      headerName: "Subcategoría",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "price",
+      headerName: "Precio",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => {
+        const formattedPrice =
+          params.value % 1 === 0 // Para ver si tiene decimales
+            ? params.value.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })
+            : params.value.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+              });
+        return <span>{formattedPrice}</span>;
+      },
+    },
+    !showDeleted && {
+      field: "stock",
+      headerName: "Stock Disp.",
+      description: "Stock Disponible",
+      align: "center",
+      headerAlign: "center",
+      width: 70,
+      renderCell: (params) => {
+        const { stock, stockMin } = params.row;
+        let color = "#283b54";
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+        if (stock <= stockMin) {
+          color = "red"; // stock <= stockMin
+        }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+        return <span style={{ color }}>{stock}</span>;
+      },
+    },
+    {
+      field: "stockMin",
+      headerName: "Stock Min.",
+      description: "Alerta de Stock Min.",
+      align: "center",
+      headerAlign: "center",
+      width: 70,
+    },
+    {
+      field: "description",
+      headerName: "Descripción",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "size",
+      headerName: "Tamaño",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
+    },
+    {
+      field: "creationDatetime",
+      headerName: "Fecha de Creación",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "updateDatetime",
+      headerName: "Fecha de Modificación",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => params.value || "N/A",
+    },
+    showDeleted && {
+      field: "deleteDatetime",
+      headerName: "Fecha de Eliminación",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "actions",
+      headerName: "Acciones",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Stack direction="row" spacing={1} justifyContent="center">
+          <ListShowImage imageURL={params.row.imageURL} />
+          {!showDeleted ? (
+            <>
+              <ListEditButton onClick={() => handleEdit(params.row)} />
+              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
+            </>
+          ) : (
+            <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
+          )}
+        </Stack>
+      ),
+    },
+  ].filter(Boolean); //Asegura que no hay columnas undefined (showDeleted=false entonces no se muestra la columna 'deleteDatetime')
 
   const handleEdit = (product) => {
     Swal.fire({
@@ -153,193 +283,65 @@ const ListProductPage = () => {
     });
   };
 
-  const handleRowToggle = (id) => {
-    setOpenRows((prevOpenRows) => ({
-      ...prevOpenRows,
-      [id]: !prevOpenRows[id],
-    }));
-  };
-
   return (
-    <Box className="background">
-      <Container
-        className="container"
-        sx={{ width: "80%", display: "flex", justifyContent: "center" }}
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+      }}
+    >
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
       >
-        <Box className="title-box">
-          {/* Título depende de showDeleted */}
-          <Typography variant="h3" className="title" align="center">
-            {showDeleted
-              ? "Listado de Productos Eliminadas"
-              : "Listado de Productos Activas"}
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <Paper
+        {showDeleted
+          ? "Listado de Productos Eliminados"
+          : "Listado de Productos Activos"}
+      </Typography>
+      <Box sx={{ height: "calc(100vh - 200px)" }}>
+        {loading || products.length === 0 ? (
+          <Box
             sx={{
-              width: "100%",
-              overflow: "hidden",
-              mt: 2,
-              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
           >
-            <TableContainer sx={{ maxHeight: 440, width: "100%" }}>
-              <Table stickyHeader aria-label="producto tabla">
-                <TableHead>
-                  <TableRow>
-                    {/* Mapea las columnas para crear las celdas del encabezado */}
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "bold",
-                          minWidth: column.minWidth,
-                        }}
-                        align="center"
-                      >
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {/* Mapea los productos */}
-                  {products
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((product) => (
-                      <React.Fragment key={product.id}>
-                        <TableRow hover tabIndex={-1}>
-                          <TableCell align="center">
-                            <IconButton
-                              onClick={() => handleRowToggle(product.id)}
-                            >
-                              {openRows[product.id] ? (
-                                <KeyboardArrowUp />
-                              ) : (
-                                <KeyboardArrowDown />
-                              )}
-                            </IconButton>
-                          </TableCell>
-                          <TableCell align="center">{product.name}</TableCell>
-                          <TableCell align="center">{product.brand}</TableCell>
-                          <TableCell align="center">
-                            {product.subCategory}
-                          </TableCell>
-                          <TableCell align="center">{product.price}</TableCell>
-                          <TableCell align="center">{product.stock}</TableCell>
-                          <TableCell align="center">
-                            {product.stockMin}
-                          </TableCell>
-                          <TableCell align="center">
-                            {!showDeleted ? (
-                              <Stack
-                                direction="row"
-                                spacing={1}
-                                justifyContent="center"
-                              >
-                                <ListDeleteButton
-                                  onClick={() => handleDelete(product.id)}
-                                />
-                                <ListEditButton
-                                  onClick={() => handleEdit(product)}
-                                />
-                              </Stack>
-                            ) : (
-                              <ListRestoreButton
-                                onClick={() => handleRestore(product.id)}
-                              />
-                            )}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={columns.length}>
-                            <Collapse
-                              in={openRows[product.id]}
-                              timeout="auto"
-                              unmountOnExit
-                            >
-                              <Box margin={1}>
-                                <Table size="small">
-                                  <TableHead>
-                                    <TableRow>
-                                      {/* Mapea los atributos restantes */}
-                                      {columnsInside.map((column) => (
-                                        <TableCell
-                                          key={column.id}
-                                          sx={{
-                                            fontSize: "16px",
-                                            fontWeight: "bold",
-                                            minWidth: column.minWidth,
-                                          }}
-                                          align="center"
-                                        >
-                                          {column.label}
-                                        </TableCell>
-                                      ))}
-                                    </TableRow>
-                                  </TableHead>
-                                  <TableBody>
-                                    <TableRow hover tabIndex={-1}>
-                                      <TableCell align="center">
-                                        {product.description}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        {product.creationDatetime}
-                                      </TableCell>
-                                      {showDeleted && (
-                                        <TableCell align="center">
-                                          {product.deleteDatetime}
-                                        </TableCell>
-                                      )}
-                                    </TableRow>
-                                  </TableBody>
-                                </Table>
-                              </Box>
-                            </Collapse>
-                          </TableCell>
-                        </TableRow>
-                      </React.Fragment>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {/* Paginación de la tabla */}
-            <TablePagination
-              rowsPerPageOptions={[5, 8, 10, 25, 100]}
-              component="div"
-              count={filteredProducts.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </Box>
-
+            <CircularProgress />
+          </Box>
+        ) : (
+          <ListDataGrid
+            rows={products}
+            columns={columns}
+            pageSize={pageSize}
+            rowsPerPageOptions={[pageSize]}
+            disableColumnMenu={true}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) =>
+              setColumnVisibilityModel(newModel)
+            }
+            disableSelectionOnClick
+            slots={{ footer: GridToolbar }}
+          />
+        )}
         <Stack
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ mt: 2 }}
+          spacing={2}
+          mt={2}
         >
-          <Stack direction="row" spacing={2}>
-            <ListCreateButton label="Producto" tipoClase={"product"} />
-            <ListShowDeletedButton
-              showDeleted={showDeleted}
-              onClick={handleShowDeletedToggle}
-            />
-          </Stack>
+          <ListCreateButton label="Producto" tipoClase={"product"} />
+          <ListShowDeletedButton
+            showDeleted={showDeleted}
+            onClick={handleShowDeletedToggle}
+          />
         </Stack>
-      </Container>
+      </Box>
     </Box>
   );
 };

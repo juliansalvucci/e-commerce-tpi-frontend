@@ -1,5 +1,11 @@
 import React, { useContext, useState } from "react";
-import { Box, Stack, FormControl, InputAdornment } from "@mui/material";
+import {
+  Box,
+  InputAdornment,
+  FormControl,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Formik, Form } from "formik";
 import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
@@ -9,7 +15,6 @@ import { CategoryContext } from "../context/CategoryContext";
 import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
 import { productSchema } from "../schemas";
-import "../styles/ABM.css";
 
 const ABMProductPage = () => {
   const { createProduct, editProduct, selectedProduct } =
@@ -25,8 +30,8 @@ const ABMProductPage = () => {
     try {
       if (!selectedProduct) {
         await createProduct({
-          name: values.nombre,
-          description: values.descripcion,
+          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
+          description: values.descripcion.trim(),
           price: values.precio,
           stock: values.stock,
           stockMin: values.stockMin,
@@ -59,22 +64,48 @@ const ABMProductPage = () => {
   };
 
   return (
-    <Box className="background" sx={{}}>
-      <Box className="container abm-product-page">
-        {/*Typography queda muy feo aca, mejor HTML*/}
-        <h2 className="title">
-          {selectedProduct ? "Editar Producto" : "Creá un Producto"}
-          <p className="subtitle">
-            {selectedProduct ? `${selectedProduct.name}` : ""}
-          </p>
-        </h2>
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography
+        variant="h3"
+        align="center"
+        color="white"
+        gutterBottom
+        sx={{ fontFamily: "Poppins" }}
+      >
+        {selectedProduct ? "Editar Producto" : "Crear Producto"}
+        <Typography
+          variant="overline"
+          align="center"
+          color="white"
+          gutterBottom
+          sx={{ display: "block", fontFamily: "Poppins" }}
+        >
+          {selectedProduct ? `${selectedProduct.name}` : ""}
+        </Typography>
+      </Typography>
+      <Box
+        sx={{
+          backgroundColor: "#283b54",
+          borderRadius: "20px",
+          padding: 3,
+          width: "90%",
+        }}
+      >
         <Formik
           initialValues={{
             nombre: selectedProduct?.name || "",
             color: selectedProduct?.color || "",
             tamaño: selectedProduct?.size || "",
             marca: selectedProduct?.brandId || "",
-            categoría: selectedProduct?.categoryId || "",
+            categoria: selectedProduct?.categoryId || "",
             subcategoria: selectedProduct?.subCategoryId || "",
             precio: selectedProduct?.price || "",
             stock: selectedProduct?.stock || "",
@@ -90,6 +121,7 @@ const ABMProductPage = () => {
             <Form>
               <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
                 <ABMInputComponent
+                  fullWidth
                   label="Nombre"
                   name="nombre"
                   type="text"
@@ -110,6 +142,7 @@ const ABMProductPage = () => {
               </Stack>
               <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
                 <ABMSelectComponent
+                  fullWidth
                   label="Marca"
                   id="marca"
                   name="marca"
@@ -121,7 +154,7 @@ const ABMProductPage = () => {
                 <ABMSelectComponent
                   label="Categoría"
                   id="categoria"
-                  name="categoría"
+                  name="categoria"
                   options={categories.map((cat) => ({
                     value: cat.id,
                     label: cat.name,
@@ -129,7 +162,7 @@ const ABMProductPage = () => {
                   onChange={(event) => {
                     const categoryId = event.target.value;
                     const categoryName = findCategoryById(categoryId);
-                    setFieldValue("categoría", categoryId);
+                    setFieldValue("categoria", categoryId);
                     setselectedCategoryP(categoryId);
                     setFieldValue("subcategoria", "");
                     setFilteredSC(
@@ -153,15 +186,24 @@ const ABMProductPage = () => {
               <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
                 <FormControl fullWidth>
                   <ABMInputComponent
+                    fullWidth
                     label="Precio"
                     name="precio"
                     type="number"
                     step="100.0"
                     placeholder="Ingrese el precio"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">$</InputAdornment>
-                      ),
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            sx={{ color: "white" }}
+                          >
+                            $
+                          </InputAdornment>
+                        ),
+                        sx: { color: "white" },
+                      },
                     }}
                   />
                 </FormControl>
@@ -178,8 +220,16 @@ const ABMProductPage = () => {
                   placeholder="Ingresar el stock mínimo de alerta"
                 />
               </Stack>
-              <Stack spacing={2} direction="row">
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
                 <ABMInputComponent
+                  fullWidth
                   label="Descripción"
                   name="descripcion"
                   type="text"
@@ -187,13 +237,23 @@ const ABMProductPage = () => {
                   multiline
                   maxRows={2}
                 />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
                 <ABMInputComponent
+                  fullWidth
                   label="Imagen"
                   name="imagen"
                   type="text"
                   placeholder="Ingrese la URL de la imagen"
                 />
-              </Stack>
+              </Box>
               <ABMActionButton
                 is={isSubmitting}
                 accion={selectedProduct ? "Guardar" : "Crear"}
