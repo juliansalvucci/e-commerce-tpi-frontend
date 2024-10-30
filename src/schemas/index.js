@@ -3,7 +3,8 @@ import * as yup from "yup";
 const alMenosUnaLetra = /[a-zA-Z]/;
 const primerCharacterLetraONumero = /^[a-zA-Z0-9]/;
 const primerCharacterLetra = /^[a-zA-Z]/;
-const soloLetras = /^[a-zA-Z]+$/;
+//const soloLetras = /^[a-zA-Z]+$/;
+const noNumeros = /^[^\d]+$/;
 
 export const brandSchema = yup.object().shape({
   nombre: yup
@@ -53,9 +54,9 @@ export const productSchema = yup.object().shape({
   color: yup
     .string()
     .required("Obligatorio")
-    .min(3, "El color debe contener al menos 2 caracteres")
+    .min(3, "El color debe contener al menos 3 caracteres")
     .max(20, "El color debe tener como maximo 20 caracteres")
-    .matches(soloLetras, "El color debe contener solo letras"),
+    .matches(noNumeros, "El color no debe contener numeros"),
   tamaño: yup.string().notRequired(),
   marca: yup.string().required("Obligatorio"),
   categoria: yup.string().required("Obligatorio"),
