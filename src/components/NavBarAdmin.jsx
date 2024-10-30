@@ -27,6 +27,9 @@ const NavBarAdmin = () => {
     "/admin/report/clients": ["Reportes", "Clientes"],
     "/admin/report/sales": ["Reportes", "Ventas"],
     "/admin/report/stock": ["Reportes", "Stock"],
+    "/admin/user/create": ["Administración", "Administrador", "Crear"],
+    "/admin/user/edit": ["Administración", "Administrador", "Editar"],
+    "/admin/user/list": ["Administración", "Administrador", "Listado"],
   };
 
   const breadcrumbs = breadcrumbsMap[location.pathname] || [""];

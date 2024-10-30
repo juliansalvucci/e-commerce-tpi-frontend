@@ -19,20 +19,33 @@ import {
   InsertChart,
   ExpandLess,
   ExpandMore,
+  SupervisorAccount as SupervisorAccountIcon,
   Add as AddIcon,
   List as ListIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
 const Sidebar = () => {
+  const [openAdmin, setOpenAdmin] = useState(false);
   const [openBrand, setOpenBrand] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
   const [openSubCategory, setOpenSubCategory] = useState(false);
   const [openProduct, setOpenProduct] = useState(false);
   const [openReports, setOpenReports] = useState(false);
 
+  const handleToggleAdmin = () => {
+    setOpenAdmin(!openAdmin);
+    if (openBrand) setOpenBrand(false);
+    if (openCategory) setOpenCategory(false);
+    if (openProduct) setOpenProduct(false);
+    if (openSubCategory) setOpenSubCategory(false);
+    if (openReports) setOpenReports(false);
+  };
+
+
   const handleToggleBrand = () => {
     setOpenBrand(!openBrand);
+    if (openAdmin) setOpenBrand(false);
     if (openCategory) setOpenCategory(false);
     if (openProduct) setOpenProduct(false);
     if (openSubCategory) setOpenSubCategory(false);
@@ -41,6 +54,7 @@ const Sidebar = () => {
 
   const handleToggleCategory = () => {
     setOpenCategory(!openCategory);
+    if (openAdmin) setOpenBrand(false);
     if (openBrand) setOpenBrand(false);
     if (openProduct) setOpenProduct(false);
     if (openSubCategory) setOpenSubCategory(false);
@@ -49,6 +63,7 @@ const Sidebar = () => {
 
   const handleToggleProduct = () => {
     setOpenProduct(!openProduct);
+    if (openAdmin) setOpenBrand(false);
     if (openBrand) setOpenBrand(false);
     if (openCategory) setOpenCategory(false);
     if (openSubCategory) setOpenSubCategory(false);
@@ -57,6 +72,7 @@ const Sidebar = () => {
 
   const handleToggleSubCategory = () => {
     setOpenSubCategory(!openSubCategory);
+    if (openAdmin) setOpenBrand(false);
     if (openBrand) setOpenBrand(false);
     if (openCategory) setOpenCategory(false);
     if (openProduct) setOpenProduct(false);
@@ -65,6 +81,7 @@ const Sidebar = () => {
 
   const handleToggleReports = () => {
     setOpenReports(!openReports);
+    if (openAdmin) setOpenBrand(false);
     if (openBrand) setOpenBrand(false);
     if (openCategory) setOpenCategory(false);
     if (openSubCategory) setOpenSubCategory(false);
@@ -145,6 +162,41 @@ const Sidebar = () => {
         >
           Administración
         </Typography>
+
+        {/* Administrador */}
+        <ListItem button="true" onClick={handleToggleAdmin}>
+          <ListItemIcon sx={{ color: "#fff" }}>
+            <SupervisorAccountIcon />
+          </ListItemIcon>
+          <ListItemText primary="Administrador" />
+          {openAdmin ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openAdmin} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem
+              component={NavLink}
+              to="/admin/user/create"
+              style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
+            >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <AddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Crear" />
+            </ListItem>
+            <ListItem
+              component={NavLink}
+              to="/admin/user/list"
+              style={navLinkStyle}
+              sx={{ pl: 4, justifyContent: "center" }}
+            >
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItem>
+          </List>
+        </Collapse>
 
         {/* Marca */}
         <ListItem button="true" onClick={handleToggleBrand}>
