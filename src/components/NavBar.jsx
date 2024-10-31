@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import {
   Badge,
   AppBar,
@@ -10,9 +11,8 @@ import {
   Box,
 } from "@mui/material";
 import { ShoppingCart, Search } from "@mui/icons-material";
-import { CartContext } from "../context/CartContext";
 import { CartPopup } from "./CartPopup"; // Componente del popup
-import { NavLink } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 const NavBar = () => {
   const navbarStyle = {

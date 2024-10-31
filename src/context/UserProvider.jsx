@@ -255,7 +255,8 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/admin/users/list") { //VER
+    if (location.pathname === "/admin/users/list") {
+      //VER
       fetchUsers();
     }
   }, [location.pathname]);

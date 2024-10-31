@@ -43,7 +43,8 @@ const ListBrandPage = () => {
     return () => window.removeEventListener("resize", updatePageSize);
   }, []);
 
-  useEffect(() => { // Simular carga de página
+  useEffect(() => {
+    // Simular carga de página
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);

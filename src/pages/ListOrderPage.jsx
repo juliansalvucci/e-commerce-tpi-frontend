@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const ListOrderPage = () => {
-  return (
-    <div>ListOrderPage</div>
-  )
-}
+  return <div>ListOrderPage</div>;
+};
 
-export default ListOrderPage
+export default ListOrderPage;

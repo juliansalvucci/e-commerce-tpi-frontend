@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { Box, IconButton, Breadcrumbs, Typography } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import Swal from "sweetalert2";
 
 const NavBarAdmin = () => {
   const location = useLocation();

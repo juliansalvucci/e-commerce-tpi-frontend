@@ -16,9 +16,7 @@ const SubCategoryProvider = ({ children }) => {
   const fetchSubCategories = async () => {
     try {
       const response = await api.get(
-        showDeleted
-          ? "/subcategory/deleted"
-          : "/subcategory"
+        showDeleted ? "/subcategory/deleted" : "/subcategory"
       );
       const updatedSubCategories = response.data.map((subcat) => ({
         ...subcat,
@@ -50,10 +48,7 @@ const SubCategoryProvider = ({ children }) => {
   // Función para crear una nueva subcategoría
   const createSubCategory = async (newSubCategory) => {
     try {
-      const response = await api.post(
-        "/subcategory",
-        newSubCategory
-      );
+      const response = await api.post("/subcategory", newSubCategory);
       setSubCategories((prevSubCategories) => [
         ...prevSubCategories,
         response.data,
@@ -104,10 +99,7 @@ const SubCategoryProvider = ({ children }) => {
         return;
       }
       const prevSubCategory = selectedSubCategory.name;
-      const response = await api.put(
-        `/subcategory/${id}`,
-        updatedSubCategory
-      );
+      const response = await api.put(`/subcategory/${id}`, updatedSubCategory);
       setSubCategories((prevSubCategories) =>
         prevSubCategories.map((subcat) =>
           subcat.id === id ? { ...subcat, ...response.data } : subcat

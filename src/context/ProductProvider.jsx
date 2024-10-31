@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ProductContext } from "./ProductContext";
+import api from "../api/api";
 import useFormatDateTime from "../utils/useFormatDateTime";
 import useNoImage from "../utils/useNoImage";
-import api from "../api/api";
-
 
 export const ProductProvider = ({ children }) => {
   const noImageURL = useNoImage();
@@ -19,9 +18,7 @@ export const ProductProvider = ({ children }) => {
   const fetchProducts = async () => {
     try {
       const response = await api.get(
-        showDeleted
-          ? "/product/deleted"
-          : "/product"
+        showDeleted ? "/product/deleted" : "/product"
       );
       const updatedProducts = response.data.map((product) => ({
         ...product,
@@ -54,10 +51,7 @@ export const ProductProvider = ({ children }) => {
   // Función para crear un nuevo producto
   const createProduct = async (newProduct) => {
     try {
-      const response = await api.post(
-        "/product",
-        newProduct
-      );
+      const response = await api.post("/product", newProduct);
       setProducts((prevProducts) => [...prevProducts, response.data]);
       Swal.fire({
         icon: "success",
@@ -113,10 +107,7 @@ export const ProductProvider = ({ children }) => {
         return;
       }
       const prevProduct = selectedProduct.name;
-      const response = await api.put(
-        `/product/${id}`,
-        updatedProduct
-      );
+      const response = await api.put(`/product/${id}`, updatedProduct);
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
           product.id === id ? { ...product, ...response.data } : product
@@ -247,7 +238,7 @@ export const ProductProvider = ({ children }) => {
     }));
 
     try {
-      await axios.post("http://localhost:8080/stock-entry", {
+      await api.post("/stock-entry", {
         stockEntryDetails,
       });
 

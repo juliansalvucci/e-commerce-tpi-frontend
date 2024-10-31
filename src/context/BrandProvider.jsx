@@ -15,11 +15,7 @@ const BrandProvider = ({ children }) => {
   // Función para obtener todas las marcas
   const fetchBrands = async () => {
     try {
-      const response = await api.get(
-        showDeleted
-          ? "/brand/deleted"
-          : "/brand"
-      );
+      const response = await api.get(showDeleted ? "/brand/deleted" : "/brand");
       const updatedBrands = response.data.map((brand) => ({
         ...brand,
         deleted: brand.deleted === true,
@@ -50,10 +46,7 @@ const BrandProvider = ({ children }) => {
   // Función para crear una nueva marca
   const createBrand = async (newBrand) => {
     try {
-      const response = await api.post(
-        "/brand",
-        newBrand
-      );
+      const response = await api.post("/brand", newBrand);
       setBrands((prevBrands) => [...prevBrands, response.data]);
       Swal.fire({
         icon: "success",
@@ -99,10 +92,7 @@ const BrandProvider = ({ children }) => {
         return;
       }
       const prevBrand = selectedBrand.name;
-      const response = await api.put(
-        `/brand/${id}`,
-        updatedBrand
-      );
+      const response = await api.put(`/brand/${id}`, updatedBrand);
       setBrands((prevBrands) =>
         prevBrands.map((brand) =>
           brand.id === id ? { ...brand, ...response.data } : brand

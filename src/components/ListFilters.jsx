@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, Typography, Checkbox, FormControlLabel } from "@mui/material";
+import { Stack, Checkbox, FormControlLabel } from "@mui/material";
 
 const ListFilters = ({
   lowStockFilter,

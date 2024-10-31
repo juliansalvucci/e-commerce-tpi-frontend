@@ -142,6 +142,7 @@ export const RegisterPage = () => {
                 <DatePickerComponent
                   label="Fecha de Nacimiento"
                   name="dateBirth"
+                  fullWidth
                 />
               </Box>
 

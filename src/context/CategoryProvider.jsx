@@ -16,9 +16,7 @@ const CategoryProvider = ({ children }) => {
   const fetchCategories = async () => {
     try {
       const response = await api.get(
-        showDeleted
-          ? "/category/deleted"
-          : "/category"
+        showDeleted ? "/category/deleted" : "/category"
       );
       const updatedCategories = response.data.map((cat) => ({
         ...cat,
@@ -50,10 +48,7 @@ const CategoryProvider = ({ children }) => {
   // Función para crear una nueva categoría
   const createCategory = async (newCategory) => {
     try {
-      const response = await api.post(
-        "/category",
-        newCategory
-      );
+      const response = await api.post("/category", newCategory);
       setCategories((prevCategories) => [...prevCategories, response.data]);
       Swal.fire({
         icon: "success",
@@ -99,10 +94,7 @@ const CategoryProvider = ({ children }) => {
         return;
       }
       const prevCategory = selectedCategory.name;
-      const response = await api.put(
-        `/category/${id}`,
-        updatedCategory
-      );
+      const response = await api.put(`/category/${id}`, updatedCategory);
       setCategories((prevCategories) =>
         prevCategories.map((cat) =>
           cat.id === id ? { ...cat, ...response.data } : cat

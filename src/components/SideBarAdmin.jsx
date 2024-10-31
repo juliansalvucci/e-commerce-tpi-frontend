@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
+  Avatar,
+  Collapse,
   Drawer,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Collapse,
   Typography,
-  Avatar,
 } from "@mui/material";
 import {
-  Dashboard,
-  Store,
+  Add as AddIcon,
   Category,
-  SubdirectoryArrowRight,
-  ProductionQuantityLimits,
-  InsertChart,
+  Dashboard,
   ExpandLess,
   ExpandMore,
-  SupervisorAccount as SupervisorAccountIcon,
-  Add as AddIcon,
   List as ListIcon,
+  ProductionQuantityLimits,
+  Store,
+  SubdirectoryArrowRight,
+  InsertChart,
+  SupervisorAccount as SupervisorAccountIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
@@ -41,7 +41,6 @@ const Sidebar = () => {
     if (openSubCategory) setOpenSubCategory(false);
     if (openReports) setOpenReports(false);
   };
-
 
   const handleToggleBrand = () => {
     setOpenBrand(!openBrand);
