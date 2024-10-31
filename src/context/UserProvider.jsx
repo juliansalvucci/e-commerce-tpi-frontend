@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import Swal from "sweetalert2";
-import formatDateTime from "../utils/formatDateTimeUtils";
 import api from "../api/api";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -91,12 +91,12 @@ export const UserProvider = ({ children }) => {
         //NO TIENE FECHA DE CREACIÓN
         ...user,
         deleted: user.deleted === true,
-        creationDatetime: formatDateTime(user.creationDatetime),
+        creationDatetime: useFormatDateTime(user.creationDatetime),
         updateDatetime: user.updateDatetime
-          ? formatDateTime(user.updateDatetime)
+          ? useFormatDateTime(user.updateDatetime)
           : "N/A",
         deleteDatetime: user.deleteDatetime
-          ? formatDateTime(user.deleteDatetime)
+          ? useFormatDateTime(user.deleteDatetime)
           : null,
       }));
       setUsers(updatedUsers);
