@@ -79,14 +79,14 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const selectUserForEdit = (brand) => {
-    setSelectedUser(brand);
+  const selectUserForEdit = (user) => {
+    setSelectedUser(user);
   };
 
   // Función para obtener todas las marcas
   const fetchUsers = async () => {
     try {
-      const response = await api.get(showDeleted ? "/brand/deleted" : "/brand");
+      const response = await api.get(showDeleted ? "/user/deleted" : "/user");
       const updatedUsers = response.data.map((user) => ({
         //NO TIENE FECHA DE CREACIÓN
         ...user,

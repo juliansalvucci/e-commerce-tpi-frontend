@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Crea una instancia de Axios
 const api = axios.create({
-  baseURL: "http://localhost:8080", // Reemplaza con la URL base de tu API
+  baseURL: "http://localhost:8080",
 });
 
 // Agrega un interceptor para incluir el token en cada petición
@@ -12,13 +12,19 @@ api.interceptors.request.use(
     // Verifica si la ruta requiere un token
     const isAuthRoute = config.url.includes("/auth/signin");
     const isRegisterRoute = config.url.includes("/auth/signup");
-    if (!isAuthRoute && !isRegisterRoute) {
-      // Obtén el token desde el almacenamiento local o desde el estado de tu aplicación
-      const token = localStorage.getItem("token");
+    const isProductListRoute = config.url.includes("/product");
+    const isUserListRouter = config.url.includes("/user");
+
+    if (
+      !isAuthRoute &&
+      !isRegisterRoute &&
+      !isProductListRoute &&
+      !isUserListRouter
+    ) {
+      const token = localStorage.getItem("token"); // Token del local storage
 
       if (token) {
-        // Incluye el token en los encabezados de la petición
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`; // Incluye el token en los encabezados de la petición
       }
     }
 
