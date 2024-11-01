@@ -1,15 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-const ListCreateButton = ({ label, tipoClase }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/admin/${tipoClase}/create`);
-  };
-
+const ListCreateStockEntry = ({ onClick }) => {
   return (
     <Button
       variant="contained"
@@ -22,11 +15,11 @@ const ListCreateButton = ({ label, tipoClase }) => {
         },
       }}
       startIcon={<AddIcon />}
-      onClick={handleClick}
+      onClick={onClick}
     >
-      Crear {label}
+      Crear Entrada de Stock
     </Button>
   );
 };
 
-export default ListCreateButton;
+export default ListCreateStockEntry;

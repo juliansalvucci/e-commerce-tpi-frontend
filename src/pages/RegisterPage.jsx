@@ -12,16 +12,15 @@ import { Formik, Form } from "formik";
 import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
 import ABMInputComponent from "../components/ABMInputComponent";
+import DatePickerComponent from "../components/DatePickerComponent";
 import { useUser } from "../context/UserProvider.jsx";
 import { registerSchema } from "../schemas";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
   const { register } = useUser();
-  // Estado para mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
-  // Función para controlar la visibilidad de la contraseña
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -39,10 +38,9 @@ export const RegisterPage = () => {
         border: "1px solid #ccc",
       }}
     >
-      {/* Imagen en el lado izquierdo */}
       <Box
         component="img"
-        src={fondo2} // Reemplaza con la ruta de tu imagen
+        src={fondo2}
         alt="Imagen de bienvenida"
         sx={{
           width: "120vh",
@@ -69,7 +67,7 @@ export const RegisterPage = () => {
         >
           <Box
             component="img"
-            src={logo} // Reemplaza con la ruta de tu imagen
+            src={logo}
             alt="Imagen de bienvenida"
             sx={{
               width: "100px",
@@ -92,6 +90,7 @@ export const RegisterPage = () => {
             apellido: "",
             email: "",
             password: "",
+            dateBirth: null,
           }}
           validationSchema={registerSchema}
           validateOnBlur={true}
@@ -136,6 +135,14 @@ export const RegisterPage = () => {
                       </InputAdornment>
                     ),
                   }}
+                />
+              </Box>
+
+              <Box mb={2}>
+                <DatePickerComponent
+                  label="Fecha de Nacimiento"
+                  name="dateBirth"
+                  fullWidth
                 />
               </Box>
 

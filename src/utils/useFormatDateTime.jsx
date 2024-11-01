@@ -1,4 +1,4 @@
-const formatDateTime = (datetime) => {
+const useFormatDateTime = (datetime) => {
   const date = new Date(datetime);
   const formattedDate = date.toLocaleDateString("es-ES"); // Formato de fecha en español
   const formattedTime = date.toLocaleTimeString("es-ES", {
@@ -9,4 +9,4 @@ const formatDateTime = (datetime) => {
   return `${formattedDate} : ${formattedTime}`;
 };
 
-export default formatDateTime;
+export default useFormatDateTime;

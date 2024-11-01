@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { CategoryContext } from "./CategoryContext";
-import formatDateTime from "../utils/formatDateTimeUtils";
+import api from "../api/api";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const CategoryProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -15,17 +15,18 @@ const CategoryProvider = ({ children }) => {
   // Función para obtener todas las categorías
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/category/deleted"
-          : "http://localhost:8080/category"
+      const response = await api.get(
+        showDeleted ? "/category/deleted" : "/category"
       );
       const updatedCategories = response.data.map((cat) => ({
         ...cat,
         deleted: cat.deleted === true,
-        creationDatetime: formatDateTime(cat.creationDatetime),
+        creationDatetime: useFormatDateTime(cat.creationDatetime),
+        updateDatetime: cat.updateDatetime
+          ? useFormatDateTime(cat.updateDatetime)
+          : "N/A",
         deleteDatetime: cat.deleteDatetime
-          ? formatDateTime(cat.deleteDatetime)
+          ? useFormatDateTime(cat.deleteDatetime)
           : null,
       }));
       setCategories(updatedCategories);
@@ -47,10 +48,7 @@ const CategoryProvider = ({ children }) => {
   // Función para crear una nueva categoría
   const createCategory = async (newCategory) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/category",
-        newCategory
-      );
+      const response = await api.post("/category", newCategory);
       setCategories((prevCategories) => [...prevCategories, response.data]);
       Swal.fire({
         icon: "success",
@@ -66,7 +64,7 @@ const CategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La categoría no pudo ser creada",
-          text: "Ya existe una categoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -96,10 +94,7 @@ const CategoryProvider = ({ children }) => {
         return;
       }
       const prevCategory = selectedCategory.name;
-      const response = await axios.put(
-        `http://localhost:8080/category/${id}`,
-        updatedCategory
-      );
+      const response = await api.put(`/category/${id}`, updatedCategory);
       setCategories((prevCategories) =>
         prevCategories.map((cat) =>
           cat.id === id ? { ...cat, ...response.data } : cat
@@ -121,7 +116,7 @@ const CategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La categoría no pudo ser editada",
-          text: "Ya existe una categoría con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -137,7 +132,7 @@ const CategoryProvider = ({ children }) => {
   // Función para eliminar una categoría
   const deleteCategory = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/category/${id}`);
+      await api.delete(`/category/${id}`);
       setCategories((prevCategories) =>
         prevCategories.filter((cat) => cat.id !== id)
       );
@@ -155,7 +150,7 @@ const CategoryProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La categoría no pudo ser eliminada",
-          text: "La categoría tiene subcategorías asociadas.",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -171,7 +166,7 @@ const CategoryProvider = ({ children }) => {
   // Función para restaurar una categoría eliminada
   const restoreCategory = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/category/recover/${id}`);
+      await api.post(`/category/recover/${id}`);
       await fetchCategories();
       const restoredCategory = categories.find(
         (category) => category.id === id
@@ -195,11 +190,13 @@ const CategoryProvider = ({ children }) => {
     setSelectedCategory(category);
   };
 
+  // Función para encontrar una categoría por su ID
   const findCategoryById = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.name : "";
   };
 
+  // Función para encontrar una categoría por su nombre
   const findCategoryByName = (categoryName) => {
     const category = categories.find((cat) => cat.name === categoryName);
     return category ? category.id : "";

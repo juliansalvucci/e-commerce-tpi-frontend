@@ -4,6 +4,7 @@ import { CartContext } from "../context/CartContext";
 import { ProductPopup } from "../components/ProductPopup";
 import addProductToCart from "../assets/add-product.png";
 import removeProductToCart from "../assets/remove-product.png";
+import Swal from "sweetalert2";
 
 export const CardComponent = ({
   id,
@@ -20,12 +21,22 @@ export const CardComponent = ({
   //Comprobamos si está o no agregado al carrito
   const [added, setAdded] = useState(false);
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false); // Estado para controlar la visibilidad del popup del producto
-  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para almacenar el producto seleccionado del popup del mismo
+  //Estados para controlar la visibilidad y el almacenar el producto seleccionado en el popup
+  const [isPopupVisible, setIsPopupVisible] = useState(false); 
+  const [selectedProduct, setSelectedProduct] = useState(null); 
 
   const addProduct = () => {
-    handlerAdd();
-    setAdded(true);
+    //verifico previamente que el stock sea mayor a 0 para poder agregarlo al carrito
+    if(stock > 0){
+      handlerAdd();
+      setAdded(true);
+    }else{
+      Swal.fire({
+        icon: "warning",
+        title: "No hay más stock disponible",
+        text: `El producto ${title} ha alcanzado el límite de stock`,
+      });
+    }
   };
 
   const removeProduct = () => {

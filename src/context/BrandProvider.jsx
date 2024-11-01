@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { BrandContext } from "./BrandContext";
-import formatDateTime from "../utils/formatDateTimeUtils";
+import api from "../api/api";
+import useFormatDateTime from "../utils/useFormatDateTime";
 
 const BrandProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -15,17 +15,16 @@ const BrandProvider = ({ children }) => {
   // Función para obtener todas las marcas
   const fetchBrands = async () => {
     try {
-      const response = await axios.get(
-        showDeleted
-          ? "http://localhost:8080/brand/deleted"
-          : "http://localhost:8080/brand"
-      );
+      const response = await api.get(showDeleted ? "/brand/deleted" : "/brand");
       const updatedBrands = response.data.map((brand) => ({
         ...brand,
         deleted: brand.deleted === true,
-        creationDatetime: formatDateTime(brand.creationDatetime),
+        creationDatetime: useFormatDateTime(brand.creationDatetime),
+        updateDatetime: brand.updateDatetime
+          ? useFormatDateTime(brand.updateDatetime)
+          : "N/A",
         deleteDatetime: brand.deleteDatetime
-          ? formatDateTime(brand.deleteDatetime)
+          ? useFormatDateTime(brand.deleteDatetime)
           : null,
       }));
       setBrands(updatedBrands);
@@ -47,10 +46,7 @@ const BrandProvider = ({ children }) => {
   // Función para crear una nueva marca
   const createBrand = async (newBrand) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/brand",
-        newBrand
-      );
+      const response = await api.post("/brand", newBrand);
       setBrands((prevBrands) => [...prevBrands, response.data]);
       Swal.fire({
         icon: "success",
@@ -66,7 +62,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser creada",
-          text: "Ya existe una marca con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -96,10 +92,7 @@ const BrandProvider = ({ children }) => {
         return;
       }
       const prevBrand = selectedBrand.name;
-      const response = await axios.put(
-        `http://localhost:8080/brand/${id}`,
-        updatedBrand
-      );
+      const response = await api.put(`/brand/${id}`, updatedBrand);
       setBrands((prevBrands) =>
         prevBrands.map((brand) =>
           brand.id === id ? { ...brand, ...response.data } : brand
@@ -121,7 +114,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser editada",
-          text: "Ya existe una marca con ese nombre",
+          text: error.response.data.name,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -137,7 +130,7 @@ const BrandProvider = ({ children }) => {
   // Función para eliminar una marca
   const deleteBrand = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/brand/${id}`);
+      await api.delete(`/brand/${id}`);
       setBrands((prevBrands) => prevBrands.filter((brand) => brand.id !== id));
       Swal.fire({
         icon: "success",
@@ -153,7 +146,7 @@ const BrandProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "La marca no pudo ser eliminada",
-          text: "La marca tiene productos asociados",
+          text: error.response.data.id,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -169,7 +162,7 @@ const BrandProvider = ({ children }) => {
   // Función para restaurar una marca eliminada
   const restoreBrand = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/brand/recover/${id}`);
+      await api.post(`/brand/recover/${id}`);
       await fetchBrands();
       const restoredBrand = brands.find((brand) => brand.id === id);
       Swal.fire({
@@ -191,6 +184,12 @@ const BrandProvider = ({ children }) => {
     setSelectedBrand(brand);
   };
 
+  // Función para encontrar una marca por su ID
+  const findBrandById = (brandId) => {
+    const brand = brands.find((brand) => brand.id === brandId);
+    return brand ? brand.name : "";
+  };
+
   return (
     <BrandContext.Provider
       value={{
@@ -204,6 +203,7 @@ const BrandProvider = ({ children }) => {
         restoreBrand,
         setShowDeleted,
         selectBrandForEdit,
+        findBrandById,
       }}
     >
       {children}
