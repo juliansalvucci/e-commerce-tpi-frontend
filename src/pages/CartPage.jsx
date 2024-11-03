@@ -4,6 +4,7 @@ import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
 import "../styles/CartPage.css";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 export const CartPage = () => {
   const {
@@ -11,68 +12,32 @@ export const CartPage = () => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
-    updateStock,
-    createOrder,
+    create,
     emptyCart,
+    calculateTotal,
+    calculateTotalQuantity,
   } = useContext(CartContext);
+
+  const { email } = useContext(UserContext);
 
   const navigate = useNavigate();
 
-  const calculateTotal = () => {
-    return shoppingList
-      .reduce((total, product) => total + product.price * product.quantity, 0)
-      .toLocaleString("en-US", { style: "currency", currency: "USD" });
-  };
-
-  // Función para calcular la cantidad total de productos
-  const calculateTotalQuantity = () => {
-    return shoppingList.reduce(
-      (totalQuantity, product) => totalQuantity + product.quantity,
-      0
-    );
-  };
-
-  /*
-  const onSubmit = async () => {
-    // Itera sobre los productos en el carrito (shoppingList) para actualizar el stock de cada uno
-    try {
-      // Itera sobre los productos del carrito y actualiza el stock
-      for (const product of shoppingList) {
-        
-        const updatedStock = product.stock - product.quantity;
-
-        // Actualiza el stock en la base de datos
-        if (updatedStock >= 0) {
-          await updateStock(product.id, updatedStock);
-        }
-          
-        
-      }
-    } catch (error) {
-      console.error("Error al procesar la compra:", error);
-    }
-  };
-  */
-
   const onSubmit = async () => {
     try {
-      // Crea el objeto de datos para la solicitud
       const newOrder = {
-        userEmail: "usuario@ejemplo.com", 
-        orderDetails: shoppingList.map(product => ({
-          productId: product.id, 
-          amount: product.quantity 
-        }))
+        userEmail: email,
+        orderDetails: shoppingList.map((product) => ({
+          productId: product.id,
+          amount: product.quantity,
+        })),
       };
-  
-      // Envía la solicitud de creación de orden al backend
-      await createOrder(newOrder);
-      console.log("Orden creada exitosamente");
+
+      await create(newOrder);
+      console.log("Pedido registrado");
     } catch (error) {
-      console.error("Error al procesar la compra:", error);
+      console.error("Error al finalizar la compra:", error);
     }
   };
-  
 
   const handlerPurchase = () => {
     if (shoppingList.length === 0) {
@@ -98,9 +63,9 @@ export const CartPage = () => {
           confirmButton: "swal-confirm-button",
           cancelButton: "swal-cancel-button",
         },
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          onSubmit();
+          await onSubmit();
           // Mostrar la segunda alerta si el usuario confirma la primera
           const productsPurchased = shoppingList
             .map((product) => `<li>${product.name} x ${product.quantity}</li>`)
@@ -121,8 +86,7 @@ export const CartPage = () => {
             if (result.isConfirmed) {
               // Solo si confirma en la alerta de éxito
               emptyCart();
-              navigate("/");
-              window.location.reload(); // Recarga la página después de redirigir al home
+              navigate("/", { state: { reloadStock: true } });
             }
           });
         }

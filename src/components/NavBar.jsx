@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
 import {
   Badge,
   AppBar,
@@ -11,8 +10,9 @@ import {
   Box,
 } from "@mui/material";
 import { ShoppingCart, Search } from "@mui/icons-material";
-import { CartPopup } from "./CartPopup"; // Componente del popup
 import { CartContext } from "../context/CartContext";
+import { CartPopup } from "./CartPopup"; // Componente del popup
+import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
   const navbarStyle = {
@@ -91,7 +91,9 @@ const NavBar = () => {
           <NavLink to="/register" style={linkStyle} onClick={closePopup}>
             <Button color="inherit">Registrarse</Button>
           </NavLink>
-
+          <NavLink to="/orders" style={linkStyle} onClick={closePopup}>
+            <Button color="inherit">Lista de pedidos</Button>
+          </NavLink>
           <NavLink to="/carrito" style={linkStyle}>
             <Button color="inherit" style={{ marginLeft: "10px" }}>
               Carrito
