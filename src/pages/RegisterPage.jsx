@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -13,13 +13,42 @@ import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
 import ABMInputComponent from "../components/ABMInputComponent";
 import DatePickerComponent from "../components/DatePickerComponent";
-import { useUser } from "../context/UserProvider.jsx";
+import { UserContext } from "../context/UserContext";
 import { registerSchema } from "../schemas";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
-  const { register } = useUser();
+  const { createUser, editUser, selectedUser } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
+
+  const onSubmit = async (values, { resetForm, setSubmitting }) => {
+    try {
+      const date = new Date(values.fechaNacimiento); // Fix provisional hasta próxima entrega
+      const isoDate = date.toISOString();
+      if (!selectedUser) {
+        await createUser({
+          firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
+          lastName: values.apellido.trim(),
+          email: values.email.trim(),
+          dateBirth: isoDate,
+          password: values.password,
+        });
+        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+      } else {
+        await editUser(selectedUser.id, {
+          firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
+          lastName: values.apellido.trim(),
+          email: values.email.trim(),
+          dateBirth: isoDate,
+          password: values.password,
+        });
+      }
+    } catch (error) {
+      console.error("Error al crear o editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -88,14 +117,14 @@ export const RegisterPage = () => {
           initialValues={{
             nombre: "",
             apellido: "",
+            fechaNacimiento: null,
             email: "",
             password: "",
-            dateBirth: null,
           }}
           validationSchema={registerSchema}
           validateOnBlur={true}
           validateOnChange={true}
-          onSubmit={register}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
@@ -141,7 +170,7 @@ export const RegisterPage = () => {
               <Box mb={2}>
                 <DatePickerComponent
                   label="Fecha de Nacimiento"
-                  name="dateBirth"
+                  name="fechaNacimiento"
                   fullWidth
                 />
               </Box>

@@ -83,7 +83,7 @@ export const productSchema = yup.object().shape({
 export const registerSchema = yup.object().shape({
   nombre: yup.string().required("El nombre es obligatorio"),
   apellido: yup.string().required("El apellido es obligatorio"),
-  dateBirth: yup
+  fechaNacimiento: yup
     .date()
     .typeError("La fecha de nacimiento debe ser válida")
     .required("La fecha de nacimiento es obligatoria"),
@@ -96,6 +96,15 @@ export const registerSchema = yup.object().shape({
     .min(8, "La contraseña debe tener al menos 8 caracteres")
     .max(22, "La contraseña debe tener como máximo 22 caracteres")
     .required("La contraseña es obligatoria"),
+});
+
+export const adminSchema = yup.object().shape({
+  nombre: yup.string().required("El nombre es obligatorio"),
+  apellido: yup.string().required("El apellido es obligatorio"),
+  fechaNacimiento: yup
+    .date()
+    .typeError("La fecha de nacimiento debe ser válida")
+    .required("La fecha de nacimiento es obligatoria"),
 });
 
 export const loginSchema = yup.object({

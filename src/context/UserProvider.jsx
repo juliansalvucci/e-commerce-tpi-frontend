@@ -8,64 +8,58 @@ import useFormatDateTime from "../utils/useFormatDateTime";
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [role, setRole] = useState();
-  const [email, setEmail] = useState();
-  const [userName, setUsername] = useState();
   const [users, setUsers] = useState([]);
+  const [loggedUser, setLoggedUser] = useState();
+  const [userName, setUsername] = useState();
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const register = async (values, { setSubmitting }) => {
+  // Función para obtener todas las marcas
+  const fetchUsers = async () => {
     try {
-      // Llamada POST al backend usando Axios
-      const response = await api.post("/auth/signup", {
-        firstName: values.nombre,
-        lastName: values.apellido,
-        email: values.email,
-        dateBirth: values.dateBirth,
-        password: values.password,
-      });
-      localStorage.setItem("token", response.data.token);
-      setEmail(response.data.email);
-      setRole(response.data.role);
-      setUsername(response.data.firstName + " " + response.data.lastName);
-      Swal.fire({
-        icon: "success",
-        title: "Usuario registrado con éxito",
-      });
-      navigate("/");
+      const response = await api.get(showDeleted ? "/user/deleted" : "/user");
+      const updatedUsers = response.data.map((user) => ({
+        ...user,
+        deleted: user.deleted === true,
+        creationDatetime: useFormatDateTime(user.creationDatetime),
+        updateDateTime: user.updateDateTime
+          ? useFormatDateTime(user.updateDateTime)
+          : "N/A",
+        deleteDateTime: user.deleteDateTime
+          ? useFormatDateTime(user.deleteDateTime)
+          : null,
+      }));
+      setUsers(updatedUsers);
     } catch (error) {
-      console.error("Error en el registro:", error);
-      Swal.fire({
-        icon: "error",
-        title: "¡Error!",
-        text: "Hubo un problema en el registro",
-      });
-    } finally {
-      setSubmitting(false);
+      console.error("Error (fetch users):", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
-  const login = async (values, { setSubmitting }) => {
+  useEffect(() => {
+    if (location.pathname === "/admin/user/list") {
+      fetchUsers();
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [showDeleted]);
+
+  const loginUser = async (values, { setSubmitting }) => {
     try {
-      // Llamada POST al backend usando Axios
       const response = await api.post("/auth/signin", {
         email: values.email,
         password: values.password,
       });
-      //console.log("Respuesta del servidor:", response.data);
       localStorage.setItem("token", response.data.token);
-      setEmail(response.data.email);
-      setRole(response.data.role);
-      setUsername(response.data.firstName + " " + response.data.lastName);
-
+      setLoggedUser(response.data);
+      setUsername(loggedUser.email);
       redirect(response.data.role);
       Swal.fire({
         icon: "success",
         title: "Bienvenido",
       });
       navigate("/");
-      // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito
     } catch (error) {
       console.error("Error en el registro:", error);
       Swal.fire({
@@ -73,46 +67,27 @@ export const UserProvider = ({ children }) => {
         title: "¡Error!",
         text: "Verifique sus credenciales",
       });
-      // Aquí puedes manejar el error, como mostrar un mensaje de error
     } finally {
       setSubmitting(false);
     }
   };
 
-  const selectUserForEdit = (user) => {
-    setSelectedUser(user);
+  const logoutUser = () => {
+    localStorage.removeItem("token");
+    setLoggedUser(null);
+    setUsername(null);
   };
 
-  // Función para obtener todas las marcas
-  const fetchUsers = async () => {
+  const createUser = async (newUser) => {
+    const URL =
+      location.pathname === "/admin/user/create" ? "/auth/admin" : "/auth/signup";
     try {
-      const response = await api.get(showDeleted ? "/user/deleted" : "/user");
-      const updatedUsers = response.data.map((user) => ({
-        //NO TIENE FECHA DE CREACIÓN
-        ...user,
-        deleted: user.deleted === true,
-        creationDatetime: useFormatDateTime(user.creationDatetime),
-        updateDatetime: user.updateDatetime
-          ? useFormatDateTime(user.updateDatetime)
-          : "N/A",
-        deleteDatetime: user.deleteDatetime
-          ? useFormatDateTime(user.deleteDatetime)
-          : null,
-      }));
-      setUsers(updatedUsers);
-    } catch (error) {
-      console.error("Error (fetch usuario):", error); // Por ahora mostramos el error por consola por comodidad
-    }
-  };
-
-  const createAdminUser = async (newUser) => {
-    try {
-      const response = await api.post("/user", newUser);
+      const response = await api.post(URL, newUser);
       setUsers((prevUsers) => [...prevUsers, response.data]);
       Swal.fire({
         icon: "success",
         title: "Exito!",
-        text: `El usuario fue creado con éxito!`,
+        text: `El usuario ${response.data.firstName} fue creado con éxito!`,
         customClass: {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
@@ -123,7 +98,7 @@ export const UserProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "El usuario no puede ser creado",
-          text: "TO-DO",
+          text: error.response.data.email,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -137,11 +112,14 @@ export const UserProvider = ({ children }) => {
   };
 
   // Función para editar una marca existente
-  const editUser = async (id, updatedUser) => {
+  const editUser = async (id, updatedUser, userEmail) => {
+    // Deuda Técnica: Aca también tendriamos que poder hacer "Actualizar datos personales" para CLIENT/USER
     try {
-      if (updatedUser.email === selectedUser?.email) {
-        //VALIDO POR EMAIL PERO CAMBIALA DEPENDIENDO DE LO QUE USES
-        // el ? es para que no de error si no hay marca seleccionada
+      if (
+        updatedUser.firstName === selectedUser?.firstName &&
+        updatedUser.lastName === selectedUser?.lastName &&
+        updatedUser.dateBirth === selectedUser?.dateBirth
+      ) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -153,11 +131,10 @@ export const UserProvider = ({ children }) => {
         });
         return;
       }
-      const prevUser = selectedUser.name;
       const response = await api.put(`/user/${id}`, updatedUser);
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
-          user.email === email ? { ...user, ...response.data } : user
+          user.email === userEmail ? { ...user, ...response.data } : user
         )
       );
       Swal.fire({
@@ -169,7 +146,7 @@ export const UserProvider = ({ children }) => {
           confirmButton: "swal-ok-button",
         },
       });
-      selectuserForEdit(null);
+      selectUserForEdit(null);
       navigate("/admin/user/list");
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -191,6 +168,7 @@ export const UserProvider = ({ children }) => {
 
   // Función para eliminar una marca
   const deleteUser = async (id) => {
+    // Deuda Técnica: Acá tendría que poder borrarse una cuenta CLIENT/USER también
     try {
       await api.delete(`/user/${id}`);
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
@@ -225,8 +203,8 @@ export const UserProvider = ({ children }) => {
   const restoreUser = async (id) => {
     try {
       await api.post(`/user/recover/${id}`);
-      await fetchusers();
-      const restoredUser = users.find((user) => user.email === id);
+      await fetchUsers();
+      //const restoredUser = users.find((user) => user.id === id);
       Swal.fire({
         icon: "success",
         title: "Exito!",
@@ -250,36 +228,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const selectUserForEdit = (user) => {
+    setSelectedUser(user);
   };
-
-  useEffect(() => {
-    if (location.pathname === "/admin/users/list") {
-      //VER
-      fetchUsers();
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [showDeleted]);
 
   return (
     <UserContext.Provider
       value={{
-        setShowDeleted,
-        register,
-        login,
-        logout,
-        role,
-        email,
-        userName,
-        createAdminUser,
+        users,
+        loggedUser,
+        showDeleted,
+        selectedUser,
         fetchUsers,
-        deleteUser,
+        loginUser,
+        logoutUser,
+        createUser,
         editUser,
+        deleteUser,
         restoreUser,
+        setShowDeleted,
         selectUserForEdit,
       }}
     >

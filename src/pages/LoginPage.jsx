@@ -17,7 +17,7 @@ import { loginSchema } from "../schemas";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useUser();
+  const { loginUser } = useUser();
   // Estado para mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
@@ -94,7 +94,7 @@ export const LoginPage = () => {
           validationSchema={loginSchema}
           validateOnBlur={true}
           validateOnChange={true}
-          onSubmit={login}
+          onSubmit={loginUser}
         >
           {({ isSubmitting }) => (
             <Form>
