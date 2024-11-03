@@ -3,22 +3,14 @@ import { CartContext } from "../context/CartContext";
 import "../styles/CartPopUp.css";
 
 export const CartPopup = ({ isVisible, onClose }) => {
-  const { shoppingList, removeProduct, incrementQuantity, decrementQuantity } =
-    useContext(CartContext);
-
-  const calculateTotal = () => {
-    return shoppingList
-      .reduce((total, product) => total + product.price * product.quantity, 0)
-      .toLocaleString("en-US", { style: "currency", currency: "USD" });
-  };
-
-  // Función para calcular la cantidad total de productos
-  const calculateTotalQuantity = () => {
-    return shoppingList.reduce(
-      (totalQuantity, product) => totalQuantity + product.quantity,
-      0
-    );
-  };
+  const {
+    shoppingList,
+    removeProduct,
+    incrementQuantity,
+    decrementQuantity,
+    calculateTotal,
+    calculateTotalQuantity,
+  } = useContext(CartContext);
 
   if (!isVisible) return null; // Si el popup no está visible, no se renderiza nada
 

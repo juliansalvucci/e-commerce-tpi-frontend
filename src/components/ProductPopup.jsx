@@ -5,6 +5,7 @@ import removeProductToCart from "../assets/remove-product.png";
 import Swal from "sweetalert2";
 import "../styles/ProductPopUp.css";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 export const ProductPopup = ({ isVisible, onClose, product }) => {
   const {
@@ -13,14 +14,15 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
-    updateStock,
     emptyCart,
+    create,
   } = useContext(CartContext);
 
   // Estado local para controlar si el producto ya está en el carrito
   const [added, setAdded] = useState(false); // Aquí se declara `added`
   const [localQuantity, setLocalQuantity] = useState(product.quantity || 1); // Cantidad por defecto
   const navigate = useNavigate();
+  const { email } = useContext(UserContext);
 
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {
@@ -61,19 +63,19 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
   };
 
   const onSubmit = async () => {
-    // Itera sobre los productos en el carrito (shoppingList) para actualizar el stock de cada uno
     try {
-      // Itera sobre los productos del carrito y actualiza el stock
-      for (const product of shoppingList) {
-        const updatedStock = product.stock - product.quantity;
+      const newOrder = {
+        userEmail: email,
+        orderDetails: shoppingList.map((product) => ({
+          productId: product.id,
+          amount: product.quantity,
+        })),
+      };
 
-        // Actualiza el stock en la base de datos
-        if (updatedStock >= 0) {
-          await updateStock(product.id, updatedStock);
-        }
-      }
+      await create(newOrder);
+      console.log("Pedido registrado");
     } catch (error) {
-      console.error("Error al procesar la compra:", error);
+      console.error("Error al finalizar la compra:", error);
     }
   };
 
@@ -90,9 +92,9 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
         confirmButton: "swal-confirm-button",
         cancelButton: "swal-cancel-button",
       },
-    }).then((result) => {
-      onSubmit();
+    }).then(async(result) => {
       if (result.isConfirmed) {
+        await onSubmit();
         // Mostrar la segunda alerta si el usuario confirma la primera
         Swal.fire({
           icon: "success",
