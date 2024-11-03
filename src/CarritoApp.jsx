@@ -26,6 +26,8 @@ import ListOrderPage from "./pages/ListOrderPage";
 import ReportClientsPage from "./pages/ReportClientsPage";
 import ReportSalesPage from "./pages/ReportSalesPage";
 import SideBarAdmin from "./components/SideBarAdmin";
+import ListOrderHistory from "./pages/ListOrderHistory";
+import OrderHistoryProvider from "./context/OrderHistoryProvider";
 
 export const CarritoApp = () => {
   const location = useLocation();
@@ -121,22 +123,25 @@ export const CarritoApp = () => {
 
     <ProductProvider>
       <CartProvider>
-        {/* Renderiza NavBar solo si no está en las rutas de login o register */}
-        {!hideNavBarAndFooter && <NavBar />}
-        <div>
-          <Routes>
-            {/* Especifico qué elementos (componente) debo mostrar al tener la ruta localhost:5174/*/}
-            <Route path="/" element={<ProductsPage />}></Route>
-            {/* Específico qué elementos (componente) debo mostrar al tener la ruta localhost:5174/carrito */}
-            <Route path="/carrito" element={<CartPage />}></Route>
-            {/* Agrego el siguiente camino en caso de que el usuario ingrese algo diferente a lo pedido */}
-            <Route path="/*" element={<Navigate to="/" />}></Route>
-            <Route path="/login" element={<LoginPage />}></Route>
-            <Route path="/register" element={<RegisterPage />}></Route>
-          </Routes>
-        </div>
-        {/* Renderiza Footer solo si no está en las rutas de login o register */}
-        {!hideNavBarAndFooter && <Footer />}
+        <OrderHistoryProvider>
+          {/* Renderiza NavBar solo si no está en las rutas de login o register */}
+          {!hideNavBarAndFooter && <NavBar />}
+          <div>
+            <Routes>
+              {/* Especifico qué elementos (componente) debo mostrar al tener la ruta localhost:5174/*/}
+              <Route path="/" element={<ProductsPage />}></Route>
+              {/* Específico qué elementos (componente) debo mostrar al tener la ruta localhost:5174/carrito */}
+              <Route path="/carrito" element={<CartPage />}></Route>
+              {/* Agrego el siguiente camino en caso de que el usuario ingrese algo diferente a lo pedido */}
+              <Route path="/*" element={<Navigate to="/" />}></Route>
+              <Route path="/login" element={<LoginPage />}></Route>
+              <Route path="/register" element={<RegisterPage />}></Route>
+              <Route path="/orders" element={<ListOrderHistory />}></Route>
+            </Routes>
+          </div>
+          {/* Renderiza Footer solo si no está en las rutas de login o register */}
+          {!hideNavBarAndFooter && <Footer />}
+        </OrderHistoryProvider>
       </CartProvider>
     </ProductProvider>
   );

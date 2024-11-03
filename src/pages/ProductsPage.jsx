@@ -1,11 +1,20 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { CardComponent } from "../components/CardComponent";
 import { ProductContext } from "../context/ProductContext";
 import { CartContext } from "../context/CartContext";
 
 export const ProductsPage = () => {
-  const { products } = useContext(ProductContext);
+  const { products, fetchProducts } = useContext(ProductContext);
   const { addProduct, removeProduct } = useContext(CartContext);
+  const location = useLocation();
+
+  // Recargar productos si viene con reloadStock: true
+  useEffect(() => {
+    if (location.state?.reloadStock) {
+      fetchProducts();
+    }
+  }, [location.state, fetchProducts]);
 
   // Estado para la paginación
   const [currentPage, setCurrentPage] = useState(1);
