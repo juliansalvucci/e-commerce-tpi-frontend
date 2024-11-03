@@ -23,12 +23,14 @@ export const RegisterPage = () => {
 
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
+      const date = new Date(values.fechaNacimiento); // Fix provisional hasta próxima entrega
+      const isoDate = date.toISOString();
       if (!selectedUser) {
         await createUser({
           firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
           lastName: values.apellido.trim(),
           email: values.email.trim(),
-          dateBirth: values.fechaNacimiento,
+          dateBirth: isoDate,
           password: values.password,
         });
         resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
@@ -37,7 +39,7 @@ export const RegisterPage = () => {
           firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
           lastName: values.apellido.trim(),
           email: values.email.trim(),
-          dateBirth: values.fechaNacimiento,
+          dateBirth: isoDate,
           password: values.password,
         });
       }
