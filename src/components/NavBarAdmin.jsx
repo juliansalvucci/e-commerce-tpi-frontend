@@ -10,6 +10,9 @@ const NavBarAdmin = () => {
   // Lógica para Breadcrumbs basada en la ruta actual
   const breadcrumbsMap = {
     "/admin": ["Principal", "Dashboard"],
+    "/admin/user/create": ["Administración", "Administrador", "Crear"],
+    "/admin/user/edit": ["Administración", "Administrador", "Editar"],
+    "/admin/user/list": ["Administración", "Administrador", "Listado"],
     "/admin/brand/create": ["Administración", "Marca", "Crear"],
     "/admin/brand/edit": ["Administración", "Marca", "Editar"],
     "/admin/brand/list": ["Administración", "Marca", "Listado"],
@@ -27,9 +30,6 @@ const NavBarAdmin = () => {
     "/admin/report/clients": ["Reportes", "Clientes"],
     "/admin/report/sales": ["Reportes", "Ventas"],
     "/admin/report/stock": ["Reportes", "Stock"],
-    "/admin/user/create": ["Administración", "Administrador", "Crear"],
-    "/admin/user/edit": ["Administración", "Administrador", "Editar"],
-    "/admin/user/list": ["Administración", "Administrador", "Listado"],
   };
 
   const breadcrumbs = breadcrumbsMap[location.pathname] || [""];
