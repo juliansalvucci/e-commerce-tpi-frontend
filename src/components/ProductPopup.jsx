@@ -22,7 +22,9 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
   const [added, setAdded] = useState(false); // Aquí se declara `added`
   const [localQuantity, setLocalQuantity] = useState(product.quantity || 1); // Cantidad por defecto
   const navigate = useNavigate();
-  const { loggedUser } = useContext(UserContext);
+  //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
+
+  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
 
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {

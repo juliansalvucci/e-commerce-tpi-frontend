@@ -18,7 +18,9 @@ export const CartPage = () => {
     calculateTotalQuantity,
   } = useContext(CartContext);
 
-  const { loggedUser } = useContext(UserContext);
+  //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
+
+  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
 
   const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ export const CartPage = () => {
         })),
       };
 
+      //console.log(newOrder);
       await createOrder(newOrder);
       //console.log("Pedido registrado");
     } catch (error) {
