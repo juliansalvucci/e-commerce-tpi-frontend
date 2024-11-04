@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
       setLoggedUser(userData);
       setUsername(userData.email);
     }
-  }, []);
+  }, [], [location.pathname]);
 
   // Función para obtener todas las marcas
   const fetchUsers = async () => {
@@ -234,6 +234,15 @@ export const UserProvider = ({ children }) => {
 
   const redirectUser = (role) => {
     if (role == "USER") {
+      Swal.fire({
+        icon: "success",
+        title: "Exito!",
+        text: `Sesión iniciada con éxito!`,
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-ok-button",
+        },
+      });
       navigate("/");
     } else {
       Swal.fire({

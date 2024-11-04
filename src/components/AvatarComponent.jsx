@@ -78,7 +78,7 @@ const AvatarComponent = ({ user, onLogout }) => {
         <MenuItem disabled>
           <Typography variant="body1">{user.email}</Typography>
         </MenuItem>
-        {user.role === "ADMIN" && (
+        {user.role === "ADMIN" && !location.pathname.includes("/admin") && (
           <MenuItem onClick={handleDashboard}>Ir a Dashboard</MenuItem>
         )}
         <MenuItem onClick={handleMenuClose}>Actualizar información</MenuItem>
