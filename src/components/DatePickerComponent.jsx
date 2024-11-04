@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useField, useFormikContext } from "formik";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "dayjs/locale/es"; // Asegúrate de importar el idioma español para dayjs
+import "dayjs/locale/es";
 import dayjs from "dayjs";
 
 const DatePickerComponent = ({ label, fullWidth, ...props }) => {
@@ -11,7 +11,6 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
   const [field, meta] = useField(props);
   const location = useLocation();
 
-  // Determinar el estilo según la ruta actual
   const isAdminRoute = location.pathname.startsWith("/admin/");
   const isLoginOrRegister =
     location.pathname === "/login" || location.pathname === "/register";
@@ -33,15 +32,29 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
         },
       };
 
+  const handleDateChange = (value) => {
+    const formattedValue = value ? value.format("YYYY-MM-DD") : ""; // LocalDate format
+    setFieldValue(field.name, formattedValue);
+  };
+
+  const handleManualInput = (event) => {
+    const inputValue = event.target.value;
+    const parsedDate = dayjs(inputValue, "DD/MM/YYYY", true);
+    if (parsedDate.isValid()) {
+      setFieldValue(field.name, parsedDate.format("YYYY-MM-DD")); // Format for backend
+    }
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
       <DatePicker
         {...props}
         label={label}
         value={field.value ? dayjs(field.value) : null}
-        onChange={(value) => setFieldValue(field.name, value ? value.format("DD/MM/YYYY") : "")}
+        onChange={handleDateChange}
+        onBlur={handleManualInput}
         format="DD/MM/YYYY"
-        views={['day', 'month', 'year']}
+        views={["day", "month", "year"]}
         maxDate={dayjs()}
         yearsOrder="desc"
         slotProps={{
@@ -53,12 +66,8 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
             InputProps: styles.InputProps,
             InputLabelProps: styles.InputLabelProps,
           },
-          previousIconButton: { // Deshabilitados para evitar error al cambiar de mes
-            disabled: true,
-          },
-          nextIconButton: {
-            disabled: true,
-          }
+          previousIconButton: { disabled: true },
+          nextIconButton: { disabled: true },
         }}
         sx={{
           maxWidth: isAdminRoute ? "400px" : "1500px",
@@ -69,4 +78,3 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
 };
 
 export default DatePickerComponent;
-
