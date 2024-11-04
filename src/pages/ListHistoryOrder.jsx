@@ -28,16 +28,16 @@ const ListHistoryOrder = () => {
     <Table size="small" sx={{ backgroundColor: "white" }}>
       <TableHead sx={{ backgroundColor: "#283b54", color: "white" }}>
         <TableRow>
-          <TableCell align="center" sx={{ color: "white"}}>
+          <TableCell align="center" sx={{ color: "white" }}>
             Productos
           </TableCell>
-          <TableCell align="center" sx={{ color: "white"}}>
+          <TableCell align="center" sx={{ color: "white" }}>
             Precio Unitario
           </TableCell>
-          <TableCell align="center" sx={{ color: "white"}}>
+          <TableCell align="center" sx={{ color: "white" }}>
             Cantidad
           </TableCell>
-          <TableCell align="center" sx={{ color: "white"}}>
+          <TableCell align="center" sx={{ color: "white" }}>
             Subtotal
           </TableCell>
         </TableRow>
@@ -122,13 +122,20 @@ const ListHistoryOrder = () => {
                 </TableHead>
                 <TableBody>
                   {orders
+                    .filter(
+                      (order) =>
+                        order.orderDetails && order.orderDetails.length > 0
+                    ) // POR AHORA: Filtrar pedidos vacíos (hasta arreglar)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((order) => (
                       <TableRow key={order.id}>
                         <TableCell>
                           {renderProducts(order.orderDetails)}
                         </TableCell>
-                        <TableCell align="center" sx={{ fontSize: "15px", color: "#283b54" }}>
+                        <TableCell
+                          align="center"
+                          sx={{ fontSize: "15px", color: "#283b54" }}
+                        >
                           ${order.total.toFixed(2)}
                         </TableCell>
                       </TableRow>
