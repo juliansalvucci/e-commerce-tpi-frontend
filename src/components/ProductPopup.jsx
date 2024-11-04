@@ -1,11 +1,11 @@
-import { useContext, useState, useEffect } from "react";
-import { CartContext } from "../context/CartContext";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import addProductToCart from "../assets/add-product.png";
 import removeProductToCart from "../assets/remove-product.png";
-import Swal from "sweetalert2";
-import "../styles/ProductPopUp.css";
-import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 import { UserContext } from "../context/UserContext";
+import "../styles/ProductPopUp.css";
 
 export const ProductPopup = ({ isVisible, onClose, product }) => {
   const {
@@ -15,14 +15,14 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     incrementQuantity,
     decrementQuantity,
     emptyCart,
-    create,
+    createOrder,
   } = useContext(CartContext);
 
   // Estado local para controlar si el producto ya está en el carrito
   const [added, setAdded] = useState(false); // Aquí se declara `added`
   const [localQuantity, setLocalQuantity] = useState(product.quantity || 1); // Cantidad por defecto
   const navigate = useNavigate();
-  const { email } = useContext(UserContext);
+  const { loggedUser } = useContext(UserContext);
 
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {
@@ -38,32 +38,33 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
 
   // Función para agregar el producto al carrito
   const handleAddProduct = () => {
-    addProduct(product, localQuantity); // Agrega el producto con la cantidad actual
+    addProduct(product, localQuantity);
     setAdded(true);
   };
 
   // Función para eliminar el producto del carrito
   const handleRemoveProduct = () => {
-    removeProduct(product.id); // Elimina el producto del carrito
+    removeProduct(product.id);
     setAdded(false);
   };
 
   // Función para incrementar la cantidad en el popup y en el carrito
   const handleIncrement = () => {
     setLocalQuantity(localQuantity + 1);
-    incrementQuantity(product.id); // Incrementa la cantidad en el carrito
+    incrementQuantity(product.id);
   };
 
   // Función para decrementar la cantidad en el popup y en el carrito
   const handleDecrement = () => {
     if (localQuantity > 1) {
       setLocalQuantity(localQuantity - 1);
-      decrementQuantity(product.id); // Decrementa la cantidad en el carrito
+      decrementQuantity(product.id);
     }
   };
 
   const onSubmit = async () => {
     try {
+      const email = loggedUser?.email;
       const newOrder = {
         userEmail: email,
         orderDetails: shoppingList.map((product) => ({
@@ -72,8 +73,9 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
         })),
       };
 
-      await create(newOrder);
-      console.log("Pedido registrado");
+      //console.log(newOrder);
+      await createOrder(newOrder);
+      //console.log("Pedido registrado");
     } catch (error) {
       console.error("Error al finalizar la compra:", error);
     }
@@ -92,7 +94,7 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
         confirmButton: "swal-confirm-button",
         cancelButton: "swal-cancel-button",
       },
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         await onSubmit();
         // Mostrar la segunda alerta si el usuario confirma la primera
@@ -101,11 +103,10 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
           title: "La compra se ha realizado con éxito",
           customClass: {
             popup: "swal-success-popup",
-            confirmButton: "swal-ok-button", // Clase personalizada para el botón "OK"
+            confirmButton: "swal-ok-button",
           },
         }).then((result) => {
           if (result.isConfirmed) {
-            // Solo si confirma en la alerta de éxito
             emptyCart();
             navigate("/");
             window.location.reload(); // Recarga la página después de redirigir al Home
