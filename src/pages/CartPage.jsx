@@ -12,18 +12,20 @@ export const CartPage = () => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
-    create,
+    createOrder,
     emptyCart,
     calculateTotal,
     calculateTotalQuantity,
   } = useContext(CartContext);
 
-  const { email } = useContext(UserContext);
+  const { loggedUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   const onSubmit = async () => {
     try {
+      //console.log(loggedUser);
+      const email = loggedUser?.email;
       const newOrder = {
         userEmail: email,
         orderDetails: shoppingList.map((product) => ({
@@ -32,8 +34,8 @@ export const CartPage = () => {
         })),
       };
 
-      await create(newOrder);
-      console.log("Pedido registrado");
+      await createOrder(newOrder);
+      //console.log("Pedido registrado");
     } catch (error) {
       console.error("Error al finalizar la compra:", error);
     }

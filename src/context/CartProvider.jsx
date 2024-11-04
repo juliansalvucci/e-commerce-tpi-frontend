@@ -104,7 +104,7 @@ export const CartProvider = ({ children }) => {
       .reduce((total, product) => total + product.price * product.quantity, 0)
       .toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
-  console.log("Total", calculateTotal());
+  //console.log("Total", calculateTotal());
 
   const calculateTotalQuantity = () => {
     return shoppingList.reduce(
@@ -113,10 +113,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  console.log("Total Quantity", calculateTotalQuantity());
+  //console.log("Total Quantity", calculateTotalQuantity());
 
   // Función para crear un nuevo pedido
-  const create = async (newOrder) => {
+  const createOrder = async (newOrder) => {
     try {
       const response = await api.post("/orders", newOrder);
       setOrders((prevOrders) => [...prevOrders, response.data]);
@@ -164,7 +164,7 @@ export const CartProvider = ({ children }) => {
         decrementQuantity,
         selectedProductForEdit,
         emptyCart,
-        create,
+        createOrder,
         orders,
         setOrders,
         calculateTotalQuantity,
