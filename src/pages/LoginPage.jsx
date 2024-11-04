@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -12,14 +12,27 @@ import { Formik, Form } from "formik";
 import fondo from "../assets/fondo.png";
 import logo from "../assets/logo.png";
 import ABMInputComponent from "../components/ABMInputComponent";
-import { useUser } from "../context/UserProvider.jsx";
+import { UserContext } from "../context/UserContext";
 import { loginSchema } from "../schemas";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { loginUser } = useUser();
-  // Estado para mostrar/ocultar la contraseña
+  const { loginUser } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
+
+  const onSubmit = async (values, { resetForm, setSubmitting }) => {
+    try {
+      await loginUser({
+        email: values.email.trim(),
+        password: values.password,
+      });
+      resetForm();
+    } catch (error) {
+      console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Función para controlar la visibilidad de la contraseña
   const handleClickShowPassword = () => {
@@ -94,7 +107,7 @@ export const LoginPage = () => {
           validationSchema={loginSchema}
           validateOnBlur={true}
           validateOnChange={true}
-          onSubmit={loginUser}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
