@@ -1,9 +1,14 @@
+import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, IconButton, Breadcrumbs, Typography } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Swal from "sweetalert2";
+import AdminAvatarComponent from "./AvatarComponent";
+import { UserContext } from "../context/UserContext";
 
 const NavBarAdmin = () => {
+  const { loggedUser, logoutUser } = useContext(UserContext);
+  
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -71,6 +76,7 @@ const NavBarAdmin = () => {
 
       {/* Iconos */}
       <Box display="flex">
+      <AdminAvatarComponent user={loggedUser} onLogout={logoutUser} />
         <IconButton onClick={handleNavigateHome}>
           <HomeOutlinedIcon sx={{ color: "white" }} />
         </IconButton>
