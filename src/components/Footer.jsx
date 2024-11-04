@@ -8,7 +8,7 @@ const Footer = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#00203D", color: "white", py: 4 }}>
+    <Box sx={{ bgcolor: "#283b54", color: "white", py: 4 }}>
       <Container>
         <Grid container spacing={4}>
           {/* Contactos */}
@@ -135,24 +135,24 @@ const Footer = () => {
             <Box mt={2}>
               <Typography variant="h5">Métodos de pago</Typography>
               <img
-                src="path/to/visa.png"
+                src="https://www.svgrepo.com/show/508730/visa-classic.svg"
                 alt="Visa"
                 width="50"
                 style={{ marginRight: "10px" }}
               />
               <img
-                src="path/to/mastercard.png"
+                src="https://www.svgrepo.com/show/508703/mastercard.svg"
                 alt="Mastercard"
                 width="50"
                 style={{ marginRight: "10px" }}
               />
               <img
-                src="path/to/paypal.png"
+                src="https://www.svgrepo.com/show/508716/paypal.svg"
                 alt="PayPal"
                 width="50"
                 style={{ marginRight: "10px" }}
               />
-              <img src="path/to/bitcoin.png" alt="Bitcoin" width="50" />
+              <img src="https://www.svgrepo.com/show/452169/bitcoin.svg" alt="Bitcoin" width="50" />
             </Box>
           </Grid>
         </Grid>
