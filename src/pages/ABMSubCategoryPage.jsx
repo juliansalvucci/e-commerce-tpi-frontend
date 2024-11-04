@@ -89,11 +89,13 @@ const ABMSubCategoryPage = () => {
                   mb: 2,
                 }}
               >
-                <ABMInputComponent
-                  label="Nombre"
-                  name="nombre"
-                  type="text"
-                  placeholder="Ingrese el nombre"
+                <ABMSelectComponent
+                  label="Categoría"
+                  name="categoria"
+                  options={categories.map((cat) => ({
+                    value: cat.id, // Usamos el ID de la categoría como valor
+                    label: cat.name, // Usamos el nombre de la categoría como label
+                  }))}
                 />
               </Box>
               <Box
@@ -104,13 +106,11 @@ const ABMSubCategoryPage = () => {
                   mb: 2,
                 }}
               >
-                <ABMSelectComponent
-                  label="Categoría"
-                  name="categoria"
-                  options={categories.map((cat) => ({
-                    value: cat.id, // Usamos el ID de la categoría como valor
-                    label: cat.name, // Usamos el nombre de la categoría como label
-                  }))}
+                <ABMInputComponent
+                  label="Nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Ingrese el nombre"
                 />
               </Box>
               <ABMActionButton
