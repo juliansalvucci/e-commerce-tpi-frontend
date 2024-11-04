@@ -1,7 +1,8 @@
 import React from "react";
+import InConstructionComponent from "../components/InConstructionComponent";
 
 const HomeAdminPage = () => {
-  return <div>HomeAdminPage</div>;
+  return <InConstructionComponent />;
 };
 
 export default HomeAdminPage;

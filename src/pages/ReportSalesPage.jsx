@@ -1,7 +1,10 @@
 import React from "react";
+import InConstructionComponent from "../components/InConstructionComponent";
 
 const ReportSalesPage = () => {
-  return <div>ReportSalesPage</div>;
+  return (
+    <InConstructionComponent />
+  );
 };
 
 export default ReportSalesPage;

@@ -1,7 +1,8 @@
 import React from "react";
+import InConstructionComponent from "../components/InConstructionComponent";
 
 const ListOrderPage = () => {
-  return <div>ListOrderPage</div>;
+  return <InConstructionComponent />;
 };
 
 export default ListOrderPage;
