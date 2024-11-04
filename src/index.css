@@ -106,6 +106,16 @@
   z-index: 99999;
 }
 
+.swal-optionLogin-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: #233349;
+  color: white;
+  margin-top: -10px;
+  z-index: 99999;
+}
+
 .swal-ok-button:hover {
   background-color: #466388;
   z-index: 99999;

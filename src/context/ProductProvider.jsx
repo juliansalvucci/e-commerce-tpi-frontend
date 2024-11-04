@@ -116,7 +116,7 @@ export const ProductProvider = ({ children }) => {
       Swal.fire({
         icon: "success",
         title: "Exito!",
-        text: `El producto ${prevProduct} fue editado con éxito a ${response.data.name}!`,
+        text: `El producto ${prevProduct} fue editado con éxito!`,
         customClass: {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",

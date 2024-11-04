@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Avatar,
@@ -24,8 +24,13 @@ import {
   SupervisorAccount as SupervisorAccountIcon,
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
+import { UserContext } from "../context/UserContext";
 
 const Sidebar = () => {
+  //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
+
+  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
+
   const [openAdmin, setOpenAdmin] = useState(false);
   const [openBrand, setOpenBrand] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
@@ -116,13 +121,16 @@ const Sidebar = () => {
         <Avatar
           sx={{ width: 80, height: 80 }}
           src="/logo.jpg" // Aca iría la imagen del usuario (si es que agregamos)
-          alt="Admin"
+          alt={loggedUser?.firstName}
         />
         <Typography variant="h6" sx={{ marginTop: 1 }}>
-          Admin
+          {loggedUser?.firstName + " " + loggedUser?.lastName}
         </Typography>
         <Typography variant="body2" sx={{ color: "#d7c4ab" }}>
-          Admin
+          {loggedUser?.role
+            ? loggedUser.role[0].toUpperCase() +
+              loggedUser.role.slice(1).toLowerCase()
+            : "Rol sin definir"}
         </Typography>
       </Box>
 
@@ -394,17 +402,6 @@ const Sidebar = () => {
                 <InsertChart />
               </ListItemIcon>
               <ListItemText primary="Ventas" />
-            </ListItem>
-            <ListItem
-              component={NavLink}
-              to="/admin/report/stock"
-              style={navLinkStyle}
-              sx={{ pl: 4, justifyContent: "center" }}
-            >
-              <ListItemIcon sx={{ color: "#fff" }}>
-                <InsertChart />
-              </ListItemIcon>
-              <ListItemText primary="Stock" />
             </ListItem>
             <ListItem
               component={NavLink}
