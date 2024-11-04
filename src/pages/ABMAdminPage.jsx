@@ -14,13 +14,11 @@ const ABMAdminPage = () => {
 
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
-      const date = new Date(values.fechaNacimiento); // Fix provisional hasta próxima entrega
-      const isoDate = date.toISOString();
       if (!selectedUser) {
         await createUser({
           firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
           lastName: values.apellido.trim(),
-          dateBirth: isoDate,
+          dateBirth: values.fechaNacimiento,
           email: values.email.trim(),
           password: values.password,
         });
@@ -31,7 +29,7 @@ const ABMAdminPage = () => {
           {
             firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
             lastName: values.apellido.trim(),
-            dateBirth: isoDate,
+            dateBirth: values.fechaNacimiento,
           },
           values.email
         );
