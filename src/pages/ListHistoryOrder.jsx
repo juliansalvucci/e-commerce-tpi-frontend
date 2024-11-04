@@ -14,7 +14,7 @@ import {
 import React, { useContext } from "react";
 import { OrderHistoryContext } from "../context/OrderHistoryContext";
 
-const ListOrderHistory = () => {
+const ListHistoryOrder = () => {
   const {
     orders,
     loading,
@@ -25,19 +25,19 @@ const ListOrderHistory = () => {
   } = useContext(OrderHistoryContext);
 
   const renderProducts = (products) => (
-    <Table size="small" sx={{ backgroundColor: "#bcc4cf" }}>
-      <TableHead>
+    <Table size="small" sx={{ backgroundColor: "white" }}>
+      <TableHead sx={{ backgroundColor: "#283b54", color: "white" }}>
         <TableRow>
-          <TableCell align="center" sx={{ color: "#283b54" }}>
+          <TableCell align="center" sx={{ color: "white"}}>
             Productos
           </TableCell>
-          <TableCell align="center" sx={{ color: "#283b54" }}>
+          <TableCell align="center" sx={{ color: "white"}}>
             Precio Unitario
           </TableCell>
-          <TableCell align="center" sx={{ color: "#283b54" }}>
+          <TableCell align="center" sx={{ color: "white"}}>
             Cantidad
           </TableCell>
-          <TableCell align="center" sx={{ color: "#283b54" }}>
+          <TableCell align="center" sx={{ color: "white"}}>
             Subtotal
           </TableCell>
         </TableRow>
@@ -64,9 +64,9 @@ const ListOrderHistory = () => {
   );
 
   return (
-    <Box sx={{ backgroundColor: "#bcc4cf", minHeight: "100vh", p: 6 }}>
+    <Box sx={{ backgroundColor: "white", minHeight: "100vh", p: 6 }}>
       <Typography
-        variant="h4"
+        variant="h3"
         align="center"
         color="#283b54"
         gutterBottom
@@ -91,7 +91,7 @@ const ListOrderHistory = () => {
           <>
             <TableContainer
               component={Paper}
-              sx={{ backgroundColor: "#bcc4cf" }}
+              sx={{ backgroundColor: "white", borderRadius: "15px" }}
             >
               <Table>
                 <TableHead>
@@ -99,9 +99,10 @@ const ListOrderHistory = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        color: "#283b54",
+                        backgroundColor: "#283b54",
+                        color: "white",
                         fontWeight: "bold",
-                        fontSize: "1.0rem",
+                        fontSize: "17px",
                       }}
                     >
                       Pedidos
@@ -109,9 +110,10 @@ const ListOrderHistory = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        color: "#283b54",
+                        backgroundColor: "#283b54",
+                        color: "white",
                         fontWeight: "bold",
-                        fontSize: "1.0rem",
+                        fontSize: "17px",
                       }}
                     >
                       Precio Total
@@ -126,7 +128,7 @@ const ListOrderHistory = () => {
                         <TableCell>
                           {renderProducts(order.orderDetails)}
                         </TableCell>
-                        <TableCell align="center" sx={{ color: "#283b54" }}>
+                        <TableCell align="center" sx={{ fontSize: "15px", color: "#283b54" }}>
                           ${order.total.toFixed(2)}
                         </TableCell>
                       </TableRow>
@@ -150,4 +152,4 @@ const ListOrderHistory = () => {
   );
 };
 
-export default ListOrderHistory;
+export default ListHistoryOrder;
