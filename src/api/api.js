@@ -14,14 +14,16 @@ api.interceptors.request.use(
     const isRegisterRoute = config.url.includes("/auth/signup");
     const isProductListRoute = config.url.includes("/product");
     const isUserListRouter = config.url.includes("/user");
+    const isOrderListRouter = config.url.includes("/orders");
 
     if (
       !isAuthRoute &&
       !isRegisterRoute &&
       !isProductListRoute &&
-      !isUserListRouter
+      !isUserListRouter &&
+      !isOrderListRouter
     ) {
-      const token = localStorage.getItem("token"); // Token del local storage
+      const token = sessionStorage.getItem("token"); // Token del local storage
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`; // Incluye el token en los encabezados de la petición
