@@ -14,6 +14,15 @@ export const UserProvider = ({ children }) => {
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    if (token && userData) {
+      setLoggedUser(userData);
+      setUsername(userData.email);
+    }
+  }, []);
+
   // Función para obtener todas las marcas
   const fetchUsers = async () => {
     try {
@@ -45,42 +54,46 @@ export const UserProvider = ({ children }) => {
     fetchUsers();
   }, [showDeleted]);
 
-  const loginUser = async (values, { setSubmitting }) => {
+  const loginUser = async (user) => {
     try {
-      const response = await api.post("/auth/signin", {
-        email: values.email,
-        password: values.password,
-      });
-      localStorage.setItem("token", response.data.token);
-      setLoggedUser(response.data);
-      setUsername(loggedUser.email);
-      redirect(response.data.role);
-      Swal.fire({
-        icon: "success",
-        title: "Bienvenido",
-      });
-      navigate("/");
+      const response = await api.post("/auth/signin", user);
+      const { firstName, lastName, email, role, token } = response.data;
+      const userData = { firstName, lastName, email, role }; // El token lo pasamos aparte
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("userData", JSON.stringify(userData));
+      setLoggedUser(userData);
+      setUsername(userData.email);
+      redirectUser(role);
     } catch (error) {
-      console.error("Error en el registro:", error);
-      Swal.fire({
-        icon: "error",
-        title: "¡Error!",
-        text: "Verifique sus credenciales",
-      });
-    } finally {
-      setSubmitting(false);
+      if (error.response && error.response.status === 404) {
+        Swal.fire({
+          icon: "error",
+          title: "El usuario no pudo loguearse",
+          text: error.response.data.email,
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal-success-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+      } else {
+        console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
+      }
     }
   };
 
   const logoutUser = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userData");
     setLoggedUser(null);
     setUsername(null);
   };
 
   const createUser = async (newUser) => {
     const URL =
-      location.pathname === "/admin/user/create" ? "/auth/admin" : "/auth/signup";
+      location.pathname === "/admin/user/create"
+        ? "/auth/admin"
+        : "/auth/signup";
     try {
       const response = await api.post(URL, newUser);
       setUsers((prevUsers) => [...prevUsers, response.data]);
@@ -219,12 +232,28 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const redirect = (role) => {
-    if (role == "CLIENT") {
-      console.log("rutacliente");
-    }
-    if (role == "ADMIN") {
-      console.log("rutasadmin");
+  const redirectUser = (role) => {
+    if (role == "USER") {
+      navigate("/");
+    } else {
+      Swal.fire({
+        title: "Elige destino",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Ir a Dashboard",
+        cancelButtonText: "Ir a Home Page",
+        customClass: {
+          popup: "swal-success-popup",
+          confirmButton: "swal-optionLogin-button",
+          cancelButton: "swal-optionLogin-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/admin");
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          navigate("/");
+        }
+      });
     }
   };
 

@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import {
   Badge,
   AppBar,
@@ -10,23 +11,25 @@ import {
   Box,
 } from "@mui/material";
 import { ShoppingCart, Search } from "@mui/icons-material";
+import { CartPopup } from "./CartPopup";
+import ClientAvatarComponent from "./AvatarComponent";
 import { CartContext } from "../context/CartContext";
-import { CartPopup } from "./CartPopup"; // Componente del popup
-import { NavLink } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const NavBar = () => {
+  const { shoppingList } = useContext(CartContext);
+  const { loggedUser, logoutUser } = useContext(UserContext);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [opacity, setOpacity] = useState(1);
+
   const navbarStyle = {
-    backgroundColor: "#00203D",
+    backgroundColor: "#283b54",
   };
 
   const linkStyle = {
-    color: "#C2E1FF",
+    color: "#fff",
     textDecoration: "none",
   };
-
-  const [opacity, setOpacity] = useState(1);
-  const { shoppingList } = useContext(CartContext);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,11 +76,11 @@ const NavBar = () => {
             <InputBase
               placeholder="Buscar productos…"
               inputProps={{ "aria-label": "search" }}
-              style={{ padding: "10px", width: "100%", color: "#00203D" }}
+              style={{ padding: "10px", width: "100%", color: "#283b54" }}
             />
             <IconButton
               type="submit"
-              style={{ padding: "10px", color: "#00203D" }}
+              style={{ padding: "10px", color: "#283b54" }}
             >
               <Search />
             </IconButton>
@@ -85,16 +88,28 @@ const NavBar = () => {
         </Box>
 
         <Box display="flex" alignItems="center" marginLeft="auto">
-          <NavLink to="/login" style={linkStyle} onClick={closePopup}>
-            <Button color="inherit">Login</Button>
-          </NavLink>
-          <NavLink to="/register" style={linkStyle} onClick={closePopup}>
-            <Button color="inherit">Registrarse</Button>
-          </NavLink>
-          <NavLink to="/orders" style={linkStyle} onClick={closePopup}>
-            <Button color="inherit">Lista de pedidos</Button>
-          </NavLink>
-          <NavLink to="/carrito" style={linkStyle}>
+          {/* Si no hay loggedUser, mostrar Login y Registrarse */}
+          {!loggedUser ? (
+            <>
+              <NavLink to="/login" style={linkStyle} onClick={closePopup}>
+                <Button color="inherit">Login</Button>
+              </NavLink>
+              <NavLink to="/register" style={linkStyle} onClick={closePopup}>
+                <Button color="inherit">Registrarse</Button>
+              </NavLink>
+            </>
+          ) : (
+            <ClientAvatarComponent user={loggedUser} onLogout={logoutUser} />
+          )}
+          {/* Si hay loggedUser, mostrar Listade de pedidos */}
+          {loggedUser ? (
+            <NavLink to="/orders" style={linkStyle} onClick={closePopup}>
+              <Button color="inherit">Lista de pedidos</Button>
+            </NavLink>
+          ) : (
+            ""
+          )}
+          <NavLink to="/cartpage" style={linkStyle}>
             <Button color="inherit" style={{ marginLeft: "10px" }}>
               Carrito
             </Button>
@@ -113,7 +128,7 @@ const NavBar = () => {
         </Box>
       </Toolbar>
 
-      <Box display="flex" justifyContent="center" p={1} bgcolor="#00203D">
+      <Box display="flex" justifyContent="center" p={1} bgcolor="#283b54">
         <Button color="inherit">Categorías</Button>
         <Button color="inherit">Notebooks</Button>
         <Button color="inherit">Smartphones</Button>
