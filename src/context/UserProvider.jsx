@@ -65,20 +65,27 @@ export const UserProvider = ({ children }) => {
       setUsername(userData.email);
       redirectUser(role);
     } catch (error) {
+      //En caso de que el usuario no esté registrado, se le proporcionará la opción de hacerlo
       if (error.response && error.response.status === 404) {
         Swal.fire({
-          icon: "error",
-          title: "El usuario no pudo loguearse",
-          text: error.response.data.email,
-          confirmButtonText: "OK",
+          title: `<h5><strong>${error.response.data.email}</strong></h5>`,
+          text: "¿Desea registrarse?",
+          showCancelButton: true,
+          confirmButtonText: "Confirmar",
+          cancelButtonText: "Cancelar",
           customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
+            popup: "swal-question-popup",
+            confirmButton: "swal-confirm-button",
+            cancelButton: "swal-cancel-button",
           },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            navigate("/register")
+          }
         });
       } else {
         console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }
+      }      
     }
   };
 

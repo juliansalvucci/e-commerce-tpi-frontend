@@ -9,7 +9,7 @@ const OrderHistoryProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     if (location.pathname === "/orders") {
@@ -25,8 +25,7 @@ const OrderHistoryProvider = ({ children }) => {
       const response = await api.get(`/orders/${email}`);
       if (response.data.length === 0) {
         Swal.fire({
-          icon: "error",
-          title: "Error",
+          icon: "warning",   
           text: "No se han realizado pedidos.",
         });
       }
@@ -34,7 +33,6 @@ const OrderHistoryProvider = ({ children }) => {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Error",
         text: "No se pudieron cargar los pedidos.",
       });
     } finally {

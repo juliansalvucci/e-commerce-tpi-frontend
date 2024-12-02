@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useContext } from "react";
 import { OrderHistoryContext } from "../context/OrderHistoryContext";
+import backgroundImage from "../assets/home-completo.png";
 
 const ListHistoryOrder = () => {
   const {
@@ -64,17 +65,15 @@ const ListHistoryOrder = () => {
   );
 
   return (
-    <Box sx={{ backgroundColor: "white", minHeight: "100vh", p: 6 }}>
-      <Typography
-        variant="h3"
-        align="center"
-        color="#283b54"
-        gutterBottom
-        fontWeight="bold"
-        mb={5}
-      >
-        Lista de Pedidos
-      </Typography>
+    <Box
+      sx={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover", // Para cubrir todo el contenedor
+        backgroundPosition: "center", // Centra la imagen
+        minHeight: "100vh",
+        p: 6,
+      }}
+    >
       <Box>
         {loading ? (
           <Box
@@ -102,21 +101,12 @@ const ListHistoryOrder = () => {
                         backgroundColor: "#283b54",
                         color: "white",
                         fontWeight: "bold",
-                        fontSize: "17px",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "1.8rem",
+                        p: "18px",
                       }}
                     >
-                      Pedidos
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        backgroundColor: "#283b54",
-                        color: "white",
-                        fontWeight: "bold",
-                        fontSize: "17px",
-                      }}
-                    >
-                      Precio Total
+                      Lista de Pedidos
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -129,29 +119,49 @@ const ListHistoryOrder = () => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((order) => (
                       <TableRow key={order.id}>
-                        <TableCell>
-                          {renderProducts(order.orderDetails)}
-                        </TableCell>
                         <TableCell
-                          align="center"
-                          sx={{ fontSize: "15px", color: "#283b54" }}
+                          sx={{
+                            textAlign: "center", // Centra horizontalmente
+                            verticalAlign: "middle", // Centra verticalmente
+                            fontSize: "15px", // Opcional: ajustar tamaño de texto
+                          }}
                         >
-                          ${order.total.toFixed(2)}
+                          {renderProducts(order.orderDetails)}
+                          <strong>Total:</strong> ${order.total.toFixed(2)}
+                          <br />
                         </TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              component="div"
-              count={orders.length}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage="Filas por página"
-            />
+            <Box>
+              <TablePagination
+                component="div"
+                count={orders.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPageOptions={[5, 10, 25]}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) =>
+                  `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
+                }
+                sx={{
+                  color: "white", // Cambia el color del texto a blanco
+                  "& .MuiTablePagination-toolbar": {
+                    color: "white", // Asegura que los textos internos sean blancos
+                  },
+                  "& .MuiTablePagination-actions button": {
+                    color: "white", // Colorea los botones de navegación
+                  },
+                  "& .MuiSelect-icon": {
+                    color: "white", // Cambia el color del ícono desplegable
+                  },
+                }}
+              />
+            </Box>
           </>
         )}
       </Box>
