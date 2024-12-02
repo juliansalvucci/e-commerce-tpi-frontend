@@ -29,6 +29,7 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {
     const isProductInCart = shoppingList.find((item) => item.id === product.id);
+    //console.log(isProductInCart);
     if (isProductInCart) {
       setAdded(true);
       setLocalQuantity(isProductInCart.quantity); // Sincroniza la cantidad local con la del carrito
@@ -40,8 +41,16 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
 
   // Función para agregar el producto al carrito
   const handleAddProduct = () => {
-    addProduct(product, localQuantity);
-    setAdded(true);
+    if (product.stock > 0) {
+      addProduct(product, localQuantity);
+      setAdded(true);
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "No hay más stock disponible",
+        text: `El producto ${product.title} ha alcanzado el límite de stock`,
+      });
+    }
   };
 
   // Función para eliminar el producto del carrito
@@ -132,7 +141,7 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
         </div>
 
         <div className="details-container">
-          <h1>{product.title}</h1>
+          <h3>{product.title}</h3>
           <div className="price-container">
             {/* Total por producto */}
             <span>Precio: </span>
@@ -148,11 +157,14 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
           <span>Descripción: </span>
           <p>{product.description}</p>
 
-          {/* Aquí mostramos el stock disponible */}
-          <div className="stock-container">
-            <p>Stock disponible: {product.stock}</p>{" "}
-            {/* Aquí se muestra el stock */}
-          </div>
+          {/*Si hay stock disponible, lo muestro en color verde, pero si no hay, en rojo */}
+          <p
+            className={`stock ${
+              product.stock > 0 ? "stock-available" : "stock-unavailable"
+            }`}
+          >
+            Stock disponible: {product.stock}
+          </p>
 
           <div className="buy-counter-buttoms">
             <div className="d-grid gap-2 buy-container">
@@ -160,39 +172,42 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
                 className="btn btn-primary buy-button"
                 type="button"
                 onClick={handlerPurchase}
+                disabled={product.stock === 0 || !added} 
               >
                 Comprar ahora
               </button>
             </div>
             <div className="products-counter-buttons">
-              <button
-                className="btn btn-outline-primary"
-                onClick={handleDecrement}
-              >
-                -
-              </button>
-              <button className="btn btn-primary local-quantity">
-                {localQuantity}
-              </button>
-              <button
-                className="btn btn-outline-primary"
-                onClick={handleIncrement}
-              >
-                +
-              </button>
-
               {added ? (
-                // Si el producto ya está en el carrito, mostramos el botón para remover
-                <div className="circle">
-                  <img
-                    src={removeProductToCart}
-                    alt="Remover del carrito"
-                    className="remove_button"
-                    onClick={handleRemoveProduct}
-                  />
-                </div>
+                <>
+                  {/* Botones de incrementar, cantidad y decrementar */}
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={handleDecrement}
+                  >
+                    -
+                  </button>
+                  <button className="btn btn-primary local-quantity">
+                    {localQuantity}
+                  </button>
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={handleIncrement}
+                  >
+                    +
+                  </button>
+                  {/* Botón de remover */}
+                  <div className="circle">
+                    <img
+                      src={removeProductToCart}
+                      alt="Remover del carrito"
+                      className="remove_button"
+                      onClick={handleRemoveProduct}
+                    />
+                  </div>
+                </>
               ) : (
-                // Si el producto no está en el carrito, mostramos el botón para agregar
+                // Botón de agregar al carrito si no está en el carrito
                 <div className="circle">
                   <img
                     src={addProductToCart}
