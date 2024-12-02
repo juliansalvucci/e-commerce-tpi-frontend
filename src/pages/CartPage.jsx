@@ -4,7 +4,6 @@ import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
 import "../styles/CartPage.css";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
 
 export const CartPage = () => {
   const {
@@ -45,18 +44,7 @@ export const CartPage = () => {
   };
 
   const handlerPurchase = () => {
-    if (shoppingList.length === 0) {
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "No hay productos seleccionados",
-        confirmButtonText: "OK",
-        customClass: {
-          popup: "swal-success-popup",
-          confirmButton: "swal-ok-button",
-        },
-      });
-    } else {
+    if(loggedUser != null){
       Swal.fire({
         title: "Finalizar compra",
         text: "¿Desea confirmar la compra?",
@@ -94,6 +82,23 @@ export const CartPage = () => {
               navigate("/", { state: { reloadStock: true } });
             }
           });
+        }
+      });
+    } else{
+      Swal.fire({
+        title: "Usuario no logueado",
+        text: "¿Desea loguearse para finalizar su compra?",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+        customClass: {
+          popup: "swal-question-popup",
+          confirmButton: "swal-confirm-button",
+          cancelButton: "swal-cancel-button",
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          navigate("/login")
         }
       });
     }
@@ -188,6 +193,7 @@ export const CartPage = () => {
               className="btn btn-primary"
               type="button"
               onClick={handlerPurchase}
+              disabled={shoppingList.length === 0}
             >
               Finalizar compra
             </button>
