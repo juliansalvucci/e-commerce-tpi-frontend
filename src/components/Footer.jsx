@@ -8,7 +8,7 @@ const Footer = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#283b54", color: "white", py: 4 }}>
+    <Box sx={{ bgcolor: "#001f3f", color: "white", py: 4, position: "sticky" }}>
       <Container>
         <Grid container spacing={4}>
           {/* Contactos */}

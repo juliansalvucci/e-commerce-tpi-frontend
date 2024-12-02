@@ -25,7 +25,7 @@ const NavBar = () => {
   const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
 
   const navbarStyle = {
-    backgroundColor: "#283b54",
+    backgroundColor: "#001f3f",
   };
 
   const linkStyle = {
@@ -130,7 +130,7 @@ const NavBar = () => {
         </Box>
       </Toolbar>
 
-      <Box display="flex" justifyContent="center" p={1} bgcolor="#283b54">
+      <Box display="flex" justifyContent="center" p={1} bgcolor="#001f3f">
         <Button color="inherit">Categorías</Button>
         <Button color="inherit">Notebooks</Button>
         <Button color="inherit">Smartphones</Button>
