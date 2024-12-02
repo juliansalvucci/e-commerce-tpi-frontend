@@ -32,13 +32,13 @@
   border-color: #f09999;
 }
 
-.details-container h1 {
+.details-container h3 {
   margin-top: 30px;
   margin-bottom: 30px;
-  font-weight: 1000;
+  font-weight: 600;
   font-family: "Poppins", sans-serif;
   text-align: left;
-  font-size: 1.5rem; /* Cambia el tamaño del título */
+  font-size: 1.2rem; /* Cambia el tamaño del título */
   width: 85%;
   margin-left: 10px;
 }
@@ -47,8 +47,8 @@
 .details-container .price-container span,
 .details-container .price-container p {
   font-family: "Poppins", sans-serif;
-  font-weight: 550;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   width: 85%;
   margin-left: 10px;
 }
@@ -63,8 +63,8 @@
 /* Cambia el tamaño de los span que contienen "Descripción" */
 .details-container span {
   font-family: "Poppins", sans-serif;
-  font-weight: 550;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   font-weight: bold;
   width: 85%;
   margin-left: 10px;
@@ -72,13 +72,11 @@
 
 /* Cambia el tamaño de los párrafos de descripción */
 .details-container p {
-  font-size: 1, 2rem;
   font-family: "Poppins", sans-serif;
-  font-weight: 550;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   width: 85%;
   margin-left: 10px;
-  font-weight: normal;
 }
 
 .details-container .price-container {
@@ -93,7 +91,7 @@
   flex-direction: row; /* Coloca los elementos uno al lado del otro (horizontalmente) */
   align-items: flex-start; /* Alinea los elementos en la parte superior del contenedor */
   justify-content: flex-start; /* Alinea los elementos al principio del contenedor */
-  background-color: white;
+  background-color: #f2f9fd;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
@@ -129,9 +127,15 @@
   text-align: justify;
 }
 
-.stock-container p {
+.stock-available {
+  color: #079c45;
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+
+.stock-unavailable {
   color: #f10b0b;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: normal;
 }
 
@@ -150,15 +154,16 @@
 }
 
 .buy-counter-buttoms .buy-container .buy-button {
-  background-color: #283b54;
+  background-color: #001f3f;
   border: none;
   color: white;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 13px;
   border-radius: 5px;
   cursor: pointer;
   margin-left: 20px;
 }
+
 
 .buy-counter-buttoms .buy-container .buy-button:hover {
   background-color: #3d5f8b;
@@ -172,13 +177,14 @@
   margin-top: 25px;
   display: flex; /* Utiliza flexbox */
   align-items: center; /* Alinea verticalmente en el centro */
+  justify-content: center;
 }
 
 /* Botones de incremento y decremento */
 .products-counter-buttons .btn-outline-primary {
   color: #fff;
-  background-color: #283b54;
-  border-color: #283b54;
+  background-color: #001f3f;
+  border-color: #001f3f;
 }
 
 .products-counter-buttons .btn-outline-primary:hover {
@@ -192,6 +198,7 @@
   border-color: gray;
   color: gray;
   display: flex;
+  
 }
 
 .products-counter-buttons .btn-primary:hover {
@@ -214,16 +221,14 @@
 .products-counter-buttons .circle {
   display: flex;
   align-items: flex-start;
-  width: 60px;
-  height: 60px;
   cursor: pointer;
-  border-radius: 30px;
   background: #a6a6a6;
   opacity: 0.8;
   flex-wrap: wrap;
   justify-content: center;
-  position: absolute;
-  top: 460px;
+  /*Esto soluciona el problema de la posición del circulo en el popup*/
+  position: sticky;
+  top: 410px;
   right: 230px;
   z-index: 1;
   flex-direction: column;
