@@ -87,24 +87,7 @@ export const CardComponent = ({
           onClick={showProductPopup}
         />
       </div>
-
-      <div className="card_content">
-        <div className="product-alert">
-          <h5 className="card_title" onClick={showProductPopup}>
-            {title}
-          </h5>
-
-          <p className="card_price" onClick={showProductPopup}>
-            $
-            {price.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </p>
-
-          <p className="stock">Stock disponible: {stock}</p>
-        </div>
-        {added ? (
+      {added ? (
           //En el caso de que ya se haya añadido el producto al carrito y el usuario quiere quitarla
           <div className="circle">
             <img
@@ -125,6 +108,28 @@ export const CardComponent = ({
             />
           </div>
         )}
+
+      <div className="card_content">
+        
+        
+        <div className="product-alert">
+          <h5 className="card_title" onClick={showProductPopup}>
+            {title}
+          </h5>
+
+          <p className="card_price" onClick={showProductPopup}>
+            $
+            {price.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+
+          <p className={`stock ${stock > 0 ? 'stock-available': 'stock-unavailable'}`}>
+            Stock disponible: {stock}
+          </p>
+        </div>
+        
       </div>
 
       {/*Renderiza el popup si está visible */}
