@@ -11,6 +11,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
+import registerBackground from "../assets/login-register-background.png";
 import ABMInputComponent from "../components/ABMInputComponent";
 import DatePickerComponent from "../components/DatePickerComponent";
 import { UserContext } from "../context/UserContext";
@@ -55,14 +56,12 @@ export const RegisterPage = () => {
   return (
     <Box
       sx={{
-        m: 1,
         display: "flex",
         flexDirection: "space-between",
         alignItems: "center",
         justifyContent: "center",
         boxShadow: 3,
         backgroundColor: "#f5f5f5",
-        border: "1px solid #ccc",
       }}
     >
       <Box
@@ -71,16 +70,22 @@ export const RegisterPage = () => {
         alt="Imagen de bienvenida"
         sx={{
           width: "120vh",
-          height: "90vh",
+          minHeight: "108vh",
+          maxHeight: "126vh",
+          //height:"126vh"
+          //objectFit: "cover", 
         }}
       />
       <Box
         sx={{
           width: "120vh",
-          height: "90vh",
+          height: "100%",
           padding: 3,
           paddingBottom: 10,
-          backgroundColor: "white",
+          //backgroundImage: "url('../assets/descarga.png')",
+          backgroundImage: `url(${registerBackground})`,
+          //backgroundSize: "cover", // Ajusta el fondo al tamaño del Box
+    //backgroundPosition: "center", // Centra la imagen de fondo
           boxShadow: 3,
         }}
       >
@@ -177,8 +182,13 @@ export const RegisterPage = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"
                 disabled={isSubmitting}
+                sx={{
+                  backgroundColor: "#23538f",
+                  "&:hover": {
+                    backgroundColor: "#1a4273", 
+                  },
+                }}
               >
                 Registrarse
               </Button>
