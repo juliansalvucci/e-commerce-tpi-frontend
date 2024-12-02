@@ -1,8 +1,23 @@
-/* Asegúrate de que el contenedor de los productos esté estilizado */
-.products-page {
+.inicio-home {
   width: 100%;
+  height: 70vh;
+}
+
+.products-pagination {
+  background-image: url("../assets/home-completo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+}
+
+.products-page {
+  position: relative;
+  width: 100%;
+
   display: flex;
   flex-direction: column;
+  z-index: 1;
 }
 
 /* Estiliza la lista de productos como una cuadrícula */
@@ -14,6 +29,7 @@
   list-style-type: none; /* Elimina los puntos de la lista si estás usando ul */
   padding: 0;
   margin: 50px;
+  z-index: 100;
 }
 
 /* Estiliza cada elemento de la lista (producto) */
@@ -23,7 +39,7 @@
   gap: 1rem;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 18px;
-  background: #f4f4f4;
+  background: #f2f9fd;
   color: black;
   padding: 1rem;
 }
@@ -35,12 +51,13 @@
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-style: normal;
+  color: #f2f9fd;
 }
 
 .products-page hr {
   margin-bottom: 50px;
   width: 50%; /* Ajusta el ancho según sea necesario */
-  border: 2px solid black; /* Color oscuro */
+  border: 2px solid #f2f9fd; /* Color oscuro */
   margin-left: auto;
   margin-right: auto; /* Esto centra el hr */
   margin-bottom: 0px;
@@ -56,8 +73,7 @@
 .products-page img {
   border-radius: 8px;
   width: 100%;
-  height: 100%;
-  aspect-ratio: 16/9;
+  height: auto;
   display: block;
   object-fit: cover;
   margin-left: 5px;
@@ -67,6 +83,15 @@
 .card .card_content {
   display: flex;
   flex-direction: column;
+}
+
+/*Los dos siguientes contenedores es para darle transición suave a las imagenes*/
+.card-img {
+  transition: transform 0.3s ease; 
+}
+
+.card-img:hover {
+  transform: scale(1.1); /* Aumenta el tamaño de la imagen un 10% */
 }
 
 /* Estiliza el título de cada producto */
@@ -106,12 +131,25 @@
   flex-wrap: wrap;
   justify-content: center;
   position: absolute;
-  right: 23px;
+  right: 12px;
+  top: auto;
   z-index: 1;
   flex-direction: column;
 }
 
-.stock {
+.card .circle:hover, 
+.card .add_button:hover,
+.card .remove_button:hover{
+  background-color: rgb(221, 218, 218);
+}
+
+.stock-available {
+  color: #079c45;
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+
+.stock-unavailable {
   color: #f10b0b;
   font-size: 0.7rem;
   font-weight: normal;
@@ -129,12 +167,12 @@
 .page-item .page-link {
   cursor: pointer;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #0a356e;
-  color: #81abe1;
+  border: 1px solid #003366;
+  color: #003366;
 }
 
 .page-item.active .page-link {
-  background-color: #416797;
+  background-color: #003366;
   color: #fff;
 }
 
@@ -145,7 +183,7 @@
 
 /* Cambio de fondo al pasar el mouse sobre los elementos "Anterior" y "Siguiente" */
 .pagination .page-item:not(.disabled) .page-link:hover {
-  background-color: #b1c7e4;
+  background-color: #003366;
   color: white;
 }
 
