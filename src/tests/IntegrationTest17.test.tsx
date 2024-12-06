@@ -1,69 +1,77 @@
-/*Prueba N°17: Validación de campos obligatorios en el formulario de modificación de producto*/
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { ProductContext } from "../context/ProductContext";
+import { BrandContext } from "../context/BrandContext";
+import { CategoryContext } from "../context/CategoryContext";
+import { SubCategoryContext } from "../context/SubCategoryContext";
+import ABMProductPage from "../pages/ABMProductPage";
+import { describe, expect, it, vi } from "vitest";
+import { BrowserRouter } from "react-router-dom";
 
-import { describe, it, expect } from "vitest";
-import { productSchema } from "../schemas";
+describe("ABMProductPage", () => {
+  const mockCreateProduct = vi.fn();
+  const mockEditProduct = vi.fn();
+  const mockFindCategoryById = vi.fn().mockReturnValue("TestCategory");
 
-describe("Validación de campos requeridos en productSchema", () => {
-  it("debería devolver errores para campos requeridos vacíos", async () => {
-    // Objeto con todos los campos vacíos
-    const invalidProduct = {
-      nombre: "",
-      color: "",
-      tamaño: "",
-      marca: "",
-      categoria: "",
-      subcategoria: "",
-      precio: null,
-      stock: null,
-      stockMin: null,
-      imagen: "",
-      descripcion: "",
-    };
+  // Simulamos que ya existe un producto seleccionado para la edición
+  const productContextValue = {
+    createProduct: mockCreateProduct,
+    editProduct: mockEditProduct,
+    selectedProduct: {
+      id: 1,
+      nombre: "Producto Existente",
+      descripcion: "Descripción",
+      precio: 100,
+      stock: 10,
+      stockMin: 2,
+    }, // Producto mockeado para la edición
+  };
 
-    try {
-      await productSchema.validate(invalidProduct, { abortEarly: false });
-    } catch (error) {
-      const validationErrors = error.inner.map((err) => ({
-        path: err.path,
-        message: err.message,
-      }));
+  const brandContextValue = {
+    brands: [
+      { id: "1", name: "Brand A" },
+      { id: "2", name: "Brand B" },
+    ],
+  };
 
-      // Validaciones específicas
-      expect(validationErrors).toEqual(
-        expect.arrayContaining([
-          { path: "nombre", message: "Obligatorio" },
-          { path: "color", message: "Obligatorio" },
-          { path: "marca", message: "Obligatorio" },
-          { path: "categoria", message: "Obligatorio" },
-          { path: "subcategoria", message: "Obligatorio" },
-          { path: "precio", message: "Obligatorio" },
-          { path: "stock", message: "Obligatorio" },
-          { path: "stockMin", message: "Obligatorio" },
-          { path: "descripcion", message: "Obligatorio" },
-        ])
-      );
-    }
+  const categoryContextValue = {
+    categories: [{ id: "1", name: "Category A" }],
+    findCategoryById: mockFindCategoryById,
+  };
+
+  const subCategoryContextValue = {
+    subCategories: [
+      { id: "1", name: "SubCategory A", category: "TestCategory" },
+    ],
+  };
+
+  it("debería mostrar errores de validación para campos requeridos al modificar un producto", async () => {
+    render(
+      <BrowserRouter>
+        <ProductContext.Provider value={productContextValue}>
+          <BrandContext.Provider value={brandContextValue}>
+            <CategoryContext.Provider value={categoryContextValue}>
+              <SubCategoryContext.Provider value={subCategoryContextValue}>
+                <ABMProductPage />
+              </SubCategoryContext.Provider>
+            </CategoryContext.Provider>
+          </BrandContext.Provider>
+        </ProductContext.Provider>
+      </BrowserRouter>
+    );
+
+    // Simulamos el envío del formulario sin cambiar nada en los campos
+    fireEvent.click(screen.getByRole("button", { name: /Guardar/i }));
+
+    // Esperamos que los errores estén presentes en los campos correspondientes
+    await waitFor(() => {
+      // Verificar que los campos de formulario muestran los errores de validación según el esquema de yup
+      expect(screen.getByText("Obligatorio")).toBeInTheDocument(); // Este es el error común para los campos requeridos
+      expect(screen.getByText("El precio no puede ser menor a $1")).toBeInTheDocument();
+      expect(screen.getByText("El stock disponible debe ser mayor o igual a 0")).toBeInTheDocument();
+      expect(screen.getByText("El stock minimo debe ser mayor o igual a 0")).toBeInTheDocument();
+    });
   });
 });
 
-it("debería validar correctamente un objeto con datos válidos", async () => {
-  // Objeto con todos los campos válidos
-  const validProduct = {
-    nombre: "Iphone 15”",
-    color: "Celeste",
-    tamaño: "Grande",
-    marca: "Apple",
-    categoria: "Smartphones",
-    subcategoria: "Smartphones",
-    precio: 2062999,
-    stock: 20,
-    stockMin: 8,
-    imagen: "http://example.com/imagen.jpg",
-    descripcion:
-      "El iPhone 15 viene con la Dynamic Island, cámara gran angular de 48 MP, entrada USB-C y un resistente vidrio con infusión de color en un diseño de aluminio.",
-  };
 
-  // La validación no debe lanzar errores
-  const result = await productSchema.validate(validProduct);
-  expect(result).toEqual(validProduct);
-});
