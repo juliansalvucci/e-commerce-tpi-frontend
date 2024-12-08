@@ -1,7 +1,7 @@
-import { expect } from 'vitest';
-import * as matchers from '@testing-library/jest-dom/matchers';
+import '@testing-library/jest-dom'; // Esto habilita los matchers como toBeInTheDocument
 
-// Extiende expect de Vitest con los matchers de jest-dom
-expect.extend(matchers);
+
+
+
 
 
