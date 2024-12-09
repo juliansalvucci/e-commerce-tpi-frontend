@@ -1,3 +1,4 @@
+import React from "react";
 import { useContext } from "react";
 import Swal from "sweetalert2";
 import trashIcon from "../assets/trash-icon.png";

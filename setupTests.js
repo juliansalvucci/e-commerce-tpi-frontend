@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'; // Esto habilita los matchers como toBeInTheDocument
+import '@testing-library/jest-dom'; //libre
 
 
 
