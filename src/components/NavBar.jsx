@@ -18,11 +18,9 @@ import { UserContext } from "../context/UserContext";
 
 const NavBar = () => {
   const { shoppingList } = useContext(CartContext);
-  const { logoutUser } = useContext(UserContext); // Aca tendría que ir loggedUser
+  const { userName, loggedUser, logoutUser } = useContext(UserContext);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [opacity, setOpacity] = useState(1);
-
-  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
 
   const navbarStyle = {
     backgroundColor: "#001f3f",
@@ -101,7 +99,7 @@ const NavBar = () => {
               </NavLink>
             </>
           ) : (
-            <ClientAvatarComponent user={loggedUser} onLogout={logoutUser} />
+            <ClientAvatarComponent user={loggedUser} userName={userName} onLogout={logoutUser} />
           )}
           {/* Si hay loggedUser, mostrar Listade de pedidos */}
           {loggedUser ? (

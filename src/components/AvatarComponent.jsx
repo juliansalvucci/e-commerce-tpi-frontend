@@ -1,10 +1,10 @@
-import React from "react";
-import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Avatar, CircularProgress, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const AvatarComponent = ({ user, onLogout }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+const AvatarComponent = ({ user, userName, onLogout }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
   const handleMenuOpen = (event) => {
@@ -64,6 +64,14 @@ const AvatarComponent = ({ user, onLogout }) => {
       }
     });
   };
+
+  if (!user) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <>

@@ -9,19 +9,29 @@ export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [users, setUsers] = useState([]);
-  const [loggedUser, setLoggedUser] = useState();
+  const [loggedUser, setLoggedUser] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    role: "USER",
+  });
   const [userName, setUsername] = useState();
   const [showDeleted, setShowDeleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     const userData = JSON.parse(sessionStorage.getItem("userData"));
+
     if (token && userData) {
       setLoggedUser(userData);
-      setUsername(userData.email);
+      setUsername(userData.email.split("@")[0]);
+    } else {
+      setLoggedUser({ firstName: "", lastName: "", email: "", role: "GUEST" });
     }
-  }, [], [location.pathname]);
+    setIsLoading(false); // Datos cargados
+  }, [location.pathname]);
 
   // Función para obtener todas las marcas
   const fetchUsers = async () => {
@@ -58,11 +68,11 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await api.post("/auth/signin", user);
       const { firstName, lastName, email, role, token } = response.data;
+      setUsername(email.split("@")[0]);
       const userData = { firstName, lastName, email, role }; // El token lo pasamos aparte
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("userData", JSON.stringify(userData));
       setLoggedUser(userData);
-      setUsername(userData.email);
       redirectUser(role);
     } catch (error) {
       //En caso de que el usuario no esté registrado, se le proporcionará la opción de hacerlo
@@ -80,12 +90,12 @@ export const UserProvider = ({ children }) => {
           },
         }).then(async (result) => {
           if (result.isConfirmed) {
-            navigate("/register")
+            navigate("/register");
           }
         });
       } else {
         console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }      
+      }
     }
   };
 
@@ -97,12 +107,8 @@ export const UserProvider = ({ children }) => {
   };
 
   const createUser = async (newUser) => {
-    const URL =
-      location.pathname === "/admin/user/create"
-        ? "/auth/admin"
-        : "/auth/signup";
     try {
-      const response = await api.post(URL, newUser);
+      const response = await api.post("/auth/signup", newUser);
       setUsers((prevUsers) => [...prevUsers, response.data]);
       Swal.fire({
         icon: "success",
@@ -282,7 +288,9 @@ export const UserProvider = ({ children }) => {
       value={{
         users,
         loggedUser,
+        userName,
         showDeleted,
+        isLoading,
         selectedUser,
         fetchUsers,
         loginUser,

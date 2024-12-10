@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Swal from "sweetalert2";
 import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/UserContext";
 import "../styles/CartPage.css";
 import { useNavigate } from "react-router-dom";
 
@@ -17,9 +18,7 @@ export const CartPage = () => {
     calculateTotalQuantity,
   } = useContext(CartContext);
 
-  //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
-
-  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
+  const { loggedUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 

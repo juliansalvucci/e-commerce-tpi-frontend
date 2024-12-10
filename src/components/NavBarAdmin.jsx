@@ -7,9 +7,7 @@ import AdminAvatarComponent from "./AvatarComponent";
 import { UserContext } from "../context/UserContext";
 
 const NavBarAdmin = () => {
-  const { logoutUser } = useContext(UserContext); // Aca tendría que ir loggedUser
-
-  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
+  const { loggedUser, logoutUser } = useContext(UserContext);
   
   const location = useLocation();
   const navigate = useNavigate();
