@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 const ListEditButton = ({ onClick }) => {
   return (
     <Tooltip title="Editar" placement="bottom" arrow>
-      <IconButton sx={{ color: "#283b54" }} onClick={onClick}>
+      <IconButton sx={{ color: "#283b54" }} aria-label="Edit" onClick={onClick}>
         <EditIcon />
       </IconButton>
     </Tooltip>

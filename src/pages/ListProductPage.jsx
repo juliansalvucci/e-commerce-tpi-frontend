@@ -206,11 +206,11 @@ const ListProductPage = () => {
           <ListShowImage imageURL={params.row.imageURL} />
           {!showDeleted ? (
             <>
-              <ListEditButton aria-label="Edit" onClick={() => handleEdit(params.row)} />
-              <ListDeleteButton aria-label="Delete" onClick={() => handleDelete(params.row.id)} />
+              <ListEditButton onClick={() => handleEdit(params.row)} />
+              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
             </>
           ) : (
-            <ListRestoreButton aria-label="Restore" onClick={() => handleRestore(params.row.id)} />
+            <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
           )}
         </Stack>
       ),

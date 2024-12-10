@@ -5,7 +5,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 const ListRestoreButton = ({ onClick }) => {
   return (
     <Tooltip title="Restaurar" placement="bottom" arrow>
-      <IconButton sx={{ color: "#283b54" }} onClick={onClick}>
+      <IconButton sx={{ color: "#283b54" }} aria-label="Restore" onClick={onClick}>
         <RestoreIcon />
       </IconButton>
     </Tooltip>
