@@ -11,7 +11,13 @@ import React from "react";
 describe("ListProductPage", () => {
   const mockProducts = [
     { id: 1, name: "Producto 1", stock: 10, stockMin: 5, deleteDatetime: null },
-    { id: 2, name: "Producto 2", stock: 3, stockMin: 5, deleteDatetime: "2024-12-01" },
+    {
+      id: 2,
+      name: "Producto 2",
+      stock: 3,
+      stockMin: 5,
+      deleteDatetime: "2024-12-01",
+    },
   ];
 
   const mockProductContext = {
@@ -25,15 +31,24 @@ describe("ListProductPage", () => {
   };
 
   const mockBrandContext = {
-    brands: [{ id: 1, name: "Brand A" }, { id: 2, name: "Brand B" }],
+    brands: [
+      { id: 1, name: "Brand A" },
+      { id: 2, name: "Brand B" },
+    ],
   };
 
   const mockCategoryContext = {
-    categories: [{ id: 1, name: "Category A" }, { id: 2, name: "Category B" }],
+    categories: [
+      { id: 1, name: "Category A" },
+      { id: 2, name: "Category B" },
+    ],
   };
 
   const mockSubCategoryContext = {
-    subCategories: [{ id: 1, name: "SubCategory A" }, { id: 2, name: "SubCategory B" }],
+    subCategories: [
+      { id: 1, name: "SubCategory A" },
+      { id: 2, name: "SubCategory B" },
+    ],
   };
 
   it("muestra los botones Edit y Delete cuando showDeleted es false", () => {
@@ -51,15 +66,20 @@ describe("ListProductPage", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getAllByRole("button", { name: /editar/i })).toHaveLength(mockProducts.length);
-    expect(screen.getAllByLabelText("Delete")).toHaveLength(mockProducts.length);
+    const editButton = screen.getByTestId("edit-button");
+    expect(editButton).toBeInTheDocument();
+    expect(screen.getAllByLabelText("Delete")).toHaveLength(
+      mockProducts.length
+    );
     expect(screen.queryByLabelText("Restore")).not.toBeInTheDocument();
   });
 
   it("muestra el botón Restore cuando showDeleted es true", () => {
     render(
       <MemoryRouter>
-        <ProductContext.Provider value={{ ...mockProductContext, showDeleted: true }}>
+        <ProductContext.Provider
+          value={{ ...mockProductContext, showDeleted: true }}
+        >
           <BrandContext.Provider value={mockBrandContext}>
             <CategoryContext.Provider value={mockCategoryContext}>
               <SubCategoryContext.Provider value={mockSubCategoryContext}>
@@ -71,15 +91,12 @@ describe("ListProductPage", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getAllByLabelText("Restore")).toHaveLength(mockProducts.length);
-    expect(screen.getAllByRole("button", { name: /editar/i })).toHaveLength(mockProducts.length);
+    expect(screen.getAllByLabelText("Restore")).toHaveLength(
+      mockProducts.length
+    );
+    expect(screen.getAllByRole("button", { name: /editar/i })).toHaveLength(
+      mockProducts.length
+    );
     expect(screen.queryByLabelText("Delete")).not.toBeInTheDocument();
   });
 });
-
-
-  
-
-
-
-
