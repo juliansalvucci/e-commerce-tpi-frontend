@@ -59,7 +59,7 @@ const ListOrderPage = () => {
       return;
     }
 
-    const filtered = await fetchOrdersByEmail(selectedEmail, todayFilter);
+    const filtered = (await fetchOrdersByEmail(selectedEmail, todayFilter)) || [];
     setFilteredOrders(filtered);
   };
 
