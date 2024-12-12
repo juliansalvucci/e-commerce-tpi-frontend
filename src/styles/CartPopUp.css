@@ -184,13 +184,13 @@
   margin-right: auto;
 }
 
-.total-container h4 {
-  text-align: center;
+.total-container p {
+  margin-left: 18%;
   font-family: "Poppins", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-style: medium;
   font-size: medium;
-  color: #f2f9fd;
+  color: #e4f2fa;
 }
 
 .close-botton {

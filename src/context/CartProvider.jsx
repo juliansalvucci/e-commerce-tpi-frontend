@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import { CartContext } from "./CartContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import api from "../api/api";
 
@@ -59,6 +59,12 @@ export const CartProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
 
+  // Estados para el descuento
+  const [subtotal, setSubtotal] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [totalWithDiscount, setTotalWithDiscount] = useState(0);
+  const [isDiscountShown, setIsDiscountShown] = useState(false);
+
   const addProduct = (product) => {
     product.quantity = 1; //Comience en 1 cuando agregue un producto
     const action = {
@@ -100,11 +106,44 @@ export const CartProvider = ({ children }) => {
   };
 
   const calculateTotal = () => {
-    return shoppingList
-      .reduce((total, product) => total + product.price * product.quantity, 0)
-      .toLocaleString("en-US", { style: "currency", currency: "USD" });
+    return shoppingList.reduce(
+      (total, product) => total + product.price * product.quantity,
+      0
+    );
   };
-  //console.log("Total", calculateTotal());
+
+  // Calculamos el descuento y el total con descuento
+  useEffect(() => {
+    const total = calculateTotal();
+    setSubtotal(total);
+    if (total >= 8000000 ) {
+      const calculatedDiscount = total * 0.1; // 10% de descuento
+      setDiscount(calculatedDiscount);
+      setTotalWithDiscount(total - calculatedDiscount);
+      // Mostrar el mensaje de descuento aplicado en la primera vez
+      if(!isDiscountShown){
+        Swal.fire({
+          title: "¡Descuento aplicado!",
+          text: `Se ha aplicado un descuento del 10%. Total con descuento: ${(total - calculatedDiscount).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })}`,
+          icon: "info",
+          customClass: {
+            popup: "swal-info-popup",
+            confirmButton: "swal-ok-button",
+          },
+        });
+        setIsDiscountShown(true);
+      }
+      
+    } else if (total < 8000000) {
+      // Reinicia el estado si el total baja de 8000000
+      setDiscount(0);
+      setTotalWithDiscount(total);
+      setIsDiscountShown(false);
+    }
+  }, [shoppingList]); 
 
   const calculateTotalQuantity = () => {
     return shoppingList.reduce(
@@ -112,8 +151,6 @@ export const CartProvider = ({ children }) => {
       0
     );
   };
-
-  //console.log("Total Quantity", calculateTotalQuantity());
 
   // Función para crear un nuevo pedido
   const createOrder = async (newOrder) => {
@@ -168,6 +205,9 @@ export const CartProvider = ({ children }) => {
         orders,
         setOrders,
         calculateTotalQuantity,
+        subtotal,
+        discount,
+        totalWithDiscount,
       }}
     >
       {children}
