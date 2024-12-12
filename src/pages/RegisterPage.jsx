@@ -31,6 +31,7 @@ export const RegisterPage = () => {
           email: values.email.trim(),
           dateBirth: values.fechaNacimiento,
           password: values.password,
+          admin: false,
         });
         resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
       } else {
@@ -40,6 +41,7 @@ export const RegisterPage = () => {
           email: values.email.trim(),
           dateBirth: values.fechaNacimiento,
           password: values.password,
+          admin: false,
         });
       }
     } catch (error) {
@@ -73,7 +75,7 @@ export const RegisterPage = () => {
           minHeight: "108vh",
           maxHeight: "126vh",
           //height:"126vh"
-          //objectFit: "cover", 
+          //objectFit: "cover",
         }}
       />
       <Box
@@ -85,7 +87,7 @@ export const RegisterPage = () => {
           //backgroundImage: "url('../assets/descarga.png')",
           backgroundImage: `url(${registerBackground})`,
           //backgroundSize: "cover", // Ajusta el fondo al tamaño del Box
-    //backgroundPosition: "center", // Centra la imagen de fondo
+          //backgroundPosition: "center", // Centra la imagen de fondo
           boxShadow: 3,
         }}
       >
@@ -186,7 +188,7 @@ export const RegisterPage = () => {
                 sx={{
                   backgroundColor: "#23538f",
                   "&:hover": {
-                    backgroundColor: "#1a4273", 
+                    backgroundColor: "#1a4273",
                   },
                 }}
               >
