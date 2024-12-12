@@ -12,8 +12,8 @@ export const UserProvider = ({ children }) => {
   const [loggedUser, setLoggedUser] = useState({
     firstName: "",
     lastName: "",
-    email: "",
-    role: "USER",
+    email: "Invitado",
+    role: "GUEST",
   });
   const [userName, setUsername] = useState();
   const [showDeleted, setShowDeleted] = useState(false);
@@ -28,12 +28,18 @@ export const UserProvider = ({ children }) => {
       setLoggedUser(userData);
       setUsername(userData.email.split("@")[0]);
     } else {
-      setLoggedUser({ firstName: "", lastName: "", email: "", role: "GUEST" });
+      setLoggedUser({
+        firstName: "",
+        lastName: "",
+        email: "Invitado",
+        role: "GUEST",
+      });
+      setUsername("Invitado");
     }
     setIsLoading(false); // Datos cargados
   }, [location.pathname]);
 
-  // Función para obtener todas las marcas
+  // Función para obtener todos los usuarios
   const fetchUsers = async () => {
     try {
       const response = await api.get(showDeleted ? "/user/deleted" : "/user");
@@ -52,6 +58,11 @@ export const UserProvider = ({ children }) => {
     } catch (error) {
       console.error("Error (fetch users):", error); // Por ahora mostramos el error por consola por comodidad
     }
+  };
+
+  const fetchClients = async () => {
+    await fetchUsers();
+    return users.map((user) => user.email);
   };
 
   useEffect(() => {
@@ -102,8 +113,13 @@ export const UserProvider = ({ children }) => {
   const logoutUser = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userData");
-    setLoggedUser(null);
-    setUsername(null);
+    setLoggedUser({
+      firstName: "",
+      lastName: "",
+      email: "Invitado",
+      role: "GUEST",
+    });
+    setUsername("Invitado");
   };
 
   const createUser = async (newUser) => {
@@ -118,6 +134,8 @@ export const UserProvider = ({ children }) => {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
         },
+      }).then(() => {
+        navigate("/");
       });
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -137,7 +155,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Función para editar una marca existente
+  // Función para editar un usuario existente
   const editUser = async (id, updatedUser, userEmail) => {
     // Deuda Técnica: Aca también tendriamos que poder hacer "Actualizar datos personales" para CLIENT/USER
     try {
@@ -192,7 +210,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Función para eliminar una marca
+  // Función para eliminar un usuario
   const deleteUser = async (id) => {
     // Deuda Técnica: Acá tendría que poder borrarse una cuenta CLIENT/USER también
     try {
@@ -225,7 +243,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Función para restaurar una marca eliminada
+  // Función para restaurar un usuario eliminado
   const restoreUser = async (id) => {
     try {
       await api.post(`/user/recover/${id}`);
@@ -255,8 +273,10 @@ export const UserProvider = ({ children }) => {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
         },
+      }).then(() => {
+        navigate("/", { replace: true });
+        window.location.reload();
       });
-      navigate("/");
     } else {
       Swal.fire({
         title: "Elige destino",
@@ -293,6 +313,7 @@ export const UserProvider = ({ children }) => {
         isLoading,
         selectedUser,
         fetchUsers,
+        fetchClients,
         loginUser,
         logoutUser,
         createUser,
