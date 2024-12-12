@@ -88,27 +88,19 @@ const NavBar = () => {
         </Box>
 
         <Box display="flex" alignItems="center" marginLeft="auto">
-          {/* Si no hay loggedUser, mostrar Login y Registrarse */}
-          {!loggedUser ? (
-            <>
-              <NavLink to="/login" style={linkStyle} onClick={closePopup}>
-                <Button color="inherit">Login</Button>
-              </NavLink>
-              <NavLink to="/register" style={linkStyle} onClick={closePopup}>
-                <Button color="inherit">Registrarse</Button>
-              </NavLink>
-            </>
-          ) : (
-            <ClientAvatarComponent user={loggedUser} userName={userName} onLogout={logoutUser} />
-          )}
-          {/* Si hay loggedUser, mostrar Listade de pedidos */}
+          <ClientAvatarComponent
+            user={loggedUser}
+            userName={userName}
+            onLogout={logoutUser}
+          />
+          {/* Si hay loggedUser, mostrar Listade de pedidos
           {loggedUser ? (
-            <NavLink to="/orders" style={linkStyle} onClick={closePopup}>
-              <Button color="inherit">Lista de pedidos</Button>
-            </NavLink>
+            <Typography variant="button" onClick={closePopup}>
+              Hola, {userName}
+            </Typography>
           ) : (
             ""
-          )}
+          )} */}
           <NavLink to="/cartpage" style={linkStyle}>
             <Button color="inherit" style={{ marginLeft: "10px" }}>
               Carrito
