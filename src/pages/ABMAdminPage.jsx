@@ -21,6 +21,7 @@ const ABMAdminPage = () => {
           dateBirth: values.fechaNacimiento,
           email: values.email.trim(),
           password: values.password,
+          admin: true,
         });
         resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
       } else {

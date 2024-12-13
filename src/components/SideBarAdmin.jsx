@@ -27,9 +27,7 @@ import { Box } from "@mui/system";
 import { UserContext } from "../context/UserContext";
 
 const Sidebar = () => {
-  //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
-
-  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
+  const { loggedUser } = useContext(UserContext);
 
   const [openAdmin, setOpenAdmin] = useState(false);
   const [openBrand, setOpenBrand] = useState(false);
