@@ -14,6 +14,7 @@ import {
 import React, { useContext } from "react";
 import { OrderHistoryContext } from "../context/OrderHistoryContext";
 import backgroundImage from "../assets/home-completo.png";
+import { parse, format } from "date-fns";
 
 const ListHistoryOrder = () => {
   const {
@@ -39,7 +40,7 @@ const ListHistoryOrder = () => {
             Cantidad
           </TableCell>
           <TableCell align="center" sx={{ color: "white" }}>
-            Subtotal
+            Precio
           </TableCell>
         </TableRow>
       </TableHead>
@@ -50,13 +51,21 @@ const ListHistoryOrder = () => {
               {product.productName}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.unitPrice.toFixed(2)}
+              $
+              {product.unitPrice.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
               {product.amount}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.subTotal.toFixed(2)}
+              $
+              {product.subTotal.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </TableCell>
           </TableRow>
         ))}
@@ -101,12 +110,59 @@ const ListHistoryOrder = () => {
                         backgroundColor: "#283b54",
                         color: "white",
                         fontWeight: "bold",
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: "1.8rem",
-                        p: "18px",
+                        fontSize: "1.0rem",
+                        p: "10px",
                       }}
                     >
-                      Lista de Pedidos
+                      Fecha
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#283b54",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Detalle de los pedidos
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#283b54",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Subtotal
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#283b54",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Descuento
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#283b54",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Total
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -117,21 +173,48 @@ const ListHistoryOrder = () => {
                         order.orderDetails && order.orderDetails.length > 0
                     ) // POR AHORA: Filtrar pedidos vacíos (hasta arreglar)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell
-                          sx={{
-                            textAlign: "center", // Centra horizontalmente
-                            verticalAlign: "middle", // Centra verticalmente
-                            fontSize: "15px", // Opcional: ajustar tamaño de texto
-                          }}
-                        >
-                          {renderProducts(order.orderDetails)}
-                          <strong>Total:</strong> ${order.total.toFixed(2)}
-                          <br />
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    .map((order) => {
+                      // Calcular el subtotal del pedido
+                      const orderSubtotal = order.orderDetails.reduce(
+                        (acc, product) => acc + product.subTotal,
+                        0
+                      );
+
+                      return (
+                        <TableRow key={order.id}>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {format(
+                              parse(
+                                order.creationDatetime,
+                                "dd/MM/yyyy : HH:mm:ss",
+                                new Date()
+                              ),
+                              "dd/MM/yyyy"
+                            )}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {renderProducts(order.orderDetails)}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            $
+                            {orderSubtotal.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {order.discount}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            $
+                            {order.total.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                 </TableBody>
               </Table>
             </TableContainer>
