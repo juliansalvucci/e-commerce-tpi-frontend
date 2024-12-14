@@ -78,9 +78,16 @@ export const UserProvider = ({ children }) => {
   const loginUser = async (user) => {
     try {
       const response = await api.post("/auth/signin", user);
-      const { firstName, lastName, email, role, token } = response.data;
+      const { firstName, lastName, email, role, birthDate, token } =
+        response.data;
       setUsername(email.split("@")[0]);
-      const userData = { firstName, lastName, email, role }; // El token lo pasamos aparte
+      const userData = {
+        firstName,
+        lastName,
+        email,
+        role,
+        dateBirth: birthDate,
+      }; // El token lo pasamos aparte
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("userData", JSON.stringify(userData));
       setLoggedUser(userData);
@@ -191,7 +198,16 @@ export const UserProvider = ({ children }) => {
         },
       });
       selectUserForEdit(null);
-      navigate("/admin/user/list");
+      const path =
+        location.pathname === "/admin/user/edit"
+          ? "/admin/user/list"
+          : location.pathname === "/admin/account/edit"
+          ? "/admin/account"
+          : "/account/";
+      navigate(path);
+      if (path === "/admin/account" || path === "/account") {
+        updateLoggedUser(updatedUser);
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Swal.fire({
@@ -303,6 +319,22 @@ export const UserProvider = ({ children }) => {
     setSelectedUser(user);
   };
 
+  // Función para encontrar un usuario por su email
+  const findUserByEmail = (email) => {
+    const user = users.find((user) => user.email === email);
+    return user.id;
+  };
+
+  // Función para actualizar el usuario logueado luego de editar sus datos
+  const updateLoggedUser = (updatedUser) => {
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    userData.firstName = updatedUser.firstName;
+    userData.lastName = updatedUser.lastName;
+    userData.dateBirth = updatedUser.dateBirth;
+    sessionStorage.setItem("userData", JSON.stringify(userData));
+    setLoggedUser(userData);
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -322,6 +354,7 @@ export const UserProvider = ({ children }) => {
         restoreUser,
         setShowDeleted,
         selectUserForEdit,
+        findUserByEmail,
       }}
     >
       {children}
