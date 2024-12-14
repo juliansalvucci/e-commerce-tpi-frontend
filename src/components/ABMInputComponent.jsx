@@ -17,7 +17,7 @@ const ABMInputComponent = ({ label, fullWidth, ...props }) => {
         variant: "outlined",
       }
     : {
-        variant: "filled",
+        variant: isAdminRoute ? "filled" : "outlined",
         InputProps: {
           style: {
             borderColor: meta.touched && meta.error ? "red" : "#d7c4ab",

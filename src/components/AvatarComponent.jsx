@@ -24,12 +24,17 @@ const AvatarComponent = ({ user, userName, onLogout }) => {
 
   const handleAccount = () => {
     handleMenuClose();
-    navigate("/account");
+    const isAdmin = location.pathname.includes("/admin");
+    const dir =
+      isAdmin && location.pathname.includes("/admin")
+        ? "/admin/account/"
+        : "/account/";
+    navigate(dir);
   };
 
   const handleOrders = () => {
     handleMenuClose();
-    navigate("/orders");
+    navigate("/account/orders");
   };
 
   const handleLogin = () => {
