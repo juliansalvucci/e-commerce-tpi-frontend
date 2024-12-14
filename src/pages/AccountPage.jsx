@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -8,14 +8,19 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import { UserContext } from "../context/UserContext";
 
 const AccountPage = () => {
+  const { loggedUser, selectUserForEdit } = useContext(UserContext);
   const location = useLocation();
   const navigate = useNavigate();
 
   const isAdmin = location.pathname.includes("/admin");
 
   const handleNavigate = (path) => {
+    if (path.includes("/edit")) {
+      selectUserForEdit(loggedUser);
+    }
     navigate(path);
   };
 
@@ -24,7 +29,7 @@ const AccountPage = () => {
     {
       title: "Listado de Pedidos",
       description: "Visualiza tus pedidos realizados",
-      path: "/orders",
+      path: "/account/orders",
       visible: location.pathname.includes("/admin") ? false : true,
     },
     {
@@ -48,7 +53,7 @@ const AccountPage = () => {
     {
       title: "Ayuda",
       description: "Contacta al servicio de atención al cliente",
-      path: "/account",
+      path: "#",
       visible: location.pathname.includes("/admin") ? false : true,
     },
   ];
@@ -56,16 +61,16 @@ const AccountPage = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#f5f5f5",
+        backgroundColor: isAdmin ? "#233349" : "#f5f5f5",
         minHeight: "100vh",
-        padding: "2rem",
+        padding: "2rem"
       }}
     >
       <Typography
         variant="h4"
         align="center"
         gutterBottom
-        sx={{ fontFamily: "Poppins", color: "#233349" }}
+        sx={{ fontFamily: "Poppins", color: isAdmin ? "white" : "#233349" }}
       >
         Mi Cuenta
       </Typography>
