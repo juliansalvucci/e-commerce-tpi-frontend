@@ -14,7 +14,7 @@ const OrderHistoryProvider = ({ children }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    if (location.pathname === "/orders") {
+    if (location.pathname === "/account/orders") {
       fetchOrders();
     }
   }, [location.pathname]);

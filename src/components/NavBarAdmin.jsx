@@ -15,6 +15,9 @@ const NavBarAdmin = () => {
   // Lógica para Breadcrumbs basada en la ruta actual
   const breadcrumbsMap = {
     "/admin": ["Principal", "Dashboard"],
+    "/admin/account/": ["Cuenta", "Información"],
+    "/admin/account/edit": ["Cuenta", "Información", "Editar"],
+    "/admin/account/reports": ["Cuenta", "Reportes"],
     "/admin/user/create": ["Administración", "Administrador", "Crear"],
     "/admin/user/edit": ["Administración", "Administrador", "Editar"],
     "/admin/user/list": ["Administración", "Administrador", "Listado"],

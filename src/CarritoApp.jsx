@@ -15,6 +15,7 @@ import ABMBrandPage from "./pages/ABMBrandPage";
 import ABMCategoryPage from "./pages/ABMCategoryPage";
 import ABMProductPage from "./pages/ABMProductPage";
 import ABMSubCategoryPage from "./pages/ABMSubCategoryPage";
+import AccountEditPage from "./pages/AccountEditPage";
 import AccountPage from "./pages/AccountPage";
 import { CartPage } from "./pages/CartPage";
 import HomeAdminPage from "./pages/HomeAdminPage";
@@ -81,9 +82,10 @@ export const CarritoApp = () => {
               <Routes>
                 <Route path="/" element={<ProductsPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/account/edit" element={<AccountEditPage />} />
+                <Route path="/account/orders" element={<ListHistoryOrder />} />
                 <Route path="/cartpage" element={<CartPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/orders" element={<ListHistoryOrder />} />
                 <Route path="/register" element={<RegisterPage />} />
 
                 {/* Rutas de administración, envueltas en los proveedores */}
