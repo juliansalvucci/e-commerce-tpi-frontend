@@ -146,9 +146,16 @@ export const UserProvider = ({ children }) => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const response = await api.post("/auth/signin", newUser);
-          const { firstName, lastName, email, role, token } = response.data;
+          const { firstName, lastName, email, role, birthDate, token } =
+            response.data;
           setUsername(email.split("@")[0]);
-          const userData = { firstName, lastName, email, role }; // El token lo pasamos aparte
+          const userData = {
+            firstName,
+            lastName,
+            email,
+            role,
+            dateBirth: birthDate,
+          }; // El token lo pasamos aparte
           sessionStorage.setItem("token", token);
           sessionStorage.setItem("userData", JSON.stringify(userData));
           setLoggedUser(userData);
