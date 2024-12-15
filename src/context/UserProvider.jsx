@@ -127,6 +127,8 @@ export const UserProvider = ({ children }) => {
       role: "GUEST",
     });
     setUsername("Invitado");
+    navigate("/");
+    window.location.reload();
   };
 
   const createUser = async (newUser) => {
@@ -141,8 +143,17 @@ export const UserProvider = ({ children }) => {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
         },
-      }).then(() => {
-        navigate("/");
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await api.post("/auth/signin", newUser);
+          const { firstName, lastName, email, role, token } = response.data;
+          setUsername(email.split("@")[0]);
+          const userData = { firstName, lastName, email, role }; // El token lo pasamos aparte
+          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("userData", JSON.stringify(userData));
+          setLoggedUser(userData);
+          navigate("/");
+        }
       });
     } catch (error) {
       if (error.response && error.response.status === 409) {

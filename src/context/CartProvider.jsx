@@ -116,15 +116,17 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const total = calculateTotal();
     setSubtotal(total);
-    if (total >= 8000000 ) {
+    if (total >= 1000000) {
       const calculatedDiscount = total * 0.1; // 10% de descuento
       setDiscount(calculatedDiscount);
       setTotalWithDiscount(total - calculatedDiscount);
       // Mostrar el mensaje de descuento aplicado en la primera vez
-      if(!isDiscountShown){
+      if (!isDiscountShown) {
         Swal.fire({
           title: "¡Descuento aplicado!",
-          text: `Se ha aplicado un descuento del 10%. Total con descuento: ${(total - calculatedDiscount).toLocaleString("en-US", {
+          text: `Se ha aplicado un descuento del 5%. Total con descuento: ${(
+            total - calculatedDiscount
+          ).toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
           })}`,
@@ -136,14 +138,13 @@ export const CartProvider = ({ children }) => {
         });
         setIsDiscountShown(true);
       }
-      
-    } else if (total < 8000000) {
+    } else if (total < 1000000) {
       // Reinicia el estado si el total baja de 8000000
       setDiscount(0);
       setTotalWithDiscount(total);
       setIsDiscountShown(false);
     }
-  }, [shoppingList]); 
+  }, [shoppingList]);
 
   const calculateTotalQuantity = () => {
     return shoppingList.reduce(
