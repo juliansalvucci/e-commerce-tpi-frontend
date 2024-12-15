@@ -82,6 +82,54 @@ const ContextWrapper = ({ children }) => (
 );
 
 // Prueba
+test("muestra el botón Restore cuando showDeleted es false", async () => {
+  // Cambiar el estado de showDeleted a true para que se muestren los productos eliminados
+  mockProductContextValue.showDeleted = false;
+
+  render(
+    <ContextWrapper>
+      <ListProductPage />
+    </ContextWrapper>
+  );
+
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId("circular-progress")).not.toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const restoreButtons = screen.getAllByTestId("edit-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(restoreButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const restoreButtons = screen.getAllByTestId("edit-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(restoreButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const restoreButtons = screen.getAllByTestId("delete-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(restoreButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+});
+
 test("muestra el botón Restore cuando showDeleted es true", async () => {
   // Cambiar el estado de showDeleted a true para que se muestren los productos eliminados
   mockProductContextValue.showDeleted = true;
@@ -99,13 +147,13 @@ test("muestra el botón Restore cuando showDeleted es true", async () => {
     { timeout: 10000 }
   );
 
-  // Verificar si el botón Restore aparece
-  const restoreButton = await screen.findByTestId("restore-button", {
-    timeout: 10000,
-  });
-  expect(restoreButton).toBeInTheDocument();
-  
+  await waitFor(
+    () => {
+      const restoreButtons = screen.getAllByTestId("restore-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(restoreButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
 });
-
-
-

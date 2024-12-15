@@ -210,7 +210,7 @@ const ListProductPage = () => {
               <ListDeleteButton data-testid="delete-button" onClick={() => handleDelete(params.row.id)} />
             </>
           ) : (
-            <ListRestoreButton data-testid="restore-button" onClick={() => handleRestore(params.row.id)} />
+            <ListRestoreButton  onClick={() => handleRestore(params.row.id)} />
           )}
         </Stack>
       ),
