@@ -4,20 +4,11 @@
 }
 
 .products-pagination {
-  background-image: url("../assets/home-completo.png");
+  
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   padding: 20px;
-}
-
-.products-page {
-  position: relative;
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  z-index: 1;
 }
 
 /* Estiliza la lista de productos como una cuadrícula */
@@ -51,13 +42,12 @@
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-style: normal;
-  color: #f2f9fd;
 }
 
 .products-page hr {
   margin-bottom: 50px;
   width: 50%; /* Ajusta el ancho según sea necesario */
-  border: 2px solid #f2f9fd; /* Color oscuro */
+  border: 2px solid black; /* Color oscuro */
   margin-left: auto;
   margin-right: auto; /* Esto centra el hr */
   margin-bottom: 0px;

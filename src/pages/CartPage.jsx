@@ -197,7 +197,7 @@ export const CartPage = () => {
             <b>Resumen de compra</b>
             <p>Cantidad de productos: {calculateTotalQuantity()}</p>
             <p>
-              Subtotal:{" "}
+              Subtotal: {" "}
               {subtotal.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",

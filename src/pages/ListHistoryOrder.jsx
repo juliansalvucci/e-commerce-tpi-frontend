@@ -1,6 +1,5 @@
 import {
   Box,
-  Typography,
   CircularProgress,
   Table,
   TableBody,
@@ -13,7 +12,6 @@ import {
 } from "@mui/material";
 import React, { useContext } from "react";
 import { OrderHistoryContext } from "../context/OrderHistoryContext";
-import backgroundImage from "../assets/home-completo.png";
 import { parse, format } from "date-fns";
 
 const ListHistoryOrder = () => {
@@ -28,7 +26,7 @@ const ListHistoryOrder = () => {
 
   const renderProducts = (products) => (
     <Table size="small" sx={{ backgroundColor: "white" }}>
-      <TableHead sx={{ backgroundColor: "#283b54", color: "white" }}>
+      <TableHead sx={{ backgroundColor: "#233349", color: "white" }}>
         <TableRow>
           <TableCell align="center" sx={{ color: "white" }}>
             Productos
@@ -76,7 +74,7 @@ const ListHistoryOrder = () => {
   return (
     <Box
       sx={{
-        backgroundImage: `url(${backgroundImage})`,
+        
         backgroundSize: "cover", // Para cubrir todo el contenedor
         backgroundPosition: "center", // Centra la imagen
         minHeight: "100vh",
@@ -107,19 +105,7 @@ const ListHistoryOrder = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
-                        color: "white",
-                        fontWeight: "bold",
-                        fontSize: "1.0rem",
-                        p: "10px",
-                      }}
-                    >
-                      Fecha
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
                         fontSize: "1.0rem",
@@ -131,7 +117,19 @@ const ListHistoryOrder = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Fecha
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
                         fontSize: "1.0rem",
@@ -143,7 +141,7 @@ const ListHistoryOrder = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
                         fontSize: "1.0rem",
@@ -155,7 +153,7 @@ const ListHistoryOrder = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
                         fontSize: "1.0rem",
@@ -183,6 +181,9 @@ const ListHistoryOrder = () => {
                       return (
                         <TableRow key={order.id}>
                           <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {renderProducts(order.orderDetails)}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
                             {format(
                               parse(
                                 order.creationDatetime,
@@ -191,9 +192,6 @@ const ListHistoryOrder = () => {
                               ),
                               "dd/MM/yyyy"
                             )}
-                          </TableCell>
-                          <TableCell align="center" sx={{ color: "#283b54" }}>
-                            {renderProducts(order.orderDetails)}
                           </TableCell>
                           <TableCell align="center" sx={{ color: "#283b54" }}>
                             $
@@ -232,15 +230,15 @@ const ListHistoryOrder = () => {
                   `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
                 }
                 sx={{
-                  color: "white", // Cambia el color del texto a blanco
+                  color: "black", 
                   "& .MuiTablePagination-toolbar": {
-                    color: "white", // Asegura que los textos internos sean blancos
+                    color: "black", 
                   },
                   "& .MuiTablePagination-actions button": {
-                    color: "white", // Colorea los botones de navegación
+                    color: "black", // Colorea los botones de navegación
                   },
                   "& .MuiSelect-icon": {
-                    color: "white", // Cambia el color del ícono desplegable
+                    color: "black", // Cambia el color del ícono desplegable
                   },
                 }}
               />

@@ -23,7 +23,7 @@ const NavBar = () => {
   const [opacity, setOpacity] = useState(1);
 
   const navbarStyle = {
-    backgroundColor: "#001f3f",
+    backgroundColor: "#233349",
   };
 
   const linkStyle = {
@@ -120,7 +120,7 @@ const NavBar = () => {
         </Box>
       </Toolbar>
 
-      <Box display="flex" justifyContent="center" p={1} bgcolor="#001f3f">
+      <Box display="flex" justifyContent="center" p={1} bgcolor="#233349">
         <Button color="inherit">Categorías</Button>
         <Button color="inherit">Notebooks</Button>
         <Button color="inherit">Smartphones</Button>

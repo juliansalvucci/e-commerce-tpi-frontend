@@ -11,7 +11,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
-import registerBackground from "../assets/login-register-background.png";
 import ABMInputComponent from "../components/ABMInputComponent";
 import DatePickerComponent from "../components/DatePickerComponent";
 import { UserContext } from "../context/UserContext";
@@ -85,7 +84,7 @@ export const RegisterPage = () => {
           padding: 3,
           paddingBottom: 10,
           //backgroundImage: "url('../assets/descarga.png')",
-          backgroundImage: `url(${registerBackground})`,
+          
           //backgroundSize: "cover", // Ajusta el fondo al tamaño del Box
           //backgroundPosition: "center", // Centra la imagen de fondo
           boxShadow: 3,
