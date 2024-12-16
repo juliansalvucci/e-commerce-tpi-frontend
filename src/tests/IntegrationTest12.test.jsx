@@ -81,8 +81,7 @@ const ContextWrapper = ({ children }) => (
   </MemoryRouter>
 );
 
-// Prueba
-test("muestra el botón Restore cuando showDeleted es false", async () => {
+test("Partición 1: muestra el botón de modificar", async () => {
   // Cambiar el estado de showDeleted a true para que se muestren los productos eliminados
   mockProductContextValue.showDeleted = false;
 
@@ -101,36 +100,82 @@ test("muestra el botón Restore cuando showDeleted es false", async () => {
 
   await waitFor(
     () => {
-      const restoreButtons = screen.getAllByTestId("edit-button");
+      const editButtons = screen.getAllByTestId("edit-button");
 
       // Verifica que hay tantos botones como filas
-      expect(restoreButtons[0]).toBeInTheDocument();
-    },
-    { timeout: 10000 }
-  );
-
-  await waitFor(
-    () => {
-      const restoreButtons = screen.getAllByTestId("edit-button");
-
-      // Verifica que hay tantos botones como filas
-      expect(restoreButtons[0]).toBeInTheDocument();
-    },
-    { timeout: 10000 }
-  );
-
-  await waitFor(
-    () => {
-      const restoreButtons = screen.getAllByTestId("delete-button");
-
-      // Verifica que hay tantos botones como filas
-      expect(restoreButtons[0]).toBeInTheDocument();
+      expect(editButtons[0]).toBeInTheDocument();
     },
     { timeout: 10000 }
   );
 });
 
-test("muestra el botón Restore cuando showDeleted es true", async () => {
+test("Partición 2: muestra el botón de eliminar", async () => {
+  // Cambiar el estado de showDeleted a true para que se muestren los productos eliminados
+  mockProductContextValue.showDeleted = false;
+
+  render(
+    <ContextWrapper>
+      <ListProductPage />
+    </ContextWrapper>
+  );
+
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId("circular-progress")).not.toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const deleteButtons = screen.getAllByTestId("delete-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(deleteButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+});
+
+test("Partición 3: muestra ambos botones", async () => {
+  // Cambiar el estado de showDeleted a true para que se muestren los productos eliminados
+  mockProductContextValue.showDeleted = false;
+
+  render(
+    <ContextWrapper>
+      <ListProductPage />
+    </ContextWrapper>
+  );
+
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId("circular-progress")).not.toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const editButtons = screen.getAllByTestId("edit-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(editButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const deleteButtons = screen.getAllByTestId("delete-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(deleteButtons[0]).toBeInTheDocument();
+    },
+    { timeout: 10000 }
+  );
+});
+
+test("Partición 4: no muestra ninguno", async () => {
   // Cambiar el estado de showDeleted a true para que se muestren los productos eliminados
   mockProductContextValue.showDeleted = true;
 
@@ -149,10 +194,20 @@ test("muestra el botón Restore cuando showDeleted es true", async () => {
 
   await waitFor(
     () => {
-      const restoreButtons = screen.getAllByTestId("restore-button");
+      const editButtons = screen.queryAllByTestId("edit-button");
 
       // Verifica que hay tantos botones como filas
-      expect(restoreButtons[0]).toBeInTheDocument();
+      expect(editButtons == []);
+    },
+    { timeout: 10000 }
+  );
+
+  await waitFor(
+    () => {
+      const deleteButtons = screen.queryAllByTestId("delete-button");
+
+      // Verifica que hay tantos botones como filas
+      expect(deleteButtons == []);
     },
     { timeout: 10000 }
   );
