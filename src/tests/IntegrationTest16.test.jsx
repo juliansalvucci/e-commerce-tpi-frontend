@@ -10,7 +10,7 @@ vi.mock("sweetalert2", () => ({
 }));
 
 describe("CardComponent", () => {
-  it("debe mostrar 'stock-available' cuando el stock es mayor a 0", () => {
+  it("Estado con stock (stock disponible > stock mínimo) ", () => {
     // Mock del contexto
     const mockShoppingList = [];
     const mockHandlerAdd = vi.fn();
@@ -36,7 +36,7 @@ describe("CardComponent", () => {
     expect(stockElement).toHaveClass("stock-available");
   });
 
-  it("debe mostrar 'stock-unavailable' cuando el stock es igual a 0", () => {
+  it("Estado bajo stock (stock disponible ≤ stock mínimo → se muestra en color rojo)", () => {
     // Mock del contexto
     const mockShoppingList = [];
     const mockHandlerAdd = vi.fn();

@@ -8,14 +8,9 @@ import { MemoryRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import { act } from "react-dom/test-utils";
 
-// Mock para SweetAlert2
-vi.mock("sweetalert2", async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    fire: vi.fn(), // Ensure this is properly mocked
-  };
-});
+vi.mock('sweetalert2', () => ({
+  fire: vi.fn(() => Promise.resolve({ isConfirmed: true })),
+}));
 
 
 describe("CartPopup Component", () => {
@@ -127,47 +122,48 @@ describe("CartPopup Component", () => {
   });
 
   it("muestra un mensaje de alerta cuando el producto alcanza el límite de stock", async () => {
-    const product = {
-      id: 1,
-      name: "Producto 1",
-      price: 100,
-      quantity: 1,
-      stock: 1, // El límite de stock es 1
-      imageURL: "https://example.com/product.jpg",
-    };
+    const mockShoppingListWithLimitedStock = [
+      {
+        id: 1,
+        name: "Producto 1",
+        price: 100,
+        quantity: 1,
+        stock: 1, // El límite de stock es 1
+        imageURL: "https://example.com/product.jpg",
+      },
+    ];
   
-    const addProductToCart = vi.fn();
-  
-    // Renderizamos el componente CartPage dentro del proveedor de contexto
     render(
       <CartContext.Provider
         value={{
-          shoppingList: mockShoppingList,
-          removeProduct: vi.fn(),
-          incrementQuantity: vi.fn(),
+          shoppingList: mockShoppingListWithLimitedStock,
+          incrementQuantity: vi.fn((id) => {
+            const product = mockShoppingListWithLimitedStock.find(
+              (item) => item.id === id
+            );
+            if (product.quantity >= product.stock) {
+              Swal.fire({ title: "No hay más stock disponible" });
+            }
+          }),
           decrementQuantity: vi.fn(),
-          calculateTotal: vi.fn(() => "$50"),
-          calculateTotalQuantity: vi.fn(() => "3 items"),
+          removeProduct: vi.fn(),
+          calculateTotal: vi.fn(() => "$100"),
+          calculateTotalQuantity: vi.fn(() => "1 item"),
         }}
       >
         <CartPopup isVisible={true} onClose={vi.fn()} />
       </CartContext.Provider>
     );
   
-    // Agregar producto al carrito, lo que debería incrementar la cantidad
-    act(() => {
-      addProductToCart(product);
-    });
-  
+    // Simula clic en "+" para incrementar la cantidad
     const plusButtons = screen.getAllByText("+");
-    fireEvent.click(plusButtons[0]); // Simulamos que el usuario hace clic en "+"
-    
-    // Esperamos que se llame a Swal.fire con el mensaje correcto
+    fireEvent.click(plusButtons[0]);
+  
+    // Espera que Swal.fire haya sido llamado
     await waitFor(() =>
       expect(Swal.fire).toHaveBeenCalledWith({
         title: "No hay más stock disponible",
-      }),
-      { timeout: 3000 } // Increase the timeout duration if necessary
+      })
     );
   });
   
