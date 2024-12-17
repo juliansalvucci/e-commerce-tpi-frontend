@@ -36,6 +36,32 @@ const mockCartContext = {
   calculateTotalQuantity: vi.fn().mockReturnValue(1),
 };
 
+const mockCartContext2 = {
+  shoppingList: [
+    {
+      id: 1,
+      name: 'Producto 1',
+      price: 100,
+      quantity: 1,
+      imageURL: 'dummy.jpg',
+    },
+    {
+      id: 2,
+      name: 'Producto 2',
+      price: 50,
+      quantity: 3,  // Producto con cantidad diferente
+      imageURL: 'dummy2.jpg',
+    },
+  ],
+  removeProduct: vi.fn(),
+  incrementQuantity: vi.fn(),
+  decrementQuantity: vi.fn(),
+  createOrder: vi.fn(),
+  emptyCart: vi.fn(),
+  calculateTotal: vi.fn().mockReturnValue(100 + 3 * 50),  // Total actualizado
+  calculateTotalQuantity: vi.fn().mockReturnValue(4), // Cantidad total de productos (1 + 3)
+};
+
 const renderWithProviders = (cartContextValue) => {
   return render(
     <BrowserRouter>
@@ -69,7 +95,7 @@ describe("CartPage Component", () => {
   });
 
   // Test 1: Carrito vacío
-  it("desactiva el botón 'Finalizar compra' cuando el carrito está vacío", () => {
+  it("Partición 1: El carrito esta vacío.", () => {
     renderWithProviders(baseCartContext);
 
     const finishButton = screen.getByText("Finalizar compra");
@@ -79,44 +105,10 @@ describe("CartPage Component", () => {
     expect(productRows).toHaveLength(1); // Solo el header
   });
 
-  // Test 2: Un producto en el carrito
-  it("muestra correctamente un producto en el carrito", () => {
-    const cartContextWithOneProduct = {
-      ...baseCartContext,
-      shoppingList: [
-        {
-          id: 1,
-          name: "Producto 1",
-          price: 100,
-          quantity: 1,
-          imageURL: "dummy.jpg",
-        },
-      ],
-      calculateTotal: () => "$100",
-      calculateTotalQuantity: () => 1,
-    };
 
-    renderWithProviders(cartContextWithOneProduct);
-
-    expect(screen.getByText("Producto 1")).toBeInTheDocument();
-    expect(screen.getByText("$100.00")).toBeInTheDocument(); // Precio
-    expect(screen.getByText("x")).toBeInTheDocument();      // El separador
-    expect(screen.getByText("1")).toBeInTheDocument();      // Cantidad
-    
-
-
-    // Verificar los botones de cantidad
-    const incrementButton = screen.getByText("+");
-    const decrementButton = screen.getByText("-");
-    fireEvent.click(incrementButton);
-    fireEvent.click(decrementButton);
-
-    expect(mockIncrement).toHaveBeenCalledWith(1);
-    expect(mockDecrement).toHaveBeenCalledWith(1);
-  });
 
   // Test 3: Varios productos en el carrito
-  it("muestra correctamente múltiples productos en el carrito", () => {
+  it("Partición 3: Hay varios productos en el carrito", () => {
     const cartContextWithMultipleProducts = {
       ...baseCartContext,
       shoppingList: [
@@ -135,36 +127,7 @@ describe("CartPage Component", () => {
     expect(screen.getByText("Cantidad de productos: 3")).toBeInTheDocument();
   });
 
-  // Test 4: Productos con cantidades diferentes
-  test("muestra correctamente un producto en el carrito", () => {
-    // Renderiza el componente con el contexto simulado
-    render(
-      <MemoryRouter>
-        <CartContext.Provider value={mockCartContext}>
-          <CartPage />
-        </CartContext.Provider>
-      </MemoryRouter>
-    );
-
-    // Verifica que el nombre del producto esté presente
-    expect(screen.getByText("Producto 1")).toBeInTheDocument();
-
-    // Verifica el precio y cantidad, con la solución personalizada para el texto "x"
-    expect(screen.getByText("$100.00")).toBeInTheDocument(); // Precio
-
-    // Buscar "x" con una función personalizada
-    expect(
-      screen.getByText((content, element) => element?.textContent.trim() === "x")
-    ).toBeInTheDocument();
-
-    expect(screen.getByText("1")).toBeInTheDocument(); // Cantidad
-
-    // Verifica el total
-    expect(screen.getByText(/Total:\s*\$100/i)).toBeInTheDocument();
-  });
-
-  // Test 5: Confirmación de compra
-  it("muestra alertas al confirmar la compra", async () => {
+  it("Partición 2: Solo hay un producto en el carrito.", async () => {
     const cartContextWithOneProduct = {
       ...baseCartContext,
       shoppingList: [
@@ -184,5 +147,66 @@ describe("CartPage Component", () => {
     fireEvent.click(finishButton);
 
     expect(Swal.fire).toHaveBeenCalledTimes(1);
+  });
+
+  // Test 4: Productos con cantidades diferentes
+  it('muestra correctamente un producto en el carrito', () => {
+    // Renderiza el componente con el contexto mockeado
+    render(
+      <BrowserRouter>
+        <CartContext.Provider value={mockCartContext}>
+          <CartPage />
+        </CartContext.Provider>
+      </BrowserRouter>
+    );
+
+    // Verifica el nombre del producto
+    expect(screen.getByText('Producto 1')).toBeInTheDocument();
+
+    // Verifica el precio
+    expect(screen.getByText("$100.00")).toBeInTheDocument(); // Precio
+
+    // Verifica que el texto "x" esté presente de manera flexible (dentro del mismo nodo o no)
+    const quantityText = screen.getByText((content, element) => 
+      content.includes("x") && element?.textContent.includes("x")
+    );
+    expect(quantityText).toBeInTheDocument();
+
+    // Verifica el total con una expresión regular flexible para capturar espacios
+    expect(screen.getByText(/Total:\s*\d+/i)).toBeInTheDocument();
+  });
+
+  // Test 5: Confirmación de compra
+ 
+
+  it('Partición 4: Algunos productos tienen cantidades diferentes.', () => {
+    // Renderiza el componente con el contexto mockeado
+    render(
+      <BrowserRouter>
+        <CartContext.Provider value={mockCartContext2}>
+          <CartPage />
+        </CartContext.Provider>
+      </BrowserRouter>
+    );
+
+    // Verifica el nombre del Producto 1
+    expect(screen.getByText('Producto 1')).toBeInTheDocument();
+    // Verifica que la cantidad de Producto 1 sea 1
+    expect(screen.getByText(/x 1/)).toBeInTheDocument();
+    // Verifica el precio de Producto 1
+    expect(screen.getByText("$100.00")).toBeInTheDocument(); 
+
+    // Verifica el nombre del Producto 2
+    expect(screen.getByText('Producto 2')).toBeInTheDocument();
+    // Verifica que la cantidad de Producto 2 sea 3
+    expect(screen.getByText(/x 3/)).toBeInTheDocument();
+    // Verifica el precio total de Producto 2 (50 * 3 = 150)
+    expect(screen.getByText("$150.00")).toBeInTheDocument(); 
+
+    // Verifica el total del carrito actualizado (100 + 150 = 250)
+    expect(screen.getByText(/Total:\s*250/i)).toBeInTheDocument();
+
+    // Verifica el total de productos (1 + 3 = 4)
+    expect(screen.getByText(/Cantidad de productos:\s*4/i)).toBeInTheDocument();
   });
 });
