@@ -8,10 +8,15 @@ import { MemoryRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import { act } from "react-dom/test-utils";
 
-vi.mock('sweetalert2', () => ({
-  fire: vi.fn(() => Promise.resolve({ isConfirmed: true })),
-}));
-
+vi.mock("sweetalert2", async () => {
+  const actual = await vi.importActual("sweetalert2");
+  return {
+    ...actual,
+    default: {
+      fire: vi.fn(() => Promise.resolve({ isConfirmed: true })),
+    },
+  };
+});
 
 describe("CartPopup Component", () => {
   // Define the mockShoppingList outside the individual tests
@@ -32,7 +37,7 @@ describe("CartPopup Component", () => {
     },
   ];
 
-  it("should increment product quantities correctly", () => {
+  it("El sistema incrementa la cantidad a comprar del producto, no se muestra errores y se le permite al usuario continuar", () => {
     const incrementQuantityMock = vi.fn();
 
     // Render the component with the mock context
@@ -62,7 +67,7 @@ describe("CartPopup Component", () => {
     expect(incrementQuantityMock).toHaveBeenCalledWith(1); // ID of product 1
   });
 
-  it("should decrement product quantities correctly", () => {
+  it("Disminuye la cantidad del producto al que se realizó la acción", () => {
     const decrementQuantityMock = vi.fn();
 
     // Render the component with the mock context
@@ -92,7 +97,7 @@ describe("CartPopup Component", () => {
     expect(decrementQuantityMock).toHaveBeenCalledWith(1); // ID of product 1
   });
 
-  it("should disable the 'Finalizar compra' button if shoppingList is empty", () => {
+  it("No disminuye la cantidad del producto al que se realizó la acción", () => {
     render(
       <MemoryRouter>
         <CartContext.Provider
@@ -121,30 +126,34 @@ describe("CartPopup Component", () => {
     expect(finishButton).toBeDisabled();
   });
 
-  it("muestra un mensaje de alerta cuando el producto alcanza el límite de stock", async () => {
+  it("El sistema muestra un error “No hay más stock disponible” y se le permite al usuario continuar", async () => {
+    const SwalMock = Swal.fire; // Guardamos la referencia del mock
+
     const mockShoppingListWithLimitedStock = [
       {
         id: 1,
         name: "Producto 1",
         price: 100,
         quantity: 1,
-        stock: 1, // El límite de stock es 1
+        stock: 1, // Límite de stock
         imageURL: "https://example.com/product.jpg",
       },
     ];
-  
+
+    const incrementQuantityMock = vi.fn((id) => {
+      const product = mockShoppingListWithLimitedStock.find(
+        (item) => item.id === id
+      );
+      if (product && product.quantity >= product.stock) {
+        Swal.fire({ title: "No hay más stock disponible" });
+      }
+    });
+
     render(
       <CartContext.Provider
         value={{
           shoppingList: mockShoppingListWithLimitedStock,
-          incrementQuantity: vi.fn((id) => {
-            const product = mockShoppingListWithLimitedStock.find(
-              (item) => item.id === id
-            );
-            if (product.quantity >= product.stock) {
-              Swal.fire({ title: "No hay más stock disponible" });
-            }
-          }),
+          incrementQuantity: incrementQuantityMock,
           decrementQuantity: vi.fn(),
           removeProduct: vi.fn(),
           calculateTotal: vi.fn(() => "$100"),
@@ -154,19 +163,19 @@ describe("CartPopup Component", () => {
         <CartPopup isVisible={true} onClose={vi.fn()} />
       </CartContext.Provider>
     );
-  
-    // Simula clic en "+" para incrementar la cantidad
+
+    // Simula el clic en "+"
     const plusButtons = screen.getAllByText("+");
     fireEvent.click(plusButtons[0]);
-  
-    // Espera que Swal.fire haya sido llamado
-    await waitFor(() =>
-      expect(Swal.fire).toHaveBeenCalledWith({
+
+    // Esperamos la llamada correcta de Swal.fire
+    await waitFor(() => {
+      expect(SwalMock).toHaveBeenCalledWith({
         title: "No hay más stock disponible",
-      })
-    );
+      });
+    });
+
+    // Aseguramos que el mock de incrementar se llama
+    expect(incrementQuantityMock).toHaveBeenCalledWith(1);
   });
-  
 });
-
-

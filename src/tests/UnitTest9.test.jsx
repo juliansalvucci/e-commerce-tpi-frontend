@@ -9,7 +9,7 @@ describe('fetchUsers Function', () => {
           {
             id: 1,
             deleted: false,
-            creationDatetime: '2024-12-01T10:00:00Z',
+            creationDatetime: '2024-10-01T10:00:00Z',
             updateDateTime: null, // Sin fecha de modificación
             deleteDateTime: null,
           },
@@ -51,7 +51,7 @@ describe('fetchUsers Function', () => {
     expect(api.get).toHaveBeenCalledWith("/user");
 
     // Validar que la función de formato de fecha fue llamada para la fecha de creación
-    expect(useFormatDateTime).toHaveBeenCalledWith('2024-12-01T10:00:00Z');
+    expect(useFormatDateTime).toHaveBeenCalledWith('2024-10-01T10:00:00Z');
 
     // Validar que no se llamó a la función de formato para la fecha de modificación
     expect(useFormatDateTime).not.toHaveBeenCalledWith(null);
@@ -61,7 +61,7 @@ describe('fetchUsers Function', () => {
       {
         id: 1,
         deleted: false,
-        creationDatetime: 'formatted(2024-12-01T10:00:00Z)',
+        creationDatetime: 'formatted(2024-10-01T10:00:00Z)',
         updateDateTime: 'N/A', // Validar que muestra "N/A"
         deleteDateTime: null,
       },
@@ -76,8 +76,8 @@ describe('fetchUsers Function', () => {
           {
             id: 1,
             deleted: false,
-            creationDatetime: '2024-12-01T10:00:00Z',
-            updateDateTime: '2024-12-02T12:00:00Z', // Fecha de modificación presente
+            creationDatetime: '2024-10-01T10:00:00Z',
+            updateDateTime: '2024-11-01T12:00:00Z', // Fecha de modificación presente
             deleteDateTime: null,
           },
         ],
@@ -115,15 +115,15 @@ describe('fetchUsers Function', () => {
     await fetchUsers();
 
     // Validar que la función de formato de fecha fue llamada para la fecha de modificación
-    expect(useFormatDateTime).toHaveBeenCalledWith('2024-12-02T12:00:00Z');
+    expect(useFormatDateTime).toHaveBeenCalledWith('2024-11-01T12:00:00Z');
 
     // Validar que el estado se actualizó correctamente
     expect(setUsers).toHaveBeenCalledWith([
       {
         id: 1,
         deleted: false,
-        creationDatetime: 'formatted(2024-12-01T10:00:00Z)',
-        updateDateTime: 'formatted(2024-12-02T12:00:00Z)', // Validar que se formateó correctamente
+        creationDatetime: 'formatted(2024-10-01T10:00:00Z)',
+        updateDateTime: 'formatted(2024-11-01T12:00:00Z)', // Validar que se formateó correctamente
         deleteDateTime: null,
       },
     ]);
