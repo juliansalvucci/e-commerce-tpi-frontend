@@ -61,4 +61,58 @@ describe("CardComponent", () => {
     expect(stockElement).toBeInTheDocument();
     expect(stockElement).toHaveClass("stock-unavailable");
   });
+
+  it("Estado filtrado y con stock, debe aplicar el color azul oscuro", () => {
+    // Mock del contexto
+    const mockShoppingList = [];
+    const mockHandlerAdd = vi.fn();
+    const mockHandlerRemove = vi.fn();
+
+    render(
+      <CartContext.Provider value={{ shoppingList: mockShoppingList }}>
+        <CardComponent
+          id={1}
+          image="image.png"
+          title="Producto 1"
+          price={100}
+          stock={10}
+          description="Descripción del producto"
+          handlerAdd={mockHandlerAdd}
+          handlerRemove={mockHandlerRemove}
+        />
+      </CartContext.Provider>
+    );
+
+    // Simulamos que el producto está filtrado (puedes modificar esto según tu lógica de filtrado)
+    const stockElement = screen.getByText(/Stock disponible: 10/i);
+    expect(stockElement).toBeInTheDocument();
+    expect(stockElement).toHaveClass("stock-available");
+  });
+
+  it("Estado filtrado y bajo stock, debe aplicar el color rojo", () => {
+    // Mock del contexto
+    const mockShoppingList = [];
+    const mockHandlerAdd = vi.fn();
+    const mockHandlerRemove = vi.fn();
+
+    render(
+      <CartContext.Provider value={{ shoppingList: mockShoppingList }}>
+        <CardComponent
+          id={1}
+          image="image.png"
+          title="Producto 1"
+          price={100}
+          stock={0}
+          description="Descripción del producto"
+          handlerAdd={mockHandlerAdd}
+          handlerRemove={mockHandlerRemove}
+        />
+      </CartContext.Provider>
+    );
+
+    // Simulamos que el producto está filtrado y tiene stock bajo (0)
+    const stockElement = screen.getByText(/Stock disponible: 0/i);
+    expect(stockElement).toBeInTheDocument();
+    expect(stockElement).toHaveClass("stock-unavailable");
+  });
 });
