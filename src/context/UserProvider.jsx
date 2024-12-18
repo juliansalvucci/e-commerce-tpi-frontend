@@ -94,23 +94,39 @@ export const UserProvider = ({ children }) => {
       redirectUser(role);
     } catch (error) {
       //En caso de que el usuario no esté registrado, se le proporcionará la opción de hacerlo
-      if (error.response && error.response.status === 404) {
-        Swal.fire({
-          title: `<h5><strong>${error.response.data.email}</strong></h5>`,
-          text: "¿Desea registrarse?",
-          showCancelButton: true,
-          confirmButtonText: "Confirmar",
-          cancelButtonText: "Cancelar",
-          customClass: {
-            popup: "swal-question-popup",
-            confirmButton: "swal-confirm-button",
-            cancelButton: "swal-cancel-button",
-          },
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            navigate("/register");
-          }
-        });
+      if (
+        error.response &&
+        (error.response.status === 404 || error.response.status === 401)
+      ) {
+        if (error.response.status === 404) {
+          Swal.fire({
+            title: `<h5><strong>${error.response.data.email}</strong></h5>`,
+            text: "¿Desea registrarse?",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+            customClass: {
+              popup: "swal-question-popup",
+              confirmButton: "swal-confirm-button",
+              cancelButton: "swal-cancel-button",
+            },
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              navigate("/register");
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: error.response.data.password,
+            text: "Ingrese nuevamente su contraseña",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "swal-error-popup",
+              confirmButton: "swal-ok-button",
+            },
+          });
+        }
       } else {
         console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
       }
