@@ -117,6 +117,7 @@ const ABMSubCategoryPage = () => {
                 is={isSubmitting}
                 accion={selectedSubCategory ? "Guardar" : "Crear"}
                 tipoClase="Subcategoría"
+                ancho="100%"
               />
             </Form>
           )}

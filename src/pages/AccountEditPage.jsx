@@ -191,6 +191,7 @@ const AccountEditPage = () => {
                 is={isSubmitting}
                 accion={selectedUser ? "Guardar" : "Crear"}
                 tipoClase="Cambios"
+                ancho="100%"
               />
             </Form>
           )}

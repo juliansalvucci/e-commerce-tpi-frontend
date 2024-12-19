@@ -258,6 +258,7 @@ export const ABMProductPage = () => {
                 is={isSubmitting}
                 accion={selectedProduct ? "Guardar" : "Crear"}
                 tipoClase="Producto"
+                ancho="100%"
               />
             </Form>
           )}

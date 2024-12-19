@@ -87,6 +87,7 @@ const ABMBrandPage = () => {
                 is={isSubmitting}
                 accion={selectedBrand ? "Guardar" : "Crear"}
                 tipoClase="Marca"
+                ancho="100%"
               />
             </Form>
           )}

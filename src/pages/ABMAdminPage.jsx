@@ -194,6 +194,7 @@ const ABMAdminPage = () => {
                 is={isSubmitting}
                 accion={selectedUser ? "Guardar" : "Crear"}
                 tipoClase="Administrador"
+                ancho="100%"
               />
             </Form>
           )}

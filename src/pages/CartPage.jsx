@@ -78,17 +78,20 @@ export const CartPage = () => {
                 <p>Subtotal:${subtotal.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0,
                 })}</p>
                 <p>Descuento (5% a partir de $1,000,000): ${discount.toLocaleString(
                   "en-US",
                   {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   }
                 )}</p>
                 <p>Total: ${totalWithDiscount.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0,
                 })}</p>
               </div>
             `,
@@ -155,6 +158,7 @@ export const CartPage = () => {
                   {product.price.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   })}{" "}
                   x {product.quantity}
                 </td>
@@ -162,6 +166,7 @@ export const CartPage = () => {
                   {(product.price * product.quantity).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   })}
                 </td>
                 <td className="quantity-column">
@@ -204,6 +209,7 @@ export const CartPage = () => {
               {subtotal.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
+                maximumFractionDigits: 0,
               })}
             </p>
             <p>
@@ -211,6 +217,7 @@ export const CartPage = () => {
               {discount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
+                maximumFractionDigits: 0,
               })}
             </p>
             <h6>
@@ -218,6 +225,7 @@ export const CartPage = () => {
               {totalWithDiscount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
+                maximumFractionDigits: 0,
               })}
             </h6>
           </div>

@@ -90,6 +90,7 @@ const ABMCategoryPage = () => {
                 is={isSubmitting}
                 accion={selectedCategory ? "Guardar" : "Crear"}
                 tipoClase="Categoría"
+                ancho="100%"
               />
             </Form>
           )}
