@@ -152,7 +152,11 @@ const Footer = () => {
                 width="50"
                 style={{ marginRight: "10px" }}
               />
-              <img src="https://www.svgrepo.com/show/452169/bitcoin.svg" alt="Bitcoin" width="50" />
+              <img
+                src="https://www.svgrepo.com/show/452169/bitcoin.svg"
+                alt="Bitcoin"
+                width="50"
+              />
             </Box>
           </Grid>
         </Grid>

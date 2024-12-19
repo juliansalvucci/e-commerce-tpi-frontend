@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import addProductToCart from "../assets/add-product.png";
 import removeProductToCart from "../assets/remove-product.png";
 import { CartContext } from "../context/CartContext";
-import { UserContext } from "../context/UserContext";
 import "../styles/ProductPopUp.css";
 
 export const ProductPopup = ({ isVisible, onClose, product }) => {
@@ -18,13 +17,12 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     createOrder,
   } = useContext(CartContext);
 
+  const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
+
   // Estado local para controlar si el producto ya está en el carrito
   const [added, setAdded] = useState(false); // Aquí se declara `added`
   const [localQuantity, setLocalQuantity] = useState(product.quantity || 1); // Cantidad por defecto
   const navigate = useNavigate();
-  //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
-
-  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
 
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {

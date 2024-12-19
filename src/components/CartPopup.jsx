@@ -11,6 +11,9 @@ export const CartPopup = ({ isVisible, onClose }) => {
     decrementQuantity,
     calculateTotal,
     calculateTotalQuantity,
+    subtotal,
+    discount,
+    totalWithDiscount,
   } = useContext(CartContext);
 
   if (!isVisible) return null; // Si el popup no está visible, no se renderiza nada
@@ -99,9 +102,18 @@ export const CartPopup = ({ isVisible, onClose }) => {
             <hr />
             {/* Mostrar el total de los productos en el carrito */}
             <div className="total-container">
-              <h4>
-                Total ({calculateTotalQuantity()}): {calculateTotal()}
-              </h4>
+            <p>Subtotal({calculateTotalQuantity()}): {subtotal.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
+            <p>Descuento (10% a partir de $80,000,000): {discount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
+            <p>Total: {totalWithDiscount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
             </div>
 
             <div className="close-botton">

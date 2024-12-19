@@ -5,12 +5,14 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/es";
 import dayjs from "dayjs";
+import { backdropClasses } from "@mui/material";
 
 const DatePickerComponent = ({ label, fullWidth, ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(props);
   const location = useLocation();
 
+  // Determinar el estilo según la ruta actual
   const isAdminRoute = location.pathname.startsWith("/admin/");
   const isLoginOrRegister =
     location.pathname === "/login" || location.pathname === "/register";
@@ -18,7 +20,7 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
   const styles = isLoginOrRegister
     ? { variant: "outlined" }
     : {
-        variant: "filled",
+        variant: isAdminRoute ? "filled" : "outlined",
         InputProps: {
           style: {
             borderColor: meta.touched && meta.error ? "red" : "#d7c4ab",
@@ -68,6 +70,7 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
           },
           previousIconButton: { disabled: true },
           nextIconButton: { disabled: true },
+          openPickerIcon: { style: { color: "white" } },
         }}
         sx={{
           maxWidth: isAdminRoute ? "400px" : "1500px",

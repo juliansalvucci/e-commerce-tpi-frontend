@@ -1,8 +1,8 @@
-import React from "react";
-import { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/UserContext";
 import "../styles/CartPage.css";
 import { useNavigate } from "react-router-dom";
 
@@ -14,8 +14,10 @@ export const CartPage = () => {
     decrementQuantity,
     createOrder,
     emptyCart,
-    calculateTotal,
     calculateTotalQuantity,
+    subtotal,
+    discount,
+    totalWithDiscount,
   } = useContext(CartContext);
 
   //const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
@@ -26,7 +28,6 @@ export const CartPage = () => {
 
   const onSubmit = async () => {
     try {
-      //console.log(loggedUser);
       const email = loggedUser?.email;
       const newOrder = {
         userEmail: email,
@@ -35,17 +36,14 @@ export const CartPage = () => {
           amount: product.quantity,
         })),
       };
-
-      //console.log(newOrder);
       await createOrder(newOrder);
-      //console.log("Pedido registrado");
     } catch (error) {
       console.error("Error al finalizar la compra:", error);
     }
   };
 
   const handlerPurchase = () => {
-    if(loggedUser != null){
+    if (loggedUser != null) {
       Swal.fire({
         title: "Finalizar compra",
         text: "¿Desea confirmar la compra?",
@@ -60,17 +58,19 @@ export const CartPage = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           await onSubmit();
-          // Mostrar la segunda alerta si el usuario confirma la primera
           const productsPurchased = shoppingList
             .map((product) => `<li>${product.name} x ${product.quantity}</li>`)
-            .join(""); // Generar elementos de lista para cada producto
+            .join("");
           Swal.fire({
             icon: "success",
             title: "La compra se ha realizado con éxito",
             html: `
             <p>Has comprado:</p>
-            <ul>${productsPurchased}</ul> <!-- Mostrar productos en una lista -->
-            <p>Total: ${calculateTotal()}</p>
+            <ul>${productsPurchased}</ul>
+            <p>Total con descuento: ${totalWithDiscount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
           `,
             customClass: {
               popup: "swal-success-popup",
@@ -78,14 +78,13 @@ export const CartPage = () => {
             },
           }).then((result) => {
             if (result.isConfirmed) {
-              // Solo si confirma en la alerta de éxito
               emptyCart();
               navigate("/", { state: { reloadStock: true } });
             }
           });
         }
       });
-    } else{
+    } else {
       Swal.fire({
         title: "Usuario no logueado",
         text: "¿Desea loguearse para finalizar su compra?",
@@ -97,9 +96,9 @@ export const CartPage = () => {
           confirmButton: "swal-confirm-button",
           cancelButton: "swal-cancel-button",
         },
-      }).then(async (result) => {
+      }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/login")
+          navigate("/login");
         }
       });
     }
@@ -119,7 +118,6 @@ export const CartPage = () => {
               <th scope="col"></th>
             </tr>
           </thead>
-
           <tbody>
             {shoppingList.map((product) => (
               <tr key={product.id}>
@@ -133,7 +131,6 @@ export const CartPage = () => {
                     <span>{product.name}</span>
                   </div>
                 </td>
-
                 <td>
                   {product.price.toLocaleString("en-US", {
                     style: "currency",
@@ -148,18 +145,15 @@ export const CartPage = () => {
                   })}
                 </td>
                 <td className="quantity-column">
-                  {/*Quito cantidad de productos al carrito */}
                   <button
                     className="btn btn-outline-primary"
                     onClick={() => decrementQuantity(product.id)}
                   >
                     -
                   </button>
-
                   <button className="btn btn-primary">
                     {product.quantity}
                   </button>
-                  {/*Agrego cantidad de productos al carrito */}
                   <button
                     className="btn btn-outline-primary"
                     onClick={() => incrementQuantity(product.id)}
@@ -181,13 +175,22 @@ export const CartPage = () => {
             ))}
           </tbody>
         </table>
-
         <div className="bottom-container">
           <div className="summary">
             <b>Resumen de compra</b>
-            <br />
             <p>Cantidad de productos: {calculateTotalQuantity()}</p>
-            <b>Total: {calculateTotal()}</b>
+            <p>Subtotal: {subtotal.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
+            <p>Descuento (10% a partir de $80000000): {discount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
+            <p>Total: {totalWithDiscount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}</p>
           </div>
           <div className="d-grid gap-2">
             <button
