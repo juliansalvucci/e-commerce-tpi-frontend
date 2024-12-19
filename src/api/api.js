@@ -12,7 +12,7 @@ const requiereJWT = (method, url) => {
     { method: "GET", url: "/subcategory" },
     // Product:
     { method: "GET", url: "/product" },
-    // Category: 
+    // Category:
     { method: "GET", url: "/category" },
     // Brand:
     { method: "GET", url: "/brand" },
@@ -29,7 +29,7 @@ const requiereJWT = (method, url) => {
 // Agrega un interceptor para incluir el token en cada petición
 api.interceptors.request.use(
   (config) => {
-    console.log(config.url);
+    //console.log(config.url);
     // Si el endpoint requiere JWT, añade el token
     if (!requiereJWT(config.method.toUpperCase(), config.url)) {
       const token = sessionStorage.getItem("token");

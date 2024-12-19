@@ -82,7 +82,7 @@ export const LoginPage = () => {
         >
           <Box
             component="img"
-            src={logo} 
+            src={logo}
             alt="Imagen de bienvenida"
             sx={{
               width: "100px",

@@ -8,7 +8,7 @@ import { UserContext } from "../context/UserContext";
 
 const NavBarAdmin = () => {
   const { loggedUser, logoutUser } = useContext(UserContext);
-  
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -79,7 +79,7 @@ const NavBarAdmin = () => {
 
       {/* Iconos */}
       <Box display="flex">
-      <AdminAvatarComponent user={loggedUser} onLogout={logoutUser} />
+        <AdminAvatarComponent user={loggedUser} onLogout={logoutUser} />
         <IconButton onClick={handleNavigateHome}>
           <HomeOutlinedIcon sx={{ color: "white" }} />
         </IconButton>
