@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import React, { useReducer } from "react";
 import { CartContext } from "./CartContext";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
