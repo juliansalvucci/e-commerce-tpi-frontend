@@ -1,7 +1,10 @@
 import { Button } from "@mui/material";
+import React from "react";
+
 const ABMActionButton = ({ is, accion, tipoClase }) => {
   return (
     <Button
+      role="button"
       variant="contained"
       type="submit"
       disabled={is}

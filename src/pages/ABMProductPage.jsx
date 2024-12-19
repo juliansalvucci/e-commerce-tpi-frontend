@@ -16,7 +16,7 @@ import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
 import { productSchema } from "../schemas";
 
-const ABMProductPage = () => {
+export const ABMProductPage = () => {
   const { createProduct, editProduct, selectedProduct } =
     useContext(ProductContext);
   const { brands } = useContext(BrandContext);

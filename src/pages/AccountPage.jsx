@@ -5,9 +5,14 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Divider,
   Grid,
+  Stack,
   Typography,
 } from "@mui/material";
+import HelpIcon from "@mui/icons-material/Help";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import SecurityIcon from "@mui/icons-material/Security";
 import { UserContext } from "../context/UserContext";
 
 const AccountPage = () => {
@@ -30,6 +35,7 @@ const AccountPage = () => {
       title: "Listado de Pedidos",
       description: "Visualiza tus pedidos realizados",
       path: "/account/orders",
+      icon: <ReceiptIcon sx={{ color: isAdmin ? "white" : "#283b54" }} />,
       visible: location.pathname.includes("/admin") ? false : true,
     },
     {
@@ -39,21 +45,14 @@ const AccountPage = () => {
         isAdmin && location.pathname.includes("/admin")
           ? "/admin/account/edit"
           : "/account/edit",
-      visible: true,
-    },
-    {
-      title: "Reportes",
-      description: "Accede a reportes propios",
-      path:
-        isAdmin && location.pathname.includes("/admin")
-          ? "/admin/account/reports"
-          : "/account/reports",
+      icon: <SecurityIcon sx={{ color: isAdmin ? "white" : "#283b54" }} />,
       visible: true,
     },
     {
       title: "Ayuda",
       description: "Contacta al servicio de atención al cliente",
       path: "#",
+      icon: <HelpIcon sx={{ color: isAdmin ? "white" : "#283b54" }} />,
       visible: location.pathname.includes("/admin") ? false : true,
     },
   ];
@@ -63,7 +62,7 @@ const AccountPage = () => {
       sx={{
         backgroundColor: isAdmin ? "#233349" : "#f5f5f5",
         minHeight: "100vh",
-        padding: "2rem"
+        padding: "2rem",
       }}
     >
       <Typography
@@ -74,6 +73,7 @@ const AccountPage = () => {
       >
         Mi Cuenta
       </Typography>
+      <Divider sx={{ mb: 3, borderColor: "#233349" }} />
       <Grid container spacing={4} justifyContent="center">
         {options
           .filter((option) => option.visible)
@@ -84,16 +84,19 @@ const AccountPage = () => {
                   onClick={() =>
                     option.path !== "#" && handleNavigate(option.path)
                   }
-                  disabled={option.path === "#"} // Deshabilitar si no tiene funcionalidad
+                  disabled={option.path === "#"} // Desactivar el enlace si el path es "#"
                 >
                   <CardContent>
-                    <Typography
-                      variant="h6"
-                      gutterBottom
-                      sx={{ fontFamily: "Poppins", color: "#233349" }}
-                    >
-                      {option.title}
-                    </Typography>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      {option.icon}
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{ fontFamily: "Poppins", color: "#233349" }}
+                      >
+                        {option.title}
+                      </Typography>
+                    </Stack>
                     <Typography
                       variant="body2"
                       sx={{ fontFamily: "Poppins", color: "#555" }}
