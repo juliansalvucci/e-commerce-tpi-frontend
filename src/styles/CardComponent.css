@@ -65,7 +65,6 @@
   height: auto;
   display: block;
   object-fit: cover;
-  margin-left: 5px;
 }
 
 /* Estilo específico para los botones dentro del card component */

@@ -23,15 +23,15 @@ export const CardComponent = ({
   const [added, setAdded] = useState(false);
 
   //Estados para controlar la visibilidad y el almacenar el producto seleccionado en el popup
-  const [isPopupVisible, setIsPopupVisible] = useState(false); 
-  const [selectedProduct, setSelectedProduct] = useState(null); 
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const addProduct = () => {
     //verifico previamente que el stock sea mayor a 0 para poder agregarlo al carrito
-    if(stock > 0){
+    if (stock > 0) {
       handlerAdd();
       setAdded(true);
-    }else{
+    } else {
       Swal.fire({
         icon: "warning",
         title: "No hay más stock disponible",
@@ -89,30 +89,28 @@ export const CardComponent = ({
         />
       </div>
       {added ? (
-          //En el caso de que ya se haya añadido el producto al carrito y el usuario quiere quitarla
-          <div className="circle">
-            <img
-              src={removeProductToCart}
-              alt="Remover del carrito"
-              className="remove_button"
-              onClick={removeProduct}
-            />
-          </div>
-        ) : (
-          //En el caso de que no se haya agregado el producto al carrito
-          <div className="circle">
-            <img
-              src={addProductToCart}
-              alt="Agregar al carrito"
-              className="add_button"
-              onClick={addProduct}
-            />
-          </div>
-        )}
+        //En el caso de que ya se haya añadido el producto al carrito y el usuario quiere quitarla
+        <div className="circle">
+          <img
+            src={removeProductToCart}
+            alt="Remover del carrito"
+            className="remove_button"
+            onClick={removeProduct}
+          />
+        </div>
+      ) : (
+        //En el caso de que no se haya agregado el producto al carrito
+        <div className="circle">
+          <img
+            src={addProductToCart}
+            alt="Agregar al carrito"
+            className="add_button"
+            onClick={addProduct}
+          />
+        </div>
+      )}
 
       <div className="card_content">
-        
-        
         <div className="product-alert">
           <h5 className="card_title" onClick={showProductPopup}>
             {title}
@@ -121,16 +119,18 @@ export const CardComponent = ({
           <p className="card_price" onClick={showProductPopup}>
             $
             {price.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
+              maximumFractionDigits: 0,
             })}
           </p>
 
-          <p className={`stock ${stock > 0 ? 'stock-available': 'stock-unavailable'}`}>
+          <p
+            className={`stock ${
+              stock > 0 ? "stock-available" : "stock-unavailable"
+            }`}
+          >
             Stock disponible: {stock}
           </p>
         </div>
-        
       </div>
 
       {/*Renderiza el popup si está visible */}

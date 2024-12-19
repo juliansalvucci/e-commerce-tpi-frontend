@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import "../styles/CartPopUp.css";
@@ -33,7 +33,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
 
         {/*Si no hay productos muestra un mensaje*/}
         {shoppingList.length === 0 ? (
-          <h5>Aún no ha agregado productos al carrito!!</h5>
+          <h5>Aún no ha agregado productos al carrito!!!</h5>
         ) : (
           <>
             <h3>Carrito de Compras</h3>
@@ -58,7 +58,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
                         $
                         {(product.price * product.quantity).toLocaleString(
                           "en-US",
-                          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                          { maximumFractionDigits: 0 }
                         )}
                       </p>
                     </div>
@@ -114,13 +114,13 @@ export const CartPopup = ({ isVisible, onClose }) => {
                   currency: "USD",
                 })}
               </p>
-              <h7>
+              <h5>
                 Total:{" "}
                 {totalWithDiscount.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
                 })}
-              </h7>
+              </h5>
 
               <div className="close-botton">
                 <button className="btn btn-primary" onClick={onClose}>

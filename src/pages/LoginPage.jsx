@@ -11,6 +11,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo from "../assets/fondo.png";
 import logo from "../assets/logo.png";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import { UserContext } from "../context/UserContext";
 import { loginSchema } from "../schemas";
@@ -60,13 +61,13 @@ export const LoginPage = () => {
           height: "100vh",
         }}
       />
-
       <Box
         sx={{
           width: "60vw",
           height: "100vh",
-          padding: 3,
+          padding: 4,
           paddingBottom: 10,
+          paddingTop: 12,
         }}
       >
         {/* Contenedor para centrar la imagen */}
@@ -94,7 +95,12 @@ export const LoginPage = () => {
           />
         </Box>
 
-        <Typography variant="h5" align="center" gutterBottom>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontFamily: "Poppins", color: "#283b54" }}
+        >
           Iniciar Sesión
         </Typography>
 
@@ -135,15 +141,12 @@ export const LoginPage = () => {
                 />
               </Box>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-              >
-                Iniciar Sesión
-              </Button>
+              <ABMActionButton
+                is={isSubmitting}
+                accion={"Iniciar Sesión"}
+                tipoClase=""
+                ancho="50%"
+              />
             </Form>
           )}
         </Formik>

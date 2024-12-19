@@ -51,8 +51,7 @@ const ListHistoryOrder = () => {
             <TableCell align="center" sx={{ color: "#283b54" }}>
               $
               {product.unitPrice.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                maximumFractionDigits: 0,
               })}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
@@ -61,8 +60,7 @@ const ListHistoryOrder = () => {
             <TableCell align="center" sx={{ color: "#283b54" }}>
               $
               {product.subTotal.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                maximumFractionDigits: 0,
               })}
             </TableCell>
           </TableRow>
@@ -196,8 +194,7 @@ const ListHistoryOrder = () => {
                           <TableCell align="center" sx={{ color: "#283b54" }}>
                             $
                             {orderSubtotal.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
+                              maximumFractionDigits: 0,
                             })}
                           </TableCell>
                           <TableCell align="center" sx={{ color: "#283b54" }}>
@@ -206,8 +203,7 @@ const ListHistoryOrder = () => {
                           <TableCell align="center" sx={{ color: "#283b54" }}>
                             $
                             {order.total.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
+                              maximumFractionDigits: 0,
                             })}
                           </TableCell>
                         </TableRow>
