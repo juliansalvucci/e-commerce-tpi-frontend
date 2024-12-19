@@ -79,10 +79,13 @@ export const CartPage = () => {
                   style: "currency",
                   currency: "USD",
                 })}</p>
-                <p>Descuento (5% a partir de $1,000,000): ${discount.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })}</p>
+                <p>Descuento (5% a partir de $1,000,000): ${discount.toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                  }
+                )}</p>
                 <p>Total: ${totalWithDiscount.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
@@ -194,10 +197,10 @@ export const CartPage = () => {
         </table>
         <div className="bottom-container">
           <div className="summary">
-            <b>Resumen de compra</b>
+            <h6>Resumen de compra</h6>
             <p>Cantidad de productos: {calculateTotalQuantity()}</p>
             <p>
-              Subtotal: {" "}
+              Subtotal:{" "}
               {subtotal.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -210,13 +213,13 @@ export const CartPage = () => {
                 currency: "USD",
               })}
             </p>
-            <p>
+            <h6>
               Total:{" "}
               {totalWithDiscount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
               })}
-            </p>
+            </h6>
           </div>
           <div className="d-grid gap-2">
             <button

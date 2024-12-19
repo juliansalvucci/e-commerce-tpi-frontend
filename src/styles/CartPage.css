@@ -1,4 +1,4 @@
-.container-cart-page { 
+.container-cart-page {
   border-radius: 20px;
 }
 
@@ -98,7 +98,7 @@
 .bottom-container .btn-primary {
   cursor: pointer;
   padding: 0.5rem 1rem;
-  background-color: #283b54;
+  background-color: #233349;
   color: white;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
@@ -120,18 +120,23 @@ td {
   justify-content: space-between;
   align-items: center;
   font-family: "Poppins", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-style: small;
   font-size: small;
 }
+
+.bottom-container h6 {
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+}
+
 .bottom-container .d-grid {
   margin-left: auto;
   margin-right: 30px;
 }
 
 .bottom-container .btn-primary:hover {
-  background-color: rgb(97, 139, 194);
-  border-color: rgb(97, 139, 194);
-  color: white;
+  background-color: #81abe1;
+  border-color: #81abe1;
   cursor: pointer;
 }

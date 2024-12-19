@@ -8,7 +8,6 @@ export const CartPopup = ({ isVisible, onClose }) => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
-    calculateTotal,
     calculateTotalQuantity,
     subtotal,
     discount,
@@ -98,27 +97,35 @@ export const CartPopup = ({ isVisible, onClose }) => {
               ))}
             </ul>
 
-            <hr />
             {/* Mostrar el total de los productos en el carrito */}
             <div className="total-container">
-            <p>Subtotal({calculateTotalQuantity()}): {subtotal.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
-            <p>Descuento (10% a partir de $80,000,000): {discount.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
-            <p>Total: {totalWithDiscount.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
-            </div>
+              <p>
+                Subtotal({calculateTotalQuantity()}):{" "}
+                {subtotal.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              </p>
+              <p>
+                Descuento (10% a partir de $80,000,000):{" "}
+                {discount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              </p>
+              <h7>
+                Total:{" "}
+                {totalWithDiscount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              </h7>
 
-            <div className="close-botton">
-              <button className="btn btn-primary" onClick={onClose}>
-                Continuar compra
-              </button>
+              <div className="close-botton">
+                <button className="btn btn-primary" onClick={onClose}>
+                  Continuar compra
+                </button>
+              </div>
             </div>
           </>
         )}
