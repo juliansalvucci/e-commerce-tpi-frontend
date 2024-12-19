@@ -1,6 +1,5 @@
 import {
   Box,
-  Typography,
   CircularProgress,
   Table,
   TableBody,
@@ -13,7 +12,7 @@ import {
 } from "@mui/material";
 import React, { useContext } from "react";
 import { OrderHistoryContext } from "../context/OrderHistoryContext";
-import backgroundImage from "../assets/home-completo.png";
+import { parse, format } from "date-fns";
 
 const ListHistoryOrder = () => {
   const {
@@ -27,7 +26,7 @@ const ListHistoryOrder = () => {
 
   const renderProducts = (products) => (
     <Table size="small" sx={{ backgroundColor: "white" }}>
-      <TableHead sx={{ backgroundColor: "#283b54", color: "white" }}>
+      <TableHead sx={{ backgroundColor: "#233349", color: "white" }}>
         <TableRow>
           <TableCell align="center" sx={{ color: "white" }}>
             Productos
@@ -39,7 +38,7 @@ const ListHistoryOrder = () => {
             Cantidad
           </TableCell>
           <TableCell align="center" sx={{ color: "white" }}>
-            Subtotal
+            Precio
           </TableCell>
         </TableRow>
       </TableHead>
@@ -50,13 +49,21 @@ const ListHistoryOrder = () => {
               {product.productName}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.unitPrice.toFixed(2)}
+              $
+              {product.unitPrice.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
               {product.amount}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.subTotal.toFixed(2)}
+              $
+              {product.subTotal.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </TableCell>
           </TableRow>
         ))}
@@ -67,7 +74,7 @@ const ListHistoryOrder = () => {
   return (
     <Box
       sx={{
-        backgroundImage: `url(${backgroundImage})`,
+        
         backgroundSize: "cover", // Para cubrir todo el contenedor
         backgroundPosition: "center", // Centra la imagen
         minHeight: "100vh",
@@ -98,15 +105,62 @@ const ListHistoryOrder = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: "1.8rem",
-                        p: "18px",
+                        fontSize: "1.0rem",
+                        p: "10px",
                       }}
                     >
-                      Lista de Pedidos
+                      Detalle de los pedidos
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Fecha
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Subtotal
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Descuento
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Total
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -117,21 +171,48 @@ const ListHistoryOrder = () => {
                         order.orderDetails && order.orderDetails.length > 0
                     ) // POR AHORA: Filtrar pedidos vacíos (hasta arreglar)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell
-                          sx={{
-                            textAlign: "center", // Centra horizontalmente
-                            verticalAlign: "middle", // Centra verticalmente
-                            fontSize: "15px", // Opcional: ajustar tamaño de texto
-                          }}
-                        >
-                          {renderProducts(order.orderDetails)}
-                          <strong>Total:</strong> ${order.total.toFixed(2)}
-                          <br />
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    .map((order) => {
+                      // Calcular el subtotal del pedido
+                      const orderSubtotal = order.orderDetails.reduce(
+                        (acc, product) => acc + product.subTotal,
+                        0
+                      );
+
+                      return (
+                        <TableRow key={order.id}>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {renderProducts(order.orderDetails)}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {format(
+                              parse(
+                                order.creationDatetime,
+                                "dd/MM/yyyy : HH:mm:ss",
+                                new Date()
+                              ),
+                              "dd/MM/yyyy"
+                            )}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            $
+                            {orderSubtotal.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {order.discount}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            $
+                            {order.total.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -149,15 +230,15 @@ const ListHistoryOrder = () => {
                   `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
                 }
                 sx={{
-                  color: "white", // Cambia el color del texto a blanco
+                  color: "black", 
                   "& .MuiTablePagination-toolbar": {
-                    color: "white", // Asegura que los textos internos sean blancos
+                    color: "black", 
                   },
                   "& .MuiTablePagination-actions button": {
-                    color: "white", // Colorea los botones de navegación
+                    color: "black", // Colorea los botones de navegación
                   },
                   "& .MuiSelect-icon": {
-                    color: "white", // Cambia el color del ícono desplegable
+                    color: "black", // Cambia el color del ícono desplegable
                   },
                 }}
               />

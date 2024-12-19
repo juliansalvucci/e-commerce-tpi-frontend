@@ -10,7 +10,6 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo from "../assets/fondo.png";
-import loginBackground from "../assets/login-register-background.png";
 import logo from "../assets/logo.png";
 import ABMInputComponent from "../components/ABMInputComponent";
 import { UserContext } from "../context/UserContext";
@@ -68,7 +67,6 @@ export const LoginPage = () => {
           height: "100vh",
           padding: 3,
           paddingBottom: 10,
-          backgroundImage: `url(${loginBackground})`,
         }}
       >
         {/* Contenedor para centrar la imagen */}

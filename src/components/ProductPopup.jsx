@@ -13,16 +13,14 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
-    emptyCart,
-    createOrder,
   } = useContext(CartContext);
-
-  const { loggedUser } = useContext(UserContext); // Descomentar cuando esté arreglado loggedUser
 
   // Estado local para controlar si el producto ya está en el carrito
   const [added, setAdded] = useState(false); // Aquí se declara `added`
   const [localQuantity, setLocalQuantity] = useState(product.quantity || 1); // Cantidad por defecto
   const navigate = useNavigate();
+
+  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
 
   // Actualizar si el producto ya está en el carrito (cada vez que el carrito cambia)
   useEffect(() => {
@@ -71,58 +69,44 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     }
   };
 
-  const onSubmit = async () => {
-    try {
-      const email = loggedUser?.email;
-      const newOrder = {
-        userEmail: email,
-        orderDetails: shoppingList.map((product) => ({
-          productId: product.id,
-          amount: product.quantity,
-        })),
-      };
-
-      //console.log(newOrder);
-      await createOrder(newOrder);
-      //console.log("Pedido registrado");
-    } catch (error) {
-      console.error("Error al finalizar la compra:", error);
-    }
-  };
-
+  
   const handlerPurchase = () => {
     //Mostramos una alerta para que el usuario confirme la compre antes de continuar
-    Swal.fire({
-      title: "Finalizar compra",
-      text: "¿Desea confirmar la compra?",
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      cancelButtonText: "Cancelar",
-      customClass: {
-        popup: "swal-question-popup",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button",
-      },
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await onSubmit();
-        // Mostrar la segunda alerta si el usuario confirma la primera
-        Swal.fire({
-          icon: "success",
-          title: "La compra se ha realizado con éxito",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            emptyCart();
-            navigate("/");
-            window.location.reload(); // Recarga la página después de redirigir al Home
-          }
-        });
-      }
-    });
+    if (loggedUser != null) {
+      Swal.fire({
+        title: "Finalizar compra",
+        text: "¿Desea finalizar la compra?",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+        customClass: {
+          popup: "swal-question-popup",
+          confirmButton: "swal-confirm-button",
+          cancelButton: "swal-cancel-button",
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          navigate("/cartpage");
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "Usuario no logueado",
+        text: "¿Desea loguearse para finalizar su compra?",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+        customClass: {
+          popup: "swal-question-popup",
+          confirmButton: "swal-confirm-button",
+          cancelButton: "swal-cancel-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    }
   };
 
   if (!isVisible) return null;
@@ -170,7 +154,7 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
                 className="btn btn-primary buy-button"
                 type="button"
                 onClick={handlerPurchase}
-                disabled={product.stock === 0 || !added} 
+                disabled={product.stock === 0 || !added}
               >
                 Comprar ahora
               </button>
