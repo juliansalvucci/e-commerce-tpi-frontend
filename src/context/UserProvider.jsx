@@ -179,11 +179,14 @@ export const UserProvider = ({ children }) => {
         }
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
+      if (
+        (error.response && error.response.status === 409) ||
+        error.response.status === 400
+      ) {
         Swal.fire({
           icon: "error",
           title: "El usuario no puede ser creado",
-          text: error.response.data.email,
+          text: error.response.data.email || error.response.data.dateBirth,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
