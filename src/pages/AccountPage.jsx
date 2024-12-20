@@ -79,7 +79,7 @@ const AccountPage = () => {
           .filter((option) => option.visible)
           .map((option) => (
             <Grid item xs={12} sm={6} md={4} key={option.title}>
-              <Card>
+              <Card sx={{ backgroundColor: isAdmin ? "#283b54" : "white" }}>
                 <CardActionArea
                   onClick={() =>
                     option.path !== "#" && handleNavigate(option.path)
@@ -92,14 +92,14 @@ const AccountPage = () => {
                       <Typography
                         variant="h6"
                         gutterBottom
-                        sx={{ fontFamily: "Poppins", color: "#233349" }}
+                        sx={{ fontFamily: "Poppins", color: isAdmin ? "white" : "#233349" }}
                       >
                         {option.title}
                       </Typography>
                     </Stack>
                     <Typography
                       variant="body2"
-                      sx={{ fontFamily: "Poppins", color: "#555" }}
+                      sx={{ fontFamily: "Poppins", color: isAdmin ? "#cdcdcd" : "#555" }}
                     >
                       {option.description}
                     </Typography>
