@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import axios from "axios";
 
 const ReportSalesPage = () => {
@@ -17,20 +18,56 @@ const ReportSalesPage = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Reporte de Ventas</h2>
-      {iframeUrl ? (
-        <iframe
-          src={iframeUrl}
-          title="Dashboard de Ventas"
-          style={{ width: "100%", height: "600px", border: "none" }}
-        />
-      ) : (
-        <p>Cargando dashboard...</p>
-      )}
-    </div>
+    <Box
+      sx={{
+        backgroundColor: "#233349",
+        minHeight: "100vh",
+      }}
+    >
+      <Typography
+        variant="h4"
+        color="white"
+        sx={{
+          fontFamily: "Poppins",
+        }}
+      >
+        Reporte de Ventas
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          backgroundColor: "#233349",
+        }}
+      >
+        {iframeUrl ? (
+          <iframe
+            src={iframeUrl}
+            title="Dashboard de Ventas"
+            style={{ width: "100%", height: "600px", border: "none" }}
+          />
+        ) : (
+          <Stack direction="column" spacing={2}>
+            <CircularProgress size={80} thickness={6} sx={{ color: "white" }} />
+            <Typography
+              variant="h5"
+              component="p"
+              sx={{
+                position: "absolute",
+                color: "white",
+                ml: 2,
+                mt: 1,
+              }}
+            >
+              Cargando reporte...
+            </Typography>
+          </Stack>
+        )}
+      </Box>
+    </Box>
   );
 };
 
 export default ReportSalesPage;
-
