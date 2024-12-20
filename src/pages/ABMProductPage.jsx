@@ -15,6 +15,7 @@ import { CategoryContext } from "../context/CategoryContext";
 import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
 import { productSchema } from "../schemas";
+import useFormatPrice from "../utils/useFormatPrice";
 
 export const ABMProductPage = () => {
   const { createProduct, editProduct, selectedProduct } =
@@ -25,6 +26,9 @@ export const ABMProductPage = () => {
 
   const [selectedCategoryP, setselectedCategoryP] = useState("");
   const [filteredSubCategories, setFilteredSC] = useState(subCategories);
+
+  const displayPriceInitialValue = useFormatPrice(selectedProduct?.price);
+  const [displayPrice, setDisplayPrice] = useState(displayPriceInitialValue);
 
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
@@ -109,7 +113,7 @@ export const ABMProductPage = () => {
             marca: selectedProduct?.brandId || "",
             categoria: selectedProduct?.categoryId || "",
             subcategoria: selectedProduct?.subCategoryId || "",
-            precio: selectedProduct?.price || "",
+            precio: displayPrice || "",
             stock: selectedProduct?.stock || "",
             stockMin: selectedProduct?.stockMin || "",
             descripcion: selectedProduct?.description || "",
@@ -119,7 +123,7 @@ export const ABMProductPage = () => {
           validateOnChange={true}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, setFieldValue }) => (
+          {({ isSubmitting, setFieldValue, values }) => (
             <Form>
               <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
                 <ABMInputComponent
@@ -191,9 +195,16 @@ export const ABMProductPage = () => {
                     fullWidth
                     label="Precio"
                     name="precio"
-                    type="number"
+                    type="text"
                     step="100.0"
                     placeholder="Ingrese el precio"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const formattedValue = useFormatPrice(value);
+                      setDisplayPrice(formattedValue);
+                      setFieldValue("precio", value.replace(/[^\d]/g, ""));
+                    }}
+                    value={displayPrice} // Mostrar el número con formato
                     slotProps={{
                       input: {
                         startAdornment: (
@@ -201,7 +212,7 @@ export const ABMProductPage = () => {
                             position="start"
                             sx={{ color: "white" }}
                           >
-                            $
+                            <span style={{ color: "white" }}>$</span>
                           </InputAdornment>
                         ),
                         sx: { color: "white" },
