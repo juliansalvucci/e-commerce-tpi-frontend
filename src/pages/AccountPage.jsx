@@ -73,7 +73,7 @@ const AccountPage = () => {
       >
         Mi Cuenta
       </Typography>
-      <Divider sx={{ mb: 3, borderColor: "#233349" }} />
+      <Divider sx={{ mb: 3, borderColor: isAdmin? "white" : "#233349" }} />
       <Grid container spacing={4} justifyContent="center">
         {options
           .filter((option) => option.visible)
