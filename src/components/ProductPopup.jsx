@@ -69,7 +69,6 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
     }
   };
 
-  
   const handlerPurchase = () => {
     //Mostramos una alerta para que el usuario confirme la compre antes de continuar
     if (loggedUser != null) {
@@ -130,8 +129,7 @@ export const ProductPopup = ({ isVisible, onClose, product }) => {
             <p>
               $
               {(product.price * localQuantity).toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                maximumFractionDigits: 0,
               })}
             </p>
           </div>

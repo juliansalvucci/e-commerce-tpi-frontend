@@ -3,7 +3,7 @@
   right: 0;
   top: 0;
   width: 350px;
-  background: #bcc4cf;
+  background: #233349;
   color: black;
   padding: 0px;
   z-index: 1000;
@@ -39,12 +39,12 @@
   border-color: #f09999;
 }
 
-.cart h5{
+.cart h5 {
   text-align: center;
   margin: 15px;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
-  font-style:italic;
+  font-style: italic;
   color: #f2f9fd;
 }
 
@@ -78,7 +78,7 @@
   border-radius: 8px;
   margin-right: 25px;
   margin-bottom: 10px;
-  background-color: #f2f9fd;
+  background-color: white;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -92,7 +92,7 @@
   object-fit: cover;
   border-radius: 5px;
   margin-right: 10px;
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 
 /*Los dos siguientes contenedores es para darle transición suave a las imagenes*/
@@ -103,7 +103,6 @@
 .cart-img:hover {
   transform: scale(1.1); /* Aumenta el tamaño de la imagen un 10% */
 }
-
 
 .cart li {
   padding-bottom: 16px;
@@ -122,8 +121,8 @@
 /* Botón de decremento */
 .btn-outline-primary {
   color: #fff;
-  background-color: #001f3f;
-  border-color: #001f3f;
+  background-color: #233349;
+  border-color: #233349;
 }
 
 /* Botón de cantidad */
@@ -175,22 +174,27 @@
   margin-left: 10px;
 }
 
-/* Linea divisora del total*/
-.cart hr {
-  margin: 10px;
-  width: 80%;
-  border: 1px solid #f2f9fd;
-  margin-left: auto;
-  margin-right: auto;
+.total-container {
+  position: sticky;
+  bottom: 0;
+  background-color: rgb(221, 218, 218);
+  padding: 15px;
+  z-index: 10;
 }
-
 .total-container p {
-  margin-left: 18%;
+  margin-bottom: 1px;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
-  font-style: medium;
-  font-size: medium;
-  color: #e4f2fa;
+  font-style: small;
+  font-size: small;
+  color: black;
+}
+
+.total-container h6 {
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+  padding-top: 10px;
+  color: black;
 }
 
 .close-botton {
@@ -205,15 +209,15 @@
 
 /*Botón de continuar compra*/
 .close-botton .btn-primary {
-  background-color: #001f3f;
+  background-color: #233349;
   color: white;
-  border: 2px solid #001f3f;
+  border: 2px solid #233349;
   cursor: pointer;
 }
 
 /*Hover para el botón de continuar compra*/
 .close-botton .btn-primary:hover {
-  background-color: #a4c4ee;
-  border: 2px solid #a4c4ee;
+  background-color: #81abe1;
+  border: 2px solid #81abe1;
   cursor: pointer;
 }

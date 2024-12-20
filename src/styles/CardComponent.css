@@ -4,7 +4,6 @@
 }
 
 .products-pagination {
-  
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -17,7 +16,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: minmax(200px, 1fr);
   gap: 2rem;
-  list-style-type: none; /* Elimina los puntos de la lista si estás usando ul */
+  list-style-type: none;
   padding: 0;
   margin: 50px;
   z-index: 100;
@@ -30,7 +29,7 @@
   gap: 1rem;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 18px;
-  background: #f2f9fd;
+  background: white;
   color: black;
   padding: 1rem;
 }
@@ -66,7 +65,6 @@
   height: auto;
   display: block;
   object-fit: cover;
-  margin-left: 5px;
 }
 
 /* Estilo específico para los botones dentro del card component */
@@ -77,7 +75,7 @@
 
 /*Los dos siguientes contenedores es para darle transición suave a las imagenes*/
 .card-img {
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s ease;
 }
 
 .card-img:hover {
@@ -127,9 +125,9 @@
   flex-direction: column;
 }
 
-.card .circle:hover, 
+.card .circle:hover,
 .card .add_button:hover,
-.card .remove_button:hover{
+.card .remove_button:hover {
   background-color: rgb(221, 218, 218);
 }
 
@@ -157,12 +155,12 @@
 .page-item .page-link {
   cursor: pointer;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #003366;
-  color: #003366;
+  border: 1px solid #233349;
+  color: #233349;
 }
 
 .page-item.active .page-link {
-  background-color: #003366;
+  background-color: #233349;
   color: #fff;
 }
 
@@ -173,7 +171,7 @@
 
 /* Cambio de fondo al pasar el mouse sobre los elementos "Anterior" y "Siguiente" */
 .pagination .page-item:not(.disabled) .page-link:hover {
-  background-color: #003366;
+  background-color: #233349;
   color: white;
 }
 

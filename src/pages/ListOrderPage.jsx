@@ -59,7 +59,8 @@ const ListOrderPage = () => {
       return;
     }
 
-    const filtered = (await fetchOrdersByEmail(selectedEmail, todayFilter)) || [];
+    const filtered =
+      (await fetchOrdersByEmail(selectedEmail, todayFilter)) || [];
     setFilteredOrders(filtered);
   };
 
@@ -125,7 +126,6 @@ const ListOrderPage = () => {
             ? params.value.toLocaleString("es-AR", {
                 style: "currency",
                 currency: "ARS",
-                minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })
             : params.value.toLocaleString("es-AR", {

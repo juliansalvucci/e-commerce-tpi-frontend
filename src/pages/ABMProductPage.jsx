@@ -16,7 +16,7 @@ import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
 import { productSchema } from "../schemas";
 
-const ABMProductPage = () => {
+export const ABMProductPage = () => {
   const { createProduct, editProduct, selectedProduct } =
     useContext(ProductContext);
   const { brands } = useContext(BrandContext);
@@ -29,19 +29,21 @@ const ABMProductPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedProduct) {
-        await createProduct({
-          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
-          description: values.descripcion.trim(),
-          price: values.precio,
-          stock: values.stock,
-          stockMin: values.stockMin,
-          imageURL: values.imagen,
-          color: values.color,
-          size: values.tamaño,
-          brandId: values.marca,
-          subCategoryId: values.subcategoria,
-        });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+        await createProduct(
+          {
+            name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
+            description: values.descripcion.trim(),
+            price: values.precio,
+            stock: values.stock,
+            stockMin: values.stockMin,
+            imageURL: values.imagen,
+            color: values.color,
+            size: values.tamaño,
+            brandId: values.marca,
+            subCategoryId: values.subcategoria,
+          },
+          resetForm
+        );
       } else {
         await editProduct(selectedProduct.id, {
           name: values.nombre,
@@ -258,6 +260,7 @@ const ABMProductPage = () => {
                 is={isSubmitting}
                 accion={selectedProduct ? "Guardar" : "Crear"}
                 tipoClase="Producto"
+                ancho="100%"
               />
             </Form>
           )}

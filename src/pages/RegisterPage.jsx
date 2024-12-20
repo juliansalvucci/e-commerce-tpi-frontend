@@ -1,16 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Box,
-  Typography,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
+import { Box, Typography, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import DatePickerComponent from "../components/DatePickerComponent";
 import { UserContext } from "../context/UserContext";
@@ -32,7 +27,6 @@ export const RegisterPage = () => {
           password: values.password,
           admin: false,
         });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
       } else {
         await editUser(selectedUser.id, {
           firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
@@ -70,23 +64,16 @@ export const RegisterPage = () => {
         src={fondo2}
         alt="Imagen de bienvenida"
         sx={{
-          width: "120vh",
-          minHeight: "108vh",
-          maxHeight: "126vh",
-          //height:"126vh"
-          //objectFit: "cover",
+          width: "60vw",
+          height: "100vh",
         }}
       />
       <Box
         sx={{
-          width: "120vh",
-          height: "100%",
+          width: "60vw",
+          height: "100vh",
           padding: 3,
           paddingBottom: 10,
-          //backgroundImage: "url('../assets/descarga.png')",
-          
-          //backgroundSize: "cover", // Ajusta el fondo al tamaño del Box
-          //backgroundPosition: "center", // Centra la imagen de fondo
           boxShadow: 3,
         }}
       >
@@ -113,8 +100,13 @@ export const RegisterPage = () => {
             onClick={() => navigate("/")}
           />
         </Box>
-        <Typography variant="h5" align="center" gutterBottom>
-          Registro
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontFamily: "Poppins", color: "#283b54" }}
+        >
+          Registrarse
         </Typography>
 
         <Formik
@@ -179,20 +171,12 @@ export const RegisterPage = () => {
                 />
               </Box>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                disabled={isSubmitting}
-                sx={{
-                  backgroundColor: "#23538f",
-                  "&:hover": {
-                    backgroundColor: "#1a4273",
-                  },
-                }}
-              >
-                Registrarse
-              </Button>
+              <ABMActionButton
+                is={isSubmitting}
+                accion={"Registrarse"}
+                tipoClase=""
+                ancho="50%"
+              />
             </Form>
           )}
         </Formik>

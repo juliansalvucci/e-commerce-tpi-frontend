@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import ViewListIcon from "@mui/icons-material/ViewList";
 

@@ -70,7 +70,9 @@ const DatePickerComponent = ({ label, fullWidth, ...props }) => {
           },
           previousIconButton: { disabled: true },
           nextIconButton: { disabled: true },
-          openPickerIcon: { style: { color: "white" } },
+          openPickerIcon: {
+            style: { color: isAdminRoute ? "white" : "#757575" },
+          },
         }}
         sx={{
           maxWidth: isAdminRoute ? "400px" : "1500px",

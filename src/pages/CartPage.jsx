@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import trashIcon from "../assets/trash-icon.png";
 import { CartContext } from "../context/CartContext";
@@ -78,14 +78,20 @@ export const CartPage = () => {
                 <p>Subtotal:${subtotal.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0,
                 })}</p>
-                <p>Descuento (5% a partir de $1,000,000): ${discount.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })}</p>
+                <p>Descuento (5% a partir de $1,000,000): ${discount.toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  }
+                )}</p>
                 <p>Total: ${totalWithDiscount.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0,
                 })}</p>
               </div>
             `,
@@ -152,6 +158,7 @@ export const CartPage = () => {
                   {product.price.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   })}{" "}
                   x {product.quantity}
                 </td>
@@ -159,6 +166,7 @@ export const CartPage = () => {
                   {(product.price * product.quantity).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   })}
                 </td>
                 <td className="quantity-column">
@@ -194,13 +202,14 @@ export const CartPage = () => {
         </table>
         <div className="bottom-container">
           <div className="summary">
-            <b>Resumen de compra</b>
+            <h6>Resumen de compra</h6>
             <p>Cantidad de productos: {calculateTotalQuantity()}</p>
             <p>
-              Subtotal: {" "}
+              Subtotal:{" "}
               {subtotal.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
+                maximumFractionDigits: 0,
               })}
             </p>
             <p>
@@ -208,15 +217,17 @@ export const CartPage = () => {
               {discount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
+                maximumFractionDigits: 0,
               })}
             </p>
-            <p>
+            <h6>
               Total:{" "}
               {totalWithDiscount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
+                maximumFractionDigits: 0,
               })}
-            </p>
+            </h6>
           </div>
           <div className="d-grid gap-2">
             <button

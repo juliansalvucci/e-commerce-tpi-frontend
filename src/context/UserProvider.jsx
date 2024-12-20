@@ -94,23 +94,39 @@ export const UserProvider = ({ children }) => {
       redirectUser(role);
     } catch (error) {
       //En caso de que el usuario no esté registrado, se le proporcionará la opción de hacerlo
-      if (error.response && error.response.status === 404) {
-        Swal.fire({
-          title: `<h5><strong>${error.response.data.email}</strong></h5>`,
-          text: "¿Desea registrarse?",
-          showCancelButton: true,
-          confirmButtonText: "Confirmar",
-          cancelButtonText: "Cancelar",
-          customClass: {
-            popup: "swal-question-popup",
-            confirmButton: "swal-confirm-button",
-            cancelButton: "swal-cancel-button",
-          },
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            navigate("/register");
-          }
-        });
+      if (
+        error.response &&
+        (error.response.status === 404 || error.response.status === 401)
+      ) {
+        if (error.response.status === 404) {
+          Swal.fire({
+            title: `<h5><strong>${error.response.data.email}</strong></h5>`,
+            text: "¿Desea registrarse?",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+            customClass: {
+              popup: "swal-question-popup",
+              confirmButton: "swal-confirm-button",
+              cancelButton: "swal-cancel-button",
+            },
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              navigate("/register");
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: error.response.data.password,
+            text: "Ingrese nuevamente su contraseña",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "swal-error-popup",
+              confirmButton: "swal-ok-button",
+            },
+          });
+        }
       } else {
         console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
       }
@@ -131,7 +147,7 @@ export const UserProvider = ({ children }) => {
     window.location.reload();
   };
 
-  const createUser = async (newUser) => {
+  const createUser = async (newUser, resetForm) => {
     try {
       const response = await api.post("/auth/signup", newUser);
       setUsers((prevUsers) => [...prevUsers, response.data]);
@@ -145,29 +161,37 @@ export const UserProvider = ({ children }) => {
         },
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await api.post("/auth/signin", newUser);
-          const { firstName, lastName, email, role, birthDate, token } =
-            response.data;
-          setUsername(email.split("@")[0]);
-          const userData = {
-            firstName,
-            lastName,
-            email,
-            role,
-            dateBirth: birthDate,
-          }; // El token lo pasamos aparte
-          sessionStorage.setItem("token", token);
-          sessionStorage.setItem("userData", JSON.stringify(userData));
-          setLoggedUser(userData);
-          navigate("/");
+          if (location.pathname === "/register") {
+            const response = await api.post("/auth/signin", newUser);
+            const { firstName, lastName, email, role, birthDate, token } =
+              response.data;
+            setUsername(email.split("@")[0]);
+            const userData = {
+              firstName,
+              lastName,
+              email,
+              role,
+              dateBirth: birthDate,
+            }; // El token lo pasamos aparte
+            sessionStorage.setItem("token", token);
+            sessionStorage.setItem("userData", JSON.stringify(userData));
+            setLoggedUser(userData);
+            if (resetForm) {
+              resetForm();
+            }
+            navigate("/");
+          }
         }
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
+      if (
+        (error.response && error.response.status === 409) ||
+        error.response.status === 400
+      ) {
         Swal.fire({
           icon: "error",
           title: "El usuario no puede ser creado",
-          text: error.response.data.email,
+          text: error.response.data.email || error.response.data.dateBirth,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
