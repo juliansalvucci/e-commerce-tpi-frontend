@@ -145,13 +145,9 @@ describe("CartPage Component", () => {
     // Aseguramos que se obtiene el elemento total con el precio exacto
     // Buscamos el texto del total con un formato más flexible
     // Buscamos el texto "Total: $400.00" dentro de un <p> o similar
-    const totalElement = screen.getByText(/Total:\s*\$\d+\.\d+/); // Usamos una expresión regular para el total
-
-    // Asegúrate de que el totalElement sea encontrado
-    expect(totalElement).toBeTruthy(); // Verifica que el elemento existe
-
-    // Verifica que el totalElement está en el documento
-    expect(totalElement).toBeInTheDocument();
+    const totalElement = screen.getByText(/Total:\s*\$\d+\.\d+/);
+  expect(totalElement).toBeInTheDocument();
+  expect(totalElement.textContent).toBe("Total: $400.00");
 
     expect(screen.getByText("Cantidad de productos: 3")).toBeInTheDocument();
   });

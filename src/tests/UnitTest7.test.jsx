@@ -24,7 +24,9 @@ describe("CartPopup Component", () => {
 
     // Verificar que el mensaje se muestra
     expect(
-      screen.getByText("Aún no ha agregado productos al carrito!!")
+      screen.getByText((content, element) => 
+        content.includes("Aún no ha agregado productos al carrito!!!") && element.tagName.toLowerCase() === 'h5'
+      )
     ).toBeInTheDocument();
   });
 
@@ -67,10 +69,10 @@ describe("CartPopup Component", () => {
     expect(screen.getByText("Producto 2")).toBeInTheDocument();
 
     // Verificar el total y cantidad
-    const totalText = screen.getByText(/Total/); // Busca el texto "Total" sin necesidad de especificar un tag
-const totalContainer = totalText.closest("p"); // Encuentra el contenedor <p> más cercano
+    // Verificar el total y cantidad
+  const totalText = screen.getByText(/Total/); // Busca el texto "Total"
+  const totalContainer = totalText.closest("h6"); // Encuentra el contenedor <h6> más cercano
 
-expect(totalContainer).toHaveTextContent("Total: $300.00");
-
+  expect(totalContainer).toHaveTextContent("Total: $300");
   });
 });
