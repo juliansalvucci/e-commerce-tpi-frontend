@@ -27,8 +27,8 @@ const AvatarComponent = ({ user, userName, onLogout }) => {
     const isAdmin = location.pathname.includes("/admin");
     const dir =
       isAdmin && location.pathname.includes("/admin")
-        ? "/admin/account/"
-        : "/account/";
+        ? "/admin/account"
+        : "/account";
     navigate(dir);
   };
 

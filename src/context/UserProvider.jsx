@@ -248,7 +248,7 @@ export const UserProvider = ({ children }) => {
           ? "/admin/user/list"
           : location.pathname === "/admin/account/edit"
           ? "/admin/account"
-          : "/account/";
+          : "/account";
       navigate(path);
       if (path === "/admin/account" || path === "/account") {
         updateLoggedUser(updatedUser);
