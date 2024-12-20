@@ -50,6 +50,9 @@ describe("CartPopup Component", () => {
           decrementQuantity: vi.fn(),
           calculateTotal: vi.fn(() => "$50"),
           calculateTotalQuantity: vi.fn(() => "3 items"),
+          subtotal: 50,  // Mock value
+      discount: 0,    // Mock value
+      totalWithDiscount: 50,  // Mock value
         }}
       >
         <CartPopup isVisible={true} onClose={vi.fn()} />
@@ -80,6 +83,9 @@ describe("CartPopup Component", () => {
           decrementQuantity: decrementQuantityMock,
           calculateTotal: vi.fn(() => "$50"),
           calculateTotalQuantity: vi.fn(() => "3 items"),
+          subtotal: 50,  // Mock value
+      discount: 0,    // Mock value
+      totalWithDiscount: 50,  // Mock value
         }}
       >
         <CartPopup isVisible={true} onClose={vi.fn()} />
@@ -110,6 +116,9 @@ describe("CartPopup Component", () => {
             calculateTotalQuantity: vi.fn(() => "0 items"),
             emptyCart: vi.fn(),
             createOrder: vi.fn(),
+            subtotal: 0,  // Mock value
+      discount: 0,    // Mock value
+      totalWithDiscount: 0,  // Mock value
           }}
         >
           <CartPage />
@@ -158,6 +167,9 @@ describe("CartPopup Component", () => {
           removeProduct: vi.fn(),
           calculateTotal: vi.fn(() => "$100"),
           calculateTotalQuantity: vi.fn(() => "1 item"),
+          subtotal: 100,  // Mock value
+      discount: 0,    // Mock value
+      totalWithDiscount: 100,  // Mock value
         }}
       >
         <CartPopup isVisible={true} onClose={vi.fn()} />
