@@ -190,9 +190,11 @@
   color: black;
 }
 
-.total-container h7 {
+.total-container h6 {
   font-family: "Poppins", sans-serif;
   font-weight: bold;
+  padding-top: 10px;
+  color: black;
 }
 
 .close-botton {

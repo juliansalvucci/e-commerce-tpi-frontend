@@ -105,6 +105,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
                 {subtotal.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0
                 })}
               </p>
               <p>
@@ -112,15 +113,17 @@ export const CartPopup = ({ isVisible, onClose }) => {
                 {discount.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0
                 })}
               </p>
-              <h5>
+              <h6>
                 Total:{" "}
                 {totalWithDiscount.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
+                  maximumFractionDigits: 0
                 })}
-              </h5>
+              </h6>
 
               <div className="close-botton">
                 <button className="btn btn-primary" onClick={onClose}>
