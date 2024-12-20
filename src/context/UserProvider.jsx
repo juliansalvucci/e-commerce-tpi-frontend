@@ -60,6 +60,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para obtener todos los clientes
   const fetchClients = async () => {
     await fetchUsers();
     return users.map((user) => user.email);
@@ -75,6 +76,7 @@ export const UserProvider = ({ children }) => {
     fetchUsers();
   }, [showDeleted]);
 
+  // Función para iniciar sesión
   const loginUser = async (user) => {
     try {
       const response = await api.post("/auth/signin", user);
@@ -133,6 +135,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para cerrar sesión
   const logoutUser = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userData");
@@ -147,6 +150,7 @@ export const UserProvider = ({ children }) => {
     window.location.reload();
   };
 
+  // Función para crear un nuevo usuario
   const createUser = async (newUser, resetForm) => {
     try {
       const response = await api.post("/auth/signup", newUser);
@@ -206,7 +210,6 @@ export const UserProvider = ({ children }) => {
 
   // Función para editar un usuario existente
   const editUser = async (id, updatedUser, userEmail) => {
-    // Deuda Técnica: Aca también tendriamos que poder hacer "Actualizar datos personales" para CLIENT/USER
     try {
       if (
         updatedUser.firstName === selectedUser?.firstName &&
@@ -321,6 +324,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para redirigir al usuario dependiendo de su rol
   const redirectUser = (role) => {
     if (role == "USER") {
       Swal.fire({
@@ -357,6 +361,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para seleccionar un usuario para editar
   const selectUserForEdit = (user) => {
     setSelectedUser(user);
   };
