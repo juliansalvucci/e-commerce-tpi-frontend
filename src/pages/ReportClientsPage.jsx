@@ -30,6 +30,7 @@ const ReportClientsPage = () => {
       <Typography
         variant="h4"
         color="white"
+        gutterBottom
         sx={{
           fontFamily: "Poppins",
         }}
@@ -41,7 +42,7 @@ const ReportClientsPage = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "100vh",
+          height: "100%",
           backgroundColor: "#233349",
         }}
       >
