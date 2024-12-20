@@ -16,15 +16,17 @@ const ABMAdminPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedUser) {
-        await createUser({
-          firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
-          lastName: values.apellido.trim(),
-          dateBirth: values.fechaNacimiento,
-          email: values.email.trim(),
-          password: values.password,
-          admin: true,
-        });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+        await createUser(
+          {
+            firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
+            lastName: values.apellido.trim(),
+            dateBirth: values.fechaNacimiento,
+            email: values.email.trim(),
+            password: values.password,
+            admin: true,
+          },
+          resetForm
+        );
       } else {
         if (!selectedUser.id) {
           selectedUser.id = findUserByEmail(values.email);

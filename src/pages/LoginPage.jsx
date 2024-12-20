@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Button,
   Box,
+  Divider,
   Typography,
   IconButton,
   InputAdornment,
@@ -150,6 +151,14 @@ export const LoginPage = () => {
             </Form>
           )}
         </Formik>
+        <Divider sx={{ mb: 3, borderColor: "#233349" }}>ó</Divider>
+        <ABMActionButton
+          is={false}
+          accion={"Registrarse"}
+          tipoClase=""
+          ancho="50%"
+          onClick={() => navigate("/register")}
+        />
       </Box>
     </Box>
   );

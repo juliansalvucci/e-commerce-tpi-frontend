@@ -13,8 +13,7 @@ const ABMBrandPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedBrand) {
-        await createBrand({ name: values.nombre.trim() }); // trim(): Quitar espacios al final (y al principio)
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+        await createBrand({ name: values.nombre.trim() }, resetForm); // trim(): Quitar espacios al final (y al principio)
       } else {
         await editBrand(selectedBrand.id, { name: values.nombre });
       }

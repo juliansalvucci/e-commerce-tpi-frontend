@@ -29,19 +29,21 @@ export const ABMProductPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedProduct) {
-        await createProduct({
-          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
-          description: values.descripcion.trim(),
-          price: values.precio,
-          stock: values.stock,
-          stockMin: values.stockMin,
-          imageURL: values.imagen,
-          color: values.color,
-          size: values.tamaño,
-          brandId: values.marca,
-          subCategoryId: values.subcategoria,
-        });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+        await createProduct(
+          {
+            name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
+            description: values.descripcion.trim(),
+            price: values.precio,
+            stock: values.stock,
+            stockMin: values.stockMin,
+            imageURL: values.imagen,
+            color: values.color,
+            size: values.tamaño,
+            brandId: values.marca,
+            subCategoryId: values.subcategoria,
+          },
+          resetForm
+        );
       } else {
         await editProduct(selectedProduct.id, {
           name: values.nombre,

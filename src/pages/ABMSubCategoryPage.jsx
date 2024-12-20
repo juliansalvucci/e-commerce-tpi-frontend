@@ -16,11 +16,13 @@ const ABMSubCategoryPage = () => {
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedSubCategory) {
-        await createSubCategory({
-          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
-          categoryId: values.categoria,
-        });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+        await createSubCategory(
+          {
+            name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
+            categoryId: values.categoria,
+          },
+          resetForm
+        );
       } else {
         await editSubCategory(selectedSubCategory.id, {
           name: values.nombre,
