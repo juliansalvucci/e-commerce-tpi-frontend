@@ -67,7 +67,10 @@ describe("CartPopup Component", () => {
     expect(screen.getByText("Producto 2")).toBeInTheDocument();
 
     // Verificar el total y cantidad
-    const totalContainer = screen.getByText(/Total/).closest("p");
-    expect(totalContainer).toHaveTextContent("Total: $300.00");
+    const totalText = screen.getByText(/Total/); // Busca el texto "Total" sin necesidad de especificar un tag
+const totalContainer = totalText.closest("p"); // Encuentra el contenedor <p> más cercano
+
+expect(totalContainer).toHaveTextContent("Total: $300.00");
+
   });
 });
