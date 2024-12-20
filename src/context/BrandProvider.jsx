@@ -44,7 +44,7 @@ const BrandProvider = ({ children }) => {
   }, [showDeleted]);
 
   // Función para crear una nueva marca
-  const createBrand = async (newBrand) => {
+  const createBrand = async (newBrand, resetForm) => {
     try {
       const response = await api.post("/brand", newBrand);
       setBrands((prevBrands) => [...prevBrands, response.data]);
@@ -57,6 +57,9 @@ const BrandProvider = ({ children }) => {
           confirmButton: "swal-ok-button",
         },
       });
+      if (resetForm) {
+        resetForm();
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Swal.fire({

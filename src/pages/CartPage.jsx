@@ -65,13 +65,36 @@ export const CartPage = () => {
             icon: "success",
             title: "La compra se ha realizado con éxito",
             html: `
-            <p>Has comprado:</p>
-            <ul>${productsPurchased}</ul>
-            <p>Total con descuento: ${totalWithDiscount.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
-          `,
+              <p>Has comprado:</p>
+              <ul>${productsPurchased}</ul>
+              <div style="
+                  border: 1px solid #ccc; 
+                  border-radius: 8px; 
+                  padding: 10px; 
+                  margin-top: 15px; 
+                  text-align: left;
+                ">
+                <p>Cantidad de productos: ${calculateTotalQuantity()}</p>
+                <p>Subtotal:${subtotal.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}</p>
+                <p>Descuento (5% a partir de $1,000,000): ${discount.toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  }
+                )}</p>
+                <p>Total: ${totalWithDiscount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}</p>
+              </div>
+            `,
             customClass: {
               popup: "swal-success-popup",
               confirmButton: "swal-ok-button",
@@ -135,6 +158,7 @@ export const CartPage = () => {
                   {product.price.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   })}{" "}
                   x {product.quantity}
                 </td>
@@ -142,6 +166,7 @@ export const CartPage = () => {
                   {(product.price * product.quantity).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
+                    maximumFractionDigits: 0,
                   })}
                 </td>
                 <td className="quantity-column">
@@ -177,20 +202,32 @@ export const CartPage = () => {
         </table>
         <div className="bottom-container">
           <div className="summary">
-            <b>Resumen de compra</b>
+            <h6>Resumen de compra</h6>
             <p>Cantidad de productos: {calculateTotalQuantity()}</p>
-            <p>Subtotal: {subtotal.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
-            <p>Descuento (10% a partir de $80000000): {discount.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
-            <p>Total: {totalWithDiscount.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}</p>
+            <p>
+              Subtotal:{" "}
+              {subtotal.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
+            </p>
+            <p>
+              Descuento (5% a partir de $1,000,000):{" "}
+              {discount.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
+            </p>
+            <h6>
+              Total:{" "}
+              {totalWithDiscount.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
+            </h6>
           </div>
           <div className="d-grid gap-2">
             <button

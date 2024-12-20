@@ -10,6 +10,11 @@ export default defineConfig({
     css: true
   },
   plugins: [react()],
+  resolve: {
+    alias: {
+      buffer: "buffer", // Polyfill manual para Buffer
+    },
+  },
   server: {
     proxy: {
       "/api": {

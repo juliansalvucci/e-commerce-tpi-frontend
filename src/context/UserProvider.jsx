@@ -60,6 +60,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para obtener todos los clientes
   const fetchClients = async () => {
     await fetchUsers();
     return users.map((user) => user.email);
@@ -75,6 +76,7 @@ export const UserProvider = ({ children }) => {
     fetchUsers();
   }, [showDeleted]);
 
+  // Función para iniciar sesión
   const loginUser = async (user) => {
     try {
       const response = await api.post("/auth/signin", user);
@@ -133,6 +135,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para cerrar sesión
   const logoutUser = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userData");
@@ -143,9 +146,12 @@ export const UserProvider = ({ children }) => {
       role: "GUEST",
     });
     setUsername("Invitado");
+    navigate("/");
+    window.location.reload();
   };
 
-  const createUser = async (newUser) => {
+  // Función para crear un nuevo usuario
+  const createUser = async (newUser, resetForm) => {
     try {
       const response = await api.post("/auth/signup", newUser);
       setUsers((prevUsers) => [...prevUsers, response.data]);
@@ -157,15 +163,39 @@ export const UserProvider = ({ children }) => {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
         },
-      }).then(() => {
-        navigate("/");
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (location.pathname === "/register") {
+            const response = await api.post("/auth/signin", newUser);
+            const { firstName, lastName, email, role, birthDate, token } =
+              response.data;
+            setUsername(email.split("@")[0]);
+            const userData = {
+              firstName,
+              lastName,
+              email,
+              role,
+              dateBirth: birthDate,
+            }; // El token lo pasamos aparte
+            sessionStorage.setItem("token", token);
+            sessionStorage.setItem("userData", JSON.stringify(userData));
+            setLoggedUser(userData);
+            if (resetForm) {
+              resetForm();
+            }
+            navigate("/");
+          }
+        }
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
+      if (
+        (error.response && error.response.status === 409) ||
+        error.response.status === 400
+      ) {
         Swal.fire({
           icon: "error",
           title: "El usuario no puede ser creado",
-          text: error.response.data.email,
+          text: error.response.data.email || error.response.data.dateBirth,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -180,7 +210,6 @@ export const UserProvider = ({ children }) => {
 
   // Función para editar un usuario existente
   const editUser = async (id, updatedUser, userEmail) => {
-    // Deuda Técnica: Aca también tendriamos que poder hacer "Actualizar datos personales" para CLIENT/USER
     try {
       if (
         updatedUser.firstName === selectedUser?.firstName &&
@@ -219,26 +248,13 @@ export const UserProvider = ({ children }) => {
           ? "/admin/user/list"
           : location.pathname === "/admin/account/edit"
           ? "/admin/account"
-          : "/account/";
+          : "/account";
       navigate(path);
       if (path === "/admin/account" || path === "/account") {
         updateLoggedUser(updatedUser);
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no puede ser editado",
-          text: "TO-DO",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }
+      console.error("Error al editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
@@ -258,20 +274,7 @@ export const UserProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no puede ser eliminado",
-          text: "TO-DO",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al eliminar usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }
+      console.error("Error al eliminar usuario:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
@@ -295,6 +298,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para redirigir al usuario dependiendo de su rol
   const redirectUser = (role) => {
     if (role == "USER") {
       Swal.fire({
@@ -331,6 +335,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para seleccionar un usuario para editar
   const selectUserForEdit = (user) => {
     setSelectedUser(user);
   };

@@ -15,6 +15,7 @@ import { CategoryContext } from "../context/CategoryContext";
 import { ProductContext } from "../context/ProductContext";
 import { SubCategoryContext } from "../context/SubCategoryContext";
 import { productSchema } from "../schemas";
+import useFormatPrice from "../utils/useFormatPrice";
 
 export const ABMProductPage = () => {
   const { createProduct, editProduct, selectedProduct } =
@@ -26,22 +27,27 @@ export const ABMProductPage = () => {
   const [selectedCategoryP, setselectedCategoryP] = useState("");
   const [filteredSubCategories, setFilteredSC] = useState(subCategories);
 
+  const displayPriceInitialValue = useFormatPrice(selectedProduct?.price);
+  const [displayPrice, setDisplayPrice] = useState(displayPriceInitialValue);
+
   const onSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       if (!selectedProduct) {
-        await createProduct({
-          name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
-          description: values.descripcion.trim(),
-          price: values.precio,
-          stock: values.stock,
-          stockMin: values.stockMin,
-          imageURL: values.imagen,
-          color: values.color,
-          size: values.tamaño,
-          brandId: values.marca,
-          subCategoryId: values.subcategoria,
-        });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
+        await createProduct(
+          {
+            name: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio)
+            description: values.descripcion.trim(),
+            price: values.precio,
+            stock: values.stock,
+            stockMin: values.stockMin,
+            imageURL: values.imagen,
+            color: values.color,
+            size: values.tamaño,
+            brandId: values.marca,
+            subCategoryId: values.subcategoria,
+          },
+          resetForm
+        );
       } else {
         await editProduct(selectedProduct.id, {
           name: values.nombre,
@@ -107,7 +113,7 @@ export const ABMProductPage = () => {
             marca: selectedProduct?.brandId || "",
             categoria: selectedProduct?.categoryId || "",
             subcategoria: selectedProduct?.subCategoryId || "",
-            precio: selectedProduct?.price || "",
+            precio: displayPrice || "",
             stock: selectedProduct?.stock || "",
             stockMin: selectedProduct?.stockMin || "",
             descripcion: selectedProduct?.description || "",
@@ -189,9 +195,16 @@ export const ABMProductPage = () => {
                     fullWidth
                     label="Precio"
                     name="precio"
-                    type="number"
+                    type="text"
                     step="100.0"
                     placeholder="Ingrese el precio"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const formattedValue = useFormatPrice(value);
+                      setDisplayPrice(formattedValue);
+                      setFieldValue("precio", value.replace(/[^\d]/g, ""));
+                    }}
+                    value={displayPrice} // Mostrar el número con formato
                     slotProps={{
                       input: {
                         startAdornment: (
@@ -199,7 +212,7 @@ export const ABMProductPage = () => {
                             position="start"
                             sx={{ color: "white" }}
                           >
-                            $
+                            <span style={{ color: "white" }}>$</span>
                           </InputAdornment>
                         ),
                         sx: { color: "white" },
@@ -258,6 +271,7 @@ export const ABMProductPage = () => {
                 is={isSubmitting}
                 accion={selectedProduct ? "Guardar" : "Crear"}
                 tipoClase="Producto"
+                ancho="100%"
               />
             </Form>
           )}

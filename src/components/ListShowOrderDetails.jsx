@@ -45,13 +45,21 @@ const ListShowOrderDetails = ({ order }) => {
               {product.productName}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.unitPrice.toFixed(2)}
+              {product.unitPrice.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
               {product.amount}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.subTotal.toFixed(2)}
+              {product.subTotal.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
             </TableCell>
           </TableRow>
         ))}
@@ -90,8 +98,12 @@ const ListShowOrderDetails = ({ order }) => {
           <Stack spacing={2} alignItems="center">
             {order && renderProducts(order.orderDetails)}
             <Typography variant="h6" align="center">
-              <strong>Total (con descuentos aplicados):</strong> $
-              {order?.total.toFixed(2)}
+              <strong>Total (con descuentos aplicados):  </strong>
+              {order?.total.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
             </Typography>
           </Stack>
         </DialogContent>

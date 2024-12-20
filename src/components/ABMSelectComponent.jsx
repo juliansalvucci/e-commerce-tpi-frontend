@@ -1,12 +1,29 @@
 import React from "react";
 import { useField } from "formik";
 import { MenuItem, TextField } from "@mui/material";
-import useTextfieldTheme from "../utils/useTextfieldTheme";
 
 const ABMSelectComponent = ({ label, options, fullWidth, ...props }) => {
-  const [field, meta] = useField(props); // useField para manejar el campo con Formik
+  const [field, meta] = useField(props);
 
-  const styles = useTextfieldTheme();
+  const styles = {
+    variant: "filled",
+    InputProps: {
+      style: {
+        borderColor: meta.touched && meta.error ? "red" : "#d7c4ab",
+        color: "white",
+      },
+      sx: {
+        "& .MuiSvgIcon-root": {
+          color: "white",
+        },
+      },
+    },
+    InputLabelProps: {
+      style: {
+        color: meta.touched && meta.error ? "red" : "#d1d1d1",
+      },
+    },
+  };
 
   return (
     <TextField
