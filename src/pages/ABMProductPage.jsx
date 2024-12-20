@@ -123,7 +123,7 @@ export const ABMProductPage = () => {
           validateOnChange={true}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, setFieldValue, values }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
                 <ABMInputComponent
