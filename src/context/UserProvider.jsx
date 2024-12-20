@@ -254,20 +254,7 @@ export const UserProvider = ({ children }) => {
         updateLoggedUser(updatedUser);
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no puede ser editado",
-          text: "TO-DO",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }
+      console.error("Error al editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
@@ -287,20 +274,7 @@ export const UserProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no puede ser eliminado",
-          text: "TO-DO",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al eliminar usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }
+      console.error("Error al eliminar usuario:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
