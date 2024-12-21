@@ -23,6 +23,7 @@ Este proyecto utiliza las siguientes tecnologías:
 - **[Spring Boot](https://spring.io/projects/spring-boot):** Framework para desarrollar aplicaciones basadas en Java que simplifica la creación de APIs y servicios de backend, ofreciendo una configuración mínima y una alta productividad.
 - **[React](https://react.dev/):** Biblioteca JavaScript para construir interfaces de usuario dinámicas y reactivas. Utilizada para el desarrollo del frontend, ofreciendo componentes reutilizables y un rendimiento sobresaliente.
 - **[Vite](https://vitejs.dev/):** Herramienta de desarrollo frontend que permite un inicio rápido y una construcción eficiente de proyectos basados en JavaScript. Optimizamos el rendimiento del frontend gracias a su integración con React.
+- **[Vitest](https://vitest.dev/):** Framework de testing para JavaScript y TypeScript, utilizado para garantizar la calidad del frontend mediante pruebas automatizadas.
 
 ---
 
