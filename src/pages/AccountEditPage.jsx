@@ -6,9 +6,9 @@ import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import DatePickerComponent from "../components/DatePickerComponent";
 import { UserContext } from "../context/UserContext";
-import { registerSchema, adminSchema } from "../schemas";
+import { adminSchema } from "../schemas";
 
-const ABMAdminPage = () => {
+const AccountEditPage = () => {
   const { createUser, editUser, selectedUser, findUserByEmail } =
     useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
@@ -55,31 +55,28 @@ const ABMAdminPage = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#233349",
+        backgroundColor: "#f5f5f5",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        padding: "2rem",
       }}
     >
       <Typography
         variant="h3"
         align="center"
-        color="white"
         gutterBottom
-        sx={{ fontFamily: "Poppins" }}
+        sx={{ fontFamily: "Poppins", color: "#283b54" }}
       >
-        {selectedUser ? "Editar Administrador" : "Crear Administrador"}
+        Editar Usuario
         <Typography
           variant="overline"
           align="center"
-          color="white"
           gutterBottom
-          sx={{ display: "block", fontFamily: "Poppins" }}
+          sx={{ display: "block", fontFamily: "Poppins", color: "#283b54" }}
         >
-          {selectedUser
-            ? `${selectedUser.firstName} ${selectedUser.lastName}`
-            : ""}
+          {selectedUser.firstName} {selectedUser.lastName}
         </Typography>
       </Typography>
       <Box
@@ -98,7 +95,7 @@ const ABMAdminPage = () => {
             email: selectedUser?.email || "",
             password: "",
           }}
-          validationSchema={selectedUser ? adminSchema : registerSchema}
+          validationSchema={adminSchema}
           validateOnChange={true}
           onSubmit={onSubmit}
         >
@@ -195,7 +192,7 @@ const ABMAdminPage = () => {
               <ABMActionButton
                 is={isSubmitting}
                 accion={selectedUser ? "Guardar" : "Crear"}
-                tipoClase="Administrador"
+                tipoClase="Cambios"
                 ancho="100%"
               />
             </Form>
@@ -206,4 +203,4 @@ const ABMAdminPage = () => {
   );
 };
 
-export default ABMAdminPage;
+export default AccountEditPage;

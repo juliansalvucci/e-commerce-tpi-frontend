@@ -7,16 +7,17 @@ import AdminAvatarComponent from "./AvatarComponent";
 import { UserContext } from "../context/UserContext";
 
 const NavBarAdmin = () => {
-  const { logoutUser } = useContext(UserContext); // Aca tendría que ir loggedUser
+  const { loggedUser, logoutUser } = useContext(UserContext);
 
-  const loggedUser = JSON.parse(sessionStorage.getItem("userData"));
-  
   const location = useLocation();
   const navigate = useNavigate();
 
   // Lógica para Breadcrumbs basada en la ruta actual
   const breadcrumbsMap = {
     "/admin": ["Principal", "Dashboard"],
+    "/admin/account": ["Cuenta", "Información"],
+    "/admin/account/edit": ["Cuenta", "Información", "Editar"],
+    "/admin/account/reports": ["Cuenta", "Reportes"],
     "/admin/user/create": ["Administración", "Administrador", "Crear"],
     "/admin/user/edit": ["Administración", "Administrador", "Editar"],
     "/admin/user/list": ["Administración", "Administrador", "Listado"],
@@ -78,7 +79,7 @@ const NavBarAdmin = () => {
 
       {/* Iconos */}
       <Box display="flex">
-      <AdminAvatarComponent user={loggedUser} onLogout={logoutUser} />
+        <AdminAvatarComponent user={loggedUser} onLogout={logoutUser} />
         <IconButton onClick={handleNavigateHome}>
           <HomeOutlinedIcon sx={{ color: "white" }} />
         </IconButton>

@@ -1,16 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Box,
-  Typography,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
+import { Box, Typography, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo2 from "../assets/fondo-register.png";
 import logo from "../assets/logo.png";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import DatePickerComponent from "../components/DatePickerComponent";
 import { UserContext } from "../context/UserContext";
@@ -30,8 +25,8 @@ export const RegisterPage = () => {
           email: values.email.trim(),
           dateBirth: values.fechaNacimiento,
           password: values.password,
+          admin: false,
         });
-        resetForm(); // (VER) No va aca. Si hay error, no quiero que se resetee
       } else {
         await editUser(selectedUser.id, {
           firstName: values.nombre.trim(), // trim(): Quitar espacios al final (y al principio),
@@ -39,6 +34,7 @@ export const RegisterPage = () => {
           email: values.email.trim(),
           dateBirth: values.fechaNacimiento,
           password: values.password,
+          admin: false,
         });
       }
     } catch (error) {
@@ -55,14 +51,12 @@ export const RegisterPage = () => {
   return (
     <Box
       sx={{
-        m: 1,
         display: "flex",
         flexDirection: "space-between",
         alignItems: "center",
         justifyContent: "center",
         boxShadow: 3,
         backgroundColor: "#f5f5f5",
-        border: "1px solid #ccc",
       }}
     >
       <Box
@@ -70,17 +64,16 @@ export const RegisterPage = () => {
         src={fondo2}
         alt="Imagen de bienvenida"
         sx={{
-          width: "120vh",
-          height: "90vh",
+          width: "60vw",
+          height: "100vh",
         }}
       />
       <Box
         sx={{
-          width: "120vh",
-          height: "90vh",
+          width: "60vw",
+          height: "100vh",
           padding: 3,
           paddingBottom: 10,
-          backgroundColor: "white",
           boxShadow: 3,
         }}
       >
@@ -107,8 +100,13 @@ export const RegisterPage = () => {
             onClick={() => navigate("/")}
           />
         </Box>
-        <Typography variant="h5" align="center" gutterBottom>
-          Registro
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontFamily: "Poppins", color: "#283b54" }}
+        >
+          Registrarse
         </Typography>
 
         <Formik
@@ -173,15 +171,12 @@ export const RegisterPage = () => {
                 />
               </Box>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-              >
-                Registrarse
-              </Button>
+              <ABMActionButton
+                is={isSubmitting}
+                accion={"Registrarse"}
+                tipoClase=""
+                ancho="50%"
+              />
             </Form>
           )}
         </Formik>

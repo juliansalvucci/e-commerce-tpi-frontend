@@ -46,7 +46,7 @@ const CategoryProvider = ({ children }) => {
   }, [showDeleted]);
 
   // Función para crear una nueva categoría
-  const createCategory = async (newCategory) => {
+  const createCategory = async (newCategory, resetForm) => {
     try {
       const response = await api.post("/category", newCategory);
       setCategories((prevCategories) => [...prevCategories, response.data]);
@@ -59,6 +59,9 @@ const CategoryProvider = ({ children }) => {
           confirmButton: "swal-ok-button",
         },
       });
+      if (resetForm) {
+        resetForm();
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Swal.fire({

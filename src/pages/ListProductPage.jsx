@@ -122,7 +122,6 @@ const ListProductPage = () => {
             ? params.value.toLocaleString("es-AR", {
                 style: "currency",
                 currency: "ARS",
-                minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })
             : params.value.toLocaleString("es-AR", {
@@ -206,11 +205,11 @@ const ListProductPage = () => {
           <ListShowImage imageURL={params.row.imageURL} />
           {!showDeleted ? (
             <>
-              <ListEditButton onClick={() => handleEdit(params.row)} />
-              <ListDeleteButton onClick={() => handleDelete(params.row.id)} />
+              <ListEditButton data-testid="edit-button" onClick={() => handleEdit(params.row)} />
+              <ListDeleteButton data-testid="delete-button" onClick={() => handleDelete(params.row.id)} />
             </>
           ) : (
-            <ListRestoreButton onClick={() => handleRestore(params.row.id)} />
+            <ListRestoreButton  onClick={() => handleRestore(params.row.id)} />
           )}
         </Stack>
       ),
@@ -302,7 +301,7 @@ const ListProductPage = () => {
           : "Listado de Productos Activos"}
       </Typography>
       <Box sx={{ height: "calc(100vh - 200px)" }}>
-        {loading || products.length === 0 ? (
+        {loading || products?.length === 0 ? (
           <Box
             sx={{
               display: "flex",
@@ -311,7 +310,7 @@ const ListProductPage = () => {
               height: "100%",
             }}
           >
-            <CircularProgress />
+            <CircularProgress data-testid="circular-progress" />
           </Box>
         ) : (
           <ListDataGrid

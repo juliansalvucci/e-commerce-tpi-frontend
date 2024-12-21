@@ -183,7 +183,6 @@ const StockEntryPage = () => {
             ? params.value.toLocaleString("es-AR", {
                 style: "currency",
                 currency: "ARS",
-                minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })
             : params.value.toLocaleString("es-AR", {

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Button,
   Box,
+  Divider,
   Typography,
   IconButton,
   InputAdornment,
@@ -11,6 +12,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import fondo from "../assets/fondo.png";
 import logo from "../assets/logo.png";
+import ABMActionButton from "../components/ABMActionButton";
 import ABMInputComponent from "../components/ABMInputComponent";
 import { UserContext } from "../context/UserContext";
 import { loginSchema } from "../schemas";
@@ -48,8 +50,6 @@ export const LoginPage = () => {
         justifyContent: "center",
         boxShadow: 3,
         backgroundColor: "#f5f5f5",
-        m: 1,
-        border: "1px solid #ccc",
       }}
     >
       {/* Imagen en el lado izquierdo */}
@@ -58,19 +58,17 @@ export const LoginPage = () => {
         src={fondo}
         alt="Imagen de bienvenida"
         sx={{
-          width: "120vh",
-          height: "90vh",
+          width: "60vw",
+          height: "100vh",
         }}
       />
-
       <Box
         sx={{
-          width: "120vw",
-          height: "90vh",
-
-          padding: 3,
+          width: "60vw",
+          height: "100vh",
+          padding: 4,
           paddingBottom: 10,
-          backgroundColor: "white",
+          paddingTop: 12,
         }}
       >
         {/* Contenedor para centrar la imagen */}
@@ -84,7 +82,7 @@ export const LoginPage = () => {
         >
           <Box
             component="img"
-            src={logo} // Reemplaza con la ruta de tu imagen
+            src={logo}
             alt="Imagen de bienvenida"
             sx={{
               width: "100px",
@@ -98,7 +96,12 @@ export const LoginPage = () => {
           />
         </Box>
 
-        <Typography variant="h5" align="center" gutterBottom>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontFamily: "Poppins", color: "#283b54" }}
+        >
           Iniciar Sesión
         </Typography>
 
@@ -139,18 +142,23 @@ export const LoginPage = () => {
                 />
               </Box>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-              >
-                Iniciar Sesión
-              </Button>
+              <ABMActionButton
+                is={isSubmitting}
+                accion={"Iniciar Sesión"}
+                tipoClase=""
+                ancho="50%"
+              />
             </Form>
           )}
         </Formik>
+        <Divider sx={{ mb: 3, borderColor: "#233349" }}>ó</Divider>
+        <ABMActionButton
+          is={false}
+          accion={"Registrarse"}
+          tipoClase=""
+          ancho="50%"
+          onClick={() => navigate("/register")}
+        />
       </Box>
     </Box>
   );

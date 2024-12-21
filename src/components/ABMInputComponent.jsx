@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useField } from "formik";
 import TextField from "@mui/material/TextField";
 
-const ABMInputComponent = ({ label, fullWidth, ...props }) => {
+const ABMInputComponent = ({ label, fullWidth, placeholder, ...props }) => {
   const [field, meta] = useField(props);
   const location = useLocation();
 
@@ -17,7 +17,7 @@ const ABMInputComponent = ({ label, fullWidth, ...props }) => {
         variant: "outlined",
       }
     : {
-        variant: "filled",
+        variant: isAdminRoute ? "filled" : "outlined",
         InputProps: {
           style: {
             borderColor: meta.touched && meta.error ? "red" : "#d7c4ab",
@@ -38,6 +38,7 @@ const ABMInputComponent = ({ label, fullWidth, ...props }) => {
       {...field}
       {...props}
       {...styles}
+      placeholder={placeholder}
       error={meta.touched && Boolean(meta.error)}
       helperText={meta.touched && meta.error ? meta.error : ""}
       style={{

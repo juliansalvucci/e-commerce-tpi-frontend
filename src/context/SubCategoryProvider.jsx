@@ -46,7 +46,7 @@ const SubCategoryProvider = ({ children }) => {
   }, [showDeleted]);
 
   // Función para crear una nueva subcategoría
-  const createSubCategory = async (newSubCategory) => {
+  const createSubCategory = async (newSubCategory, resetForm) => {
     try {
       const response = await api.post("/subcategory", newSubCategory);
       setSubCategories((prevSubCategories) => [
@@ -62,6 +62,9 @@ const SubCategoryProvider = ({ children }) => {
           confirmButton: "swal-ok-button",
         },
       });
+      if (resetForm) {
+        resetForm();
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Swal.fire({

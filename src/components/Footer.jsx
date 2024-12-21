@@ -8,7 +8,7 @@ const Footer = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#283b54", color: "white", py: 4 }}>
+    <Box sx={{ bgcolor: "#233349", color: "white", py: 4, position: "sticky" }}>
       <Container>
         <Grid container spacing={4}>
           {/* Contactos */}
@@ -152,7 +152,11 @@ const Footer = () => {
                 width="50"
                 style={{ marginRight: "10px" }}
               />
-              <img src="https://www.svgrepo.com/show/452169/bitcoin.svg" alt="Bitcoin" width="50" />
+              <img
+                src="https://www.svgrepo.com/show/452169/bitcoin.svg"
+                alt="Bitcoin"
+                width="50"
+              />
             </Box>
           </Grid>
         </Grid>

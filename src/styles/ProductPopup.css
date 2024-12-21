@@ -17,7 +17,7 @@
   top: 96px;
   right: 210px;
   background: #dc3546e5;
-  color: #283b54;
+  color: #233349;
   border: none;
   font-size: 12px;
   border-radius: 10px;
@@ -32,13 +32,13 @@
   border-color: #f09999;
 }
 
-.details-container h1 {
+.details-container h3 {
   margin-top: 30px;
   margin-bottom: 30px;
-  font-weight: 1000;
+  font-weight: 600;
   font-family: "Poppins", sans-serif;
   text-align: left;
-  font-size: 1.5rem; /* Cambia el tamaño del título */
+  font-size: 1.2rem;
   width: 85%;
   margin-left: 10px;
 }
@@ -47,8 +47,8 @@
 .details-container .price-container span,
 .details-container .price-container p {
   font-family: "Poppins", sans-serif;
-  font-weight: 550;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   width: 85%;
   margin-left: 10px;
 }
@@ -63,8 +63,8 @@
 /* Cambia el tamaño de los span que contienen "Descripción" */
 .details-container span {
   font-family: "Poppins", sans-serif;
-  font-weight: 550;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   font-weight: bold;
   width: 85%;
   margin-left: 10px;
@@ -72,13 +72,11 @@
 
 /* Cambia el tamaño de los párrafos de descripción */
 .details-container p {
-  font-size: 1, 2rem;
   font-family: "Poppins", sans-serif;
-  font-weight: 550;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   width: 85%;
   margin-left: 10px;
-  font-weight: normal;
 }
 
 .details-container .price-container {
@@ -103,23 +101,11 @@
 
 /*Contenedor para la imagen del producto, que estará en el lado izquierdo*/
 .popup-content .image-container {
-  border-radius: 8px;
-  max-width: 300px;
-  max-height: 200px;
-  width: 100%;
+  width: 50%;
+  place-items: center;
   object-fit: cover;
-  margin-right: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup-content .image-container img {
-  display: block;
-  margin-top: 150px;
-  margin-left: 50px;
-  height: 50vh;
-  width: 100%;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
 
 /*Contener de la descripción y precio de los productos, a la derecha de la imagen*/
@@ -129,9 +115,15 @@
   text-align: justify;
 }
 
-.stock-container p {
+.stock-available {
+  color: #079c45;
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+
+.stock-unavailable {
   color: #f10b0b;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: normal;
 }
 
@@ -150,19 +142,24 @@
 }
 
 .buy-counter-buttoms .buy-container .buy-button {
-  background-color: #283b54;
+  background-color: #233349;
   border: none;
   color: white;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 13px;
   border-radius: 5px;
   cursor: pointer;
   margin-left: 20px;
 }
+.buy-button {
+  font-weight: 500; /* Opcional, para hacer el texto más destacado */
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+  padding: 0.75rem;
+}
 
 .buy-counter-buttoms .buy-container .buy-button:hover {
-  background-color: #3d5f8b;
-  color: #a6a6a6;
+  background-color: #81abe1;
   transition: background-color 0.3s ease;
   cursor: pointer;
 }
@@ -172,19 +169,20 @@
   margin-top: 25px;
   display: flex; /* Utiliza flexbox */
   align-items: center; /* Alinea verticalmente en el centro */
+  justify-content: center;
 }
 
 /* Botones de incremento y decremento */
 .products-counter-buttons .btn-outline-primary {
   color: #fff;
-  background-color: #283b54;
-  border-color: #283b54;
+  background-color: #233349;
+  border-color: #233349;
 }
 
 .products-counter-buttons .btn-outline-primary:hover {
   color: white;
-  background-color: #3d5f8b;
-  border-color: #3d5f8b;
+  background-color: #81abe1;
+  border-color: #81abe1;
 }
 
 .local-quantity {
@@ -214,19 +212,16 @@
 .products-counter-buttons .circle {
   display: flex;
   align-items: flex-start;
-  width: 60px;
-  height: 60px;
   cursor: pointer;
-  border-radius: 30px;
   background: #a6a6a6;
   opacity: 0.8;
   flex-wrap: wrap;
   justify-content: center;
-  position: absolute;
-  top: 460px;
+  /*Esto soluciona el problema de la posición del circulo en el popup*/
+  position: sticky;
+  top: 410px;
   right: 230px;
   z-index: 1;
-  flex-direction: column;
 }
 
 .close-btn {

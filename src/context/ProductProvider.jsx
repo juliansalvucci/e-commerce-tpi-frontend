@@ -49,7 +49,7 @@ export const ProductProvider = ({ children }) => {
   }, [showDeleted]);
 
   // Función para crear un nuevo producto
-  const createProduct = async (newProduct) => {
+  const createProduct = async (newProduct, resetForm) => {
     try {
       const response = await api.post("/product", newProduct);
       setProducts((prevProducts) => [...prevProducts, response.data]);
@@ -62,6 +62,9 @@ export const ProductProvider = ({ children }) => {
           confirmButton: "swal-ok-button",
         },
       });
+      if (resetForm) {
+        resetForm();
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Swal.fire({

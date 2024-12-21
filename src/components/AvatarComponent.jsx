@@ -1,10 +1,17 @@
-import React from "react";
-import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Avatar,
+  CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const AvatarComponent = ({ user, onLogout }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+const AvatarComponent = ({ user, userName, onLogout }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
   const handleMenuOpen = (event) => {
@@ -13,6 +20,31 @@ const AvatarComponent = ({ user, onLogout }) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleAccount = () => {
+    handleMenuClose();
+    const isAdmin = location.pathname.includes("/admin");
+    const dir =
+      isAdmin && location.pathname.includes("/admin")
+        ? "/admin/account"
+        : "/account";
+    navigate(dir);
+  };
+
+  const handleOrders = () => {
+    handleMenuClose();
+    navigate("/account/orders");
+  };
+
+  const handleLogin = () => {
+    handleMenuClose();
+    navigate("/login");
+  };
+
+  const handleRegister = () => {
+    handleMenuClose();
+    navigate("/register");
   };
 
   const handleLogout = () => {
@@ -30,15 +62,6 @@ const AvatarComponent = ({ user, onLogout }) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: "Exito!",
-          text: `Se ha cerrado la sesión de ${user.email}`,
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
         onLogout();
         navigate("/");
       }
@@ -75,14 +98,42 @@ const AvatarComponent = ({ user, onLogout }) => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem disabled>
-          <Typography variant="body1">{user.email}</Typography>
-        </MenuItem>
-        {user.role === "ADMIN" && !location.pathname.includes("/admin") && (
-          <MenuItem onClick={handleDashboard}>Ir a Dashboard</MenuItem>
-        )}
-        <MenuItem onClick={handleMenuClose}>Actualizar información</MenuItem>
-        <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+        {[
+          <MenuItem key="username" disabled>
+            <Typography variant="body1">{userName}</Typography>
+          </MenuItem>,
+          user.role === "ADMIN" && !location.pathname.includes("/admin") && (
+            <MenuItem key="dashboard" onClick={handleDashboard}>
+              Ir a Dashboard
+            </MenuItem>
+          ),
+          user.role === "GUEST" && (
+            <MenuItem key="login" onClick={handleLogin}>
+              Iniciar Sesión
+            </MenuItem>
+          ),
+          user.role === "GUEST" && (
+            <MenuItem key="register" onClick={handleRegister}>
+              Registrarse
+            </MenuItem>
+          ),
+          (user.role === "USER" || user.role === "ADMIN") && (
+            <MenuItem key="account" onClick={handleAccount}>
+              Cuenta
+            </MenuItem>
+          ),
+          (user.role === "USER" || user.role === "ADMIN") &&
+            !location.pathname.includes("/admin") && (
+              <MenuItem key="orders" onClick={handleOrders}>
+                Listado de Pedidos
+              </MenuItem>
+            ),
+          (user.role === "USER" || user.role === "ADMIN") && (
+            <MenuItem key="logout" onClick={handleLogout}>
+              Cerrar sesión
+            </MenuItem>
+          ),
+        ].filter(Boolean)}
       </Menu>
     </>
   );

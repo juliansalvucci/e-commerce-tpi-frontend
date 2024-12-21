@@ -1,6 +1,5 @@
 import {
   Box,
-  Typography,
   CircularProgress,
   Table,
   TableBody,
@@ -13,6 +12,7 @@ import {
 } from "@mui/material";
 import React, { useContext } from "react";
 import { OrderHistoryContext } from "../context/OrderHistoryContext";
+import { parse, format } from "date-fns";
 
 const ListHistoryOrder = () => {
   const {
@@ -26,7 +26,7 @@ const ListHistoryOrder = () => {
 
   const renderProducts = (products) => (
     <Table size="small" sx={{ backgroundColor: "white" }}>
-      <TableHead sx={{ backgroundColor: "#283b54", color: "white" }}>
+      <TableHead sx={{ backgroundColor: "#233349", color: "white" }}>
         <TableRow>
           <TableCell align="center" sx={{ color: "white" }}>
             Productos
@@ -38,7 +38,7 @@ const ListHistoryOrder = () => {
             Cantidad
           </TableCell>
           <TableCell align="center" sx={{ color: "white" }}>
-            Subtotal
+            Precio
           </TableCell>
         </TableRow>
       </TableHead>
@@ -49,13 +49,19 @@ const ListHistoryOrder = () => {
               {product.productName}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.unitPrice.toFixed(2)}
+              $
+              {product.unitPrice.toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
               {product.amount}
             </TableCell>
             <TableCell align="center" sx={{ color: "#283b54" }}>
-              ${product.subTotal.toFixed(2)}
+              $
+              {product.subTotal.toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}
             </TableCell>
           </TableRow>
         ))}
@@ -64,17 +70,15 @@ const ListHistoryOrder = () => {
   );
 
   return (
-    <Box sx={{ backgroundColor: "white", minHeight: "100vh", p: 6 }}>
-      <Typography
-        variant="h3"
-        align="center"
-        color="#283b54"
-        gutterBottom
-        fontWeight="bold"
-        mb={5}
-      >
-        Lista de Pedidos
-      </Typography>
+    <Box
+      sx={{
+        
+        backgroundSize: "cover", // Para cubrir todo el contenedor
+        backgroundPosition: "center", // Centra la imagen
+        minHeight: "100vh",
+        p: 6,
+      }}
+    >
       <Box>
         {loading ? (
           <Box
@@ -99,24 +103,62 @@ const ListHistoryOrder = () => {
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
-                        fontSize: "17px",
+                        fontSize: "1.0rem",
+                        p: "10px",
                       }}
                     >
-                      Pedidos
+                      Detalle de los pedidos
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#283b54",
+                        backgroundColor: "#233349",
                         color: "white",
                         fontWeight: "bold",
-                        fontSize: "17px",
+                        fontSize: "1.0rem",
+                        p: "10px",
                       }}
                     >
-                      Precio Total
+                      Fecha
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Subtotal
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Descuento
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        backgroundColor: "#233349",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.0rem",
+                        p: "10px",
+                      }}
+                    >
+                      Total
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -127,31 +169,76 @@ const ListHistoryOrder = () => {
                         order.orderDetails && order.orderDetails.length > 0
                     ) // POR AHORA: Filtrar pedidos vacíos (hasta arreglar)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell>
-                          {renderProducts(order.orderDetails)}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{ fontSize: "15px", color: "#283b54" }}
-                        >
-                          ${order.total.toFixed(2)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    .map((order) => {
+                      // Calcular el subtotal del pedido
+                      const orderSubtotal = order.orderDetails.reduce(
+                        (acc, product) => acc + product.subTotal,
+                        0
+                      );
+
+                      return (
+                        <TableRow key={order.id}>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {renderProducts(order.orderDetails)}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {format(
+                              parse(
+                                order.creationDatetime,
+                                "dd/MM/yyyy : HH:mm:ss",
+                                new Date()
+                              ),
+                              "dd/MM/yyyy"
+                            )}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            $
+                            {orderSubtotal.toLocaleString("en-US", {
+                              maximumFractionDigits: 0,
+                            })}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            {order.discount}
+                          </TableCell>
+                          <TableCell align="center" sx={{ color: "#283b54" }}>
+                            $
+                            {order.total.toLocaleString("en-US", {
+                              maximumFractionDigits: 0,
+                            })}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              component="div"
-              count={orders.length}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage="Filas por página"
-            />
+            <Box>
+              <TablePagination
+                component="div"
+                count={orders.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPageOptions={[5, 10, 25]}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) =>
+                  `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
+                }
+                sx={{
+                  color: "black", 
+                  "& .MuiTablePagination-toolbar": {
+                    color: "black", 
+                  },
+                  "& .MuiTablePagination-actions button": {
+                    color: "black", // Colorea los botones de navegación
+                  },
+                  "& .MuiSelect-icon": {
+                    color: "black", // Cambia el color del ícono desplegable
+                  },
+                }}
+              />
+            </Box>
           </>
         )}
       </Box>

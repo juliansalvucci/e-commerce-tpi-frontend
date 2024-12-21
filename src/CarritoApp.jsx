@@ -10,12 +10,13 @@ import CategoryProvider from "./context/CategoryProvider";
 import OrderHistoryProvider from "./context/OrderHistoryProvider";
 import { ProductProvider } from "./context/ProductProvider";
 import SubCategoryProvider from "./context/SubCategoryProvider";
-import { UserContext } from "./context/UserContext";
 import ABMAdminPage from "./pages/ABMAdminPage";
 import ABMBrandPage from "./pages/ABMBrandPage";
 import ABMCategoryPage from "./pages/ABMCategoryPage";
 import ABMProductPage from "./pages/ABMProductPage";
 import ABMSubCategoryPage from "./pages/ABMSubCategoryPage";
+import AccountEditPage from "./pages/AccountEditPage";
+import AccountPage from "./pages/AccountPage";
 import { CartPage } from "./pages/CartPage";
 import HomeAdminPage from "./pages/HomeAdminPage";
 import ListAdminPage from "./pages/ListAdminPage";
@@ -35,6 +36,8 @@ import StockEntryPage from "./pages/StockEntryPage";
 const AdminRoutes = () => (
   <Routes>
     <Route path="/" element={<HomeAdminPage />} />
+    <Route path="/account" element={<AccountPage />} />
+    <Route path="/account/edit" element={<ABMAdminPage />} />
     <Route path="/user/create" element={<ABMAdminPage />} />
     <Route path="/user/edit" element={<ABMAdminPage />} />
     <Route path="/user/list" element={<ListAdminPage />} />
@@ -78,10 +81,12 @@ export const CarritoApp = () => {
               {isAdminRoute && <NavBarAdmin className="topbar" />}
               <Routes>
                 <Route path="/" element={<ProductsPage />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/account/edit" element={<AccountEditPage />} />
+                <Route path="/account/orders" element={<ListHistoryOrder />} />
                 <Route path="/cartpage" element={<CartPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/orders" element={<ListHistoryOrder />} />
 
                 {/* Rutas de administración, envueltas en los proveedores */}
                 <Route

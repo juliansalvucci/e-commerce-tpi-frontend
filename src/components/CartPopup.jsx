@@ -1,3 +1,4 @@
+import React from "react";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import "../styles/CartPopUp.css";
@@ -8,8 +9,10 @@ export const CartPopup = ({ isVisible, onClose }) => {
     removeProduct,
     incrementQuantity,
     decrementQuantity,
-    calculateTotal,
     calculateTotalQuantity,
+    subtotal,
+    discount,
+    totalWithDiscount,
   } = useContext(CartContext);
 
   if (!isVisible) return null; // Si el popup no está visible, no se renderiza nada
@@ -30,7 +33,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
 
         {/*Si no hay productos muestra un mensaje*/}
         {shoppingList.length === 0 ? (
-          <h5>Aún no ha agregado productos al carrito!!</h5>
+          <h5>Aún no ha agregado productos al carrito!!!</h5>
         ) : (
           <>
             <h3>Carrito de Compras</h3>
@@ -55,7 +58,7 @@ export const CartPopup = ({ isVisible, onClose }) => {
                         $
                         {(product.price * product.quantity).toLocaleString(
                           "en-US",
-                          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                          { maximumFractionDigits: 0 }
                         )}
                       </p>
                     </div>
@@ -95,18 +98,38 @@ export const CartPopup = ({ isVisible, onClose }) => {
               ))}
             </ul>
 
-            <hr />
             {/* Mostrar el total de los productos en el carrito */}
             <div className="total-container">
-              <h4>
-                Total ({calculateTotalQuantity()}): {calculateTotal()}
-              </h4>
-            </div>
+              <p>
+                Subtotal({calculateTotalQuantity()}):{" "}
+                {subtotal.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0
+                })}
+              </p>
+              <p>
+                Descuento (10% a partir de $80,000,000):{" "}
+                {discount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0
+                })}
+              </p>
+              <h6>
+                Total:{" "}
+                {totalWithDiscount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0
+                })}
+              </h6>
 
-            <div className="close-botton">
-              <button className="btn btn-primary" onClick={onClose}>
-                Continuar compra
-              </button>
+              <div className="close-botton">
+                <button className="btn btn-primary" onClick={onClose}>
+                  Continuar compra
+                </button>
+              </div>
             </div>
           </>
         )}

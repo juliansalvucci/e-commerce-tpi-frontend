@@ -9,21 +9,37 @@ export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [users, setUsers] = useState([]);
-  const [loggedUser, setLoggedUser] = useState();
+  const [loggedUser, setLoggedUser] = useState({
+    firstName: "",
+    lastName: "",
+    email: "Invitado",
+    role: "GUEST",
+  });
   const [userName, setUsername] = useState();
   const [showDeleted, setShowDeleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     const userData = JSON.parse(sessionStorage.getItem("userData"));
+
     if (token && userData) {
       setLoggedUser(userData);
-      setUsername(userData.email);
+      setUsername(userData.email.split("@")[0]);
+    } else {
+      setLoggedUser({
+        firstName: "",
+        lastName: "",
+        email: "Invitado",
+        role: "GUEST",
+      });
+      setUsername("Invitado");
     }
-  }, [], [location.pathname]);
+    setIsLoading(false); // Datos cargados
+  }, [location.pathname]);
 
-  // Función para obtener todas las marcas
+  // Función para obtener todos los usuarios
   const fetchUsers = async () => {
     try {
       const response = await api.get(showDeleted ? "/user/deleted" : "/user");
@@ -44,6 +60,12 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para obtener todos los clientes
+  const fetchClients = async () => {
+    await fetchUsers();
+    return users.map((user) => user.email);
+  };
+
   useEffect(() => {
     if (location.pathname === "/admin/user/list") {
       fetchUsers();
@@ -54,48 +76,84 @@ export const UserProvider = ({ children }) => {
     fetchUsers();
   }, [showDeleted]);
 
+  // Función para iniciar sesión
   const loginUser = async (user) => {
     try {
       const response = await api.post("/auth/signin", user);
-      const { firstName, lastName, email, role, token } = response.data;
-      const userData = { firstName, lastName, email, role }; // El token lo pasamos aparte
+      const { firstName, lastName, email, role, birthDate, token } =
+        response.data;
+      setUsername(email.split("@")[0]);
+      const userData = {
+        firstName,
+        lastName,
+        email,
+        role,
+        dateBirth: birthDate,
+      }; // El token lo pasamos aparte
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("userData", JSON.stringify(userData));
       setLoggedUser(userData);
-      setUsername(userData.email);
       redirectUser(role);
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no pudo loguearse",
-          text: error.response.data.email,
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
+      //En caso de que el usuario no esté registrado, se le proporcionará la opción de hacerlo
+      if (
+        error.response &&
+        (error.response.status === 404 || error.response.status === 401)
+      ) {
+        if (error.response.status === 404) {
+          Swal.fire({
+            title: `<h5><strong>${error.response.data.email}</strong></h5>`,
+            text: "¿Desea registrarse?",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+            customClass: {
+              popup: "swal-question-popup",
+              confirmButton: "swal-confirm-button",
+              cancelButton: "swal-cancel-button",
+            },
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              navigate("/register");
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: error.response.data.password,
+            text: "Ingrese nuevamente su contraseña",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "swal-error-popup",
+              confirmButton: "swal-ok-button",
+            },
+          });
+        }
       } else {
         console.error("Error al loguear usuario:", error); // Por ahora mostramos el error por consola por comodidad
       }
     }
   };
 
+  // Función para cerrar sesión
   const logoutUser = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userData");
-    setLoggedUser(null);
-    setUsername(null);
+    setLoggedUser({
+      firstName: "",
+      lastName: "",
+      email: "Invitado",
+      role: "GUEST",
+    });
+    setUsername("Invitado");
+    navigate("/");
+    window.location.reload();
   };
 
-  const createUser = async (newUser) => {
-    const URL =
-      location.pathname === "/admin/user/create"
-        ? "/auth/admin"
-        : "/auth/signup";
+  // Función para crear un nuevo usuario
+  const createUser = async (newUser, resetForm) => {
     try {
-      const response = await api.post(URL, newUser);
+      const response = await api.post("/auth/signup", newUser);
       setUsers((prevUsers) => [...prevUsers, response.data]);
       Swal.fire({
         icon: "success",
@@ -105,13 +163,39 @@ export const UserProvider = ({ children }) => {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
         },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (location.pathname === "/register") {
+            const response = await api.post("/auth/signin", newUser);
+            const { firstName, lastName, email, role, birthDate, token } =
+              response.data;
+            setUsername(email.split("@")[0]);
+            const userData = {
+              firstName,
+              lastName,
+              email,
+              role,
+              dateBirth: birthDate,
+            }; // El token lo pasamos aparte
+            sessionStorage.setItem("token", token);
+            sessionStorage.setItem("userData", JSON.stringify(userData));
+            setLoggedUser(userData);
+            if (resetForm) {
+              resetForm();
+            }
+            navigate("/");
+          }
+        }
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
+      if (
+        (error.response && error.response.status === 409) ||
+        error.response.status === 400
+      ) {
         Swal.fire({
           icon: "error",
           title: "El usuario no puede ser creado",
-          text: error.response.data.email,
+          text: error.response.data.email || error.response.data.dateBirth,
           confirmButtonText: "OK",
           customClass: {
             popup: "swal-success-popup",
@@ -124,9 +208,8 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Función para editar una marca existente
+  // Función para editar un usuario existente
   const editUser = async (id, updatedUser, userEmail) => {
-    // Deuda Técnica: Aca también tendriamos que poder hacer "Actualizar datos personales" para CLIENT/USER
     try {
       if (
         updatedUser.firstName === selectedUser?.firstName &&
@@ -160,26 +243,22 @@ export const UserProvider = ({ children }) => {
         },
       });
       selectUserForEdit(null);
-      navigate("/admin/user/list");
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no puede ser editado",
-          text: "TO-DO",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
+      const path =
+        location.pathname === "/admin/user/edit"
+          ? "/admin/user/list"
+          : location.pathname === "/admin/account/edit"
+          ? "/admin/account"
+          : "/account";
+      navigate(path);
+      if (path === "/admin/account" || path === "/account") {
+        updateLoggedUser(updatedUser);
       }
+    } catch (error) {
+      console.error("Error al editar usuario:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
-  // Función para eliminar una marca
+  // Función para eliminar un usuario
   const deleteUser = async (id) => {
     // Deuda Técnica: Acá tendría que poder borrarse una cuenta CLIENT/USER también
     try {
@@ -195,24 +274,11 @@ export const UserProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire({
-          icon: "error",
-          title: "El usuario no puede ser eliminado",
-          text: "TO-DO",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal-success-popup",
-            confirmButton: "swal-ok-button",
-          },
-        });
-      } else {
-        console.error("Error al eliminar usuario:", error); // Por ahora mostramos el error por consola por comodidad
-      }
+      console.error("Error al eliminar usuario:", error); // Por ahora mostramos el error por consola por comodidad
     }
   };
 
-  // Función para restaurar una marca eliminada
+  // Función para restaurar un usuario eliminado
   const restoreUser = async (id) => {
     try {
       await api.post(`/user/recover/${id}`);
@@ -232,6 +298,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para redirigir al usuario dependiendo de su rol
   const redirectUser = (role) => {
     if (role == "USER") {
       Swal.fire({
@@ -242,8 +309,10 @@ export const UserProvider = ({ children }) => {
           popup: "swal-success-popup",
           confirmButton: "swal-ok-button",
         },
+      }).then(() => {
+        navigate("/", { replace: true });
+        window.location.reload();
       });
-      navigate("/");
     } else {
       Swal.fire({
         title: "Elige destino",
@@ -266,8 +335,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Función para seleccionar un usuario para editar
   const selectUserForEdit = (user) => {
     setSelectedUser(user);
+  };
+
+  // Función para encontrar un usuario por su email
+  const findUserByEmail = (email) => {
+    const user = users.find((user) => user.email === email);
+    return user.id;
+  };
+
+  // Función para actualizar el usuario logueado luego de editar sus datos
+  const updateLoggedUser = (updatedUser) => {
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    userData.firstName = updatedUser.firstName;
+    userData.lastName = updatedUser.lastName;
+    userData.dateBirth = updatedUser.dateBirth;
+    sessionStorage.setItem("userData", JSON.stringify(userData));
+    setLoggedUser(userData);
   };
 
   return (
@@ -275,9 +361,12 @@ export const UserProvider = ({ children }) => {
       value={{
         users,
         loggedUser,
+        userName,
         showDeleted,
+        isLoading,
         selectedUser,
         fetchUsers,
+        fetchClients,
         loginUser,
         logoutUser,
         createUser,
@@ -286,6 +375,7 @@ export const UserProvider = ({ children }) => {
         restoreUser,
         setShowDeleted,
         selectUserForEdit,
+        findUserByEmail,
       }}
     >
       {children}
