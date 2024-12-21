@@ -1,6 +1,9 @@
 # **MegaStore**
+
 ## **Descripción del Proyecto**
 Este proyecto consiste en la Implementación de un Sistema de Gestión para una Plataforma de eCommerce. El objetivo es desarrollar un sistema de gestión integral para la nueva plataforma de eCommerce de la empresa MegaStore, que permita mejorar la eficiencia de sus operaciones en la web y ofrecer una excelente experiencia de compra a sus clientes. El sistema abarcará la gestión de productos, usuarios, pedidos, y stock, entre otros aspectos clave para el comercio en línea.
+
+El proyecto trabaja en conjunto con el [repositorio del backend](https://github.com/usuario/megastore-backend), encargado de manejar la lógica de negocio y los servicios necesarios para el sistema.
 
 ---
 
@@ -12,7 +15,6 @@ Este proyecto consiste en la Implementación de un Sistema de Gestión para una 
   - [**Estructura del Proyecto**](#estructura-del-proyecto)
   - [**Clonar Proyecto**](#clonar-proyecto)
   - [**Participantes**](#participantes)
-  - [**Guía para Contribuir**](#guía-para-contribuir)
 
 ---
 
@@ -20,7 +22,6 @@ Este proyecto consiste en la Implementación de un Sistema de Gestión para una 
 
 Este proyecto utiliza las siguientes tecnologías:
 
-- **[Spring Boot](https://spring.io/projects/spring-boot):** Framework para desarrollar aplicaciones basadas en Java que simplifica la creación de APIs y servicios de backend, ofreciendo una configuración mínima y una alta productividad.
 - **[React](https://react.dev/):** Biblioteca JavaScript para construir interfaces de usuario dinámicas y reactivas. Utilizada para el desarrollo del frontend, ofreciendo componentes reutilizables y un rendimiento sobresaliente.
 - **[Vite](https://vitejs.dev/):** Herramienta de desarrollo frontend que permite un inicio rápido y una construcción eficiente de proyectos basados en JavaScript. Optimizamos el rendimiento del frontend gracias a su integración con React.
 - **[Vitest](https://vitest.dev/):** Framework de testing para JavaScript y TypeScript, utilizado para garantizar la calidad del frontend mediante pruebas automatizadas.
@@ -87,8 +88,6 @@ El equipo de desarrollo está compuesto por:
 - **Marisol Rojas López** - [mrojaslopez03@gmail.com](mailto:mrojaslopez03@gmail.com)
 - **Lohana Rumis** - [rumislohana@gmail.com](mailto:rumislohana@gmail.com)
 - **Julián López Salvucci** - [julianls783@gmail.com](mailto:julianls783@gmail.com)
-
----
 
 ## **Guía para Contribuir**
 
