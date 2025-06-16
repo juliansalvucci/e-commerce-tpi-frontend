@@ -10,6 +10,7 @@ export default defineConfig({
     css: true
   },
   plugins: [react()],
+  base: '/e-commerce-tpi-frontend/', // reemplazá por tu nombre de repo
   resolve: {
     alias: {
       buffer: "buffer", // Polyfill manual para Buffer
