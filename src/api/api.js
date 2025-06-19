@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Crea una instancia de Axios
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: "https://e-commerce-tpi-backend-2.onrender.com/",
 });
 
 // Define una función para verificar si un endpoint requiere JWT
