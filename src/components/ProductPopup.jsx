@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import addProductToCart from "../assets/add-product.png";
 import removeProductToCart from "../assets/remove-product.png";
 import { CartContext } from "../context/CartContext";
-import "../styles/ProductPopUp.css";
+import "../styles/ProductPopup.css";
 
 export const ProductPopup = ({ isVisible, onClose, product }) => {
   const {
